@@ -1,3 +1,0 @@
-[console_scripts]
-analysis = TraceAnalyser.GUI.analysis_gui:start_gui
-ebfret = TraceAnalyser.GUI.ebfret_utils:launch_ebfret_instance
