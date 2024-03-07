@@ -1119,6 +1119,7 @@
     </property>
     <addaction name="actionGroup_Traces"/>
     <addaction name="actionSmooth_Traces"/>
+    <addaction name="actionDetect_Crop_Range"/>
     <addaction name="actionDetect_Bleaching"/>
     <addaction name="actionCorrection_Factors"/>
     <addaction name="actionTrace_Management"/>
@@ -1256,6 +1257,11 @@
   <action name="actionTrace_Management">
    <property name="text">
     <string>Dataset Management</string>
+   </property>
+  </action>
+  <action name="actionDetect_Crop_Range">
+   <property name="text">
+    <string>Detect Crop Range</string>
    </property>
   </action>
  </widget>

@@ -947,6 +947,9 @@ class _export_methods:
         elif export_mode.lower() == "correction":
             user_filter = self.correction_window.correction_user_group.currentText()
             nucleotide_filter = self.correction_window.correction_nucleotide_group.currentText()
+        elif export_mode.lower() == "detect_crop":
+            user_filter = self.crop_window.crop_user_group.currentText()
+            nucleotide_filter = self.crop_window.crop_nucleotide_group.currentText()
         elif export_mode.lower() == "ebfret":
             user_filter = self.fitting_window.ebfret_user_group.currentText()
             nucleotide_filter = self.fitting_window.ebfret_nucleotide_group.currentText()

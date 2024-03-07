@@ -10,6 +10,7 @@ from TraceAnalyser.GUI.GUI_windows.correctionwindow_gui import Ui_Form as correc
 from TraceAnalyser.GUI.GUI_windows.groupwindow_gui import Ui_Form as groupwindow_gui
 from TraceAnalyser.GUI.GUI_windows.simulatorwindow_gui import Ui_Form as simulatorwindow_gui
 from TraceAnalyser.GUI.GUI_windows.managewindow_gui import Ui_Form as managewindow_gui
+from TraceAnalyser.GUI.GUI_windows.cropwindow_gui import Ui_Form as cropwindow_gui
 
 
 
@@ -72,7 +73,8 @@ class _window_utils:
 
     def update_channel_selection(self, window_name,
             dataset_combo_name, channel_combo_name,
-            channel_dict_name="channel_dict"):
+            channel_dict_name = "channel_dict",
+            single_channel = False):
 
         try:
 
@@ -108,24 +110,21 @@ class _window_utils:
                                 if channel_name not in channel_names:
                                     channel_names.append(channel_name)
 
-                if set(["Donor", "Acceptor"]).issubset(channel_names):
-                    combo_options.append("FRET Data")
-                    channel_dict["FRET Data"] = ["Donor", "Acceptor"]
-                if "FRET Efficiency" in channel_names:
-                    combo_options.append("FRET Efficiency")
-                    channel_dict["FRET Efficiency"] = ["FRET Efficiency"]
-                if set(["Donor", "Acceptor", "FRET Efficiency"]).issubset(channel_names):
-                    combo_options.append("FRET Data + FRET Efficiency")
-                    channel_dict["FRET Data + FRET Efficiency"] = ["Donor", "Acceptor", "FRET Efficiency"]
-                if "ALEX Efficiency" in channel_names:
-                    combo_options.append("ALEX Efficiency")
-                    channel_dict["ALEX Efficiency"] = ["ALEX Efficiency"]
-                if set(["DD", "DA", "AD", "AA"]).issubset(channel_names):
-                    combo_options.append("ALEX Data")
-                    channel_dict["ALEX Data"] = ["DD", "DA", "AD", "AA"]
-                if set(["DD", "DA", "AD", "AA", "ALEX Efficiency"]).issubset(channel_names):
-                    combo_options.append("ALEX Data + ALEX Efficiency")
-                    channel_dict["ALEX Data + ALEX Efficiency"] = ["DD", "DA", "AD", "AA", "ALEX Efficiency"]
+                if single_channel == False:
+
+                    if set(["Donor", "Acceptor"]).issubset(channel_names):
+                        combo_options.append("FRET Data")
+                        channel_dict["FRET Data"] = ["Donor", "Acceptor"]
+                    if set(["Donor", "Acceptor", "FRET Efficiency"]).issubset(channel_names):
+                        combo_options.append("FRET Data + FRET Efficiency")
+                        channel_dict["FRET Data + FRET Efficiency"] = ["Donor", "Acceptor", "FRET Efficiency"]
+                    if set(["DD", "DA", "AD", "AA"]).issubset(channel_names):
+                        combo_options.append("ALEX Data")
+                        channel_dict["ALEX Data"] = ["DD", "DA", "AD", "AA"]
+                    if set(["DD", "DA", "AD", "AA", "ALEX Efficiency"]).issubset(channel_names):
+                        combo_options.append("ALEX Data + ALEX Efficiency")
+                        channel_dict["ALEX Data + ALEX Efficiency"] = ["DD", "DA", "AD", "AA", "ALEX Efficiency"]
+
                 if "Trace" in channel_names:
                     combo_options.append("Trace")
                     channel_dict["Trace"] = ["Trace"]
@@ -147,10 +146,16 @@ class _window_utils:
                 if "AD" in channel_names:
                     combo_options.append("AD")
                     channel_dict["AD"] = ["AD"]
+                if "FRET Efficiency" in channel_names:
+                    combo_options.append("FRET Efficiency")
+                    channel_dict["FRET Efficiency"] = ["FRET Efficiency"]
+                if "ALEX Efficiency" in channel_names:
+                    combo_options.append("ALEX Efficiency")
+                    channel_dict["ALEX Efficiency"] = ["ALEX Efficiency"]
 
                 combo_options = self.sort_channel_list(combo_options)
 
-                if len(combo_options) > 1:
+                if len(combo_options) > 1 and single_channel == False:
                     combo_options.insert(0, "All Channels")
                     channel_dict["All Channels"] = channel_names
 
@@ -378,6 +383,25 @@ class _window_utils:
             self.manage_window.hide()
             self.activateWindow()
 
+    def toggle_crop_window(self):
+
+        if self.crop_window.isHidden() or self.crop_window.isActiveWindow() == False:
+            if self.current_dialog != self.crop_window:
+                if self.current_dialog != None:
+                    self.current_dialog.hide()
+                    self.current_dialog.close()
+
+            self.crop_window.show()
+            self.crop_window.raise_()
+            self.crop_window.activateWindow()
+            self.crop_window.setFocus()
+
+            self.current_dialog = self.crop_window
+
+        else:
+            self.crop_window.hide()
+            self.activateWindow()
+
 
 
 
@@ -594,6 +618,26 @@ class SimulatorWindow(QDialog, simulatorwindow_gui):
         super(SimulatorWindow, self).__init__()
         self.setupUi(self)  # Set up the user interface from Designer.
         self.setWindowTitle("Simulator")  # Set the window title
+
+        self.AnalysisGUI = parent
+
+    def keyPressEvent(self, event):
+        try:
+            if event.key() == Qt.Key_Escape:
+                self.close()
+            else:
+                self.AnalysisGUI.keyPressEvent(event)
+                super().keyPressEvent(event)
+        except:
+            pass
+
+
+class CropWindow(QDialog, cropwindow_gui):
+
+    def __init__(self, parent):
+        super(CropWindow, self).__init__()
+        self.setupUi(self)  # Set up the user interface from Designer.
+        self.setWindowTitle("Crop Traces")  # Set the window title
 
         self.AnalysisGUI = parent
 

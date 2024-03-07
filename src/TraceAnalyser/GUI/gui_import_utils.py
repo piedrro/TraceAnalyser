@@ -859,6 +859,7 @@ class _import_methods:
         self.populate_correction_combos()
         self.populate_group_combos()
         self.populate_management_combos()
+        self.populate_detectcrop_combos()
 
         self.updating_combos = False
 

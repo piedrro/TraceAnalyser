@@ -14,7 +14,7 @@ from TraceAnalyser.GUI.gui_windows import (_window_utils,
     PlotSettingsWindow, ImportSettingsWindow,
     ExportSettingsWindow, FittingWindow,
     DetectWindow, SmoothingWindow, BleachWindow, CorrectionWindow,
-    GroupWindow, SimulatorWindow, ManageWindow)
+    GroupWindow, SimulatorWindow, ManageWindow, CropWindow)
 
 from TraceAnalyser.GUI.gui_trace_plot_utils import CustomPyQTGraphWidget, _trace_plotting_methods
 from TraceAnalyser.GUI.gui_analysis_plot_utils import  CustomMatplotlibWidget, _analysis_plotting_methods
@@ -32,6 +32,7 @@ from TraceAnalyser.GUI.gui_simulation_utils import _simulation_utils
 from TraceAnalyser.GUI.gui_measure_plot_utils import _measure_plotting_methods
 from TraceAnalyser.GUI.gui_trace_plot_overlays import _trace_plot_overlays
 from TraceAnalyser.GUI.gui_management_utils import _management_utils
+from TraceAnalyser.GUI.gui_detectcrop_utils import _detectcrop_utils
 
 class AnalysisGUI(QtWidgets.QMainWindow,
     Ui_MainWindow, _trace_plotting_methods,
@@ -41,7 +42,8 @@ class AnalysisGUI(QtWidgets.QMainWindow,
     _HMM_methods, _window_utils, _smoothing_utils,
     _bleach_utils, _correction_utils, _group_utils,
     _simulation_utils, _measure_plotting_methods,
-    _trace_plot_overlays, _management_utils):
+    _trace_plot_overlays, _management_utils,
+    _detectcrop_utils):
 
     def __init__(self):
         super(AnalysisGUI, self).__init__()
@@ -61,6 +63,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.group_window = GroupWindow(self)
         self.simulator_window = SimulatorWindow(self)
         self.manage_window = ManageWindow(self)
+        self.crop_window = CropWindow(self)
 
 
         self.setWindowTitle("DeepGapSeq-Analysis")  # Set the window title
@@ -107,6 +110,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.actionGroup_Traces.triggered.connect(self.toggle_group_window)
         self.actionSimulate_Traces.triggered.connect(self.toggle_simulator_window)
         self.actionTrace_Management.triggered.connect(self.toggle_manage_window)
+        self.actionDetect_Crop_Range.triggered.connect(self.toggle_crop_window)
 
         self.export_settings.export_mode.currentIndexChanged.connect(self.update_export_options)
         self.export_settings.export_data.clicked.connect(self.initialise_export)
@@ -207,6 +211,8 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.manage_window.manage_rename_dataset.clicked.connect(self.rename_dataset)
         self.manage_window.manage_rename_measurement_label.clicked.connect(self.rename_measurement_label)
 
+        self.crop_window.detect_crop.clicked.connect(self.initialise_crop_detection)
+
         # Set the color of the status bar text
         self.statusBar().setStyleSheet("QStatusBar{color: red;}")
 
@@ -220,6 +226,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.update_group_options()
         self.update_simulation_options()
         self.update_export_options()
+        self.update_detectcrop_options()
 
         self.current_dialog = None
         self.updating_combos = False
@@ -341,7 +348,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
     def dev_function(self):
 
         print("Dev function")
-        self.update_export_options()
+        self.populate_detectcrop_combos()
 
     def enterEvent(self, event):
         self.setFocus()
@@ -395,6 +402,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.group_window.close()
         self.simulator_window.close()
         self.manage_window.close()
+        self.crop_window.close()
 
     def keyPressEvent(self, event):
         try:

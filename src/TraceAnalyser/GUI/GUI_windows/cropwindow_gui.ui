@@ -6,22 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>403</width>
-    <height>478</height>
+    <width>414</width>
+    <height>456</height>
    </rect>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>16777215</width>
-    <height>500</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="label_2">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -34,26 +28,26 @@
     </widget>
    </item>
    <item>
-    <layout class="QFormLayout" name="formLayout">
+    <layout class="QFormLayout" name="formLayout_2">
      <item row="0" column="0">
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Dataset(s)</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="bleach_dataset"/>
+      <widget class="QComboBox" name="crop_dataset"/>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_17">
+      <widget class="QLabel" name="label_18">
        <property name="text">
         <string>Group Label</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QComboBox" name="bleach_user_group">
+      <widget class="QComboBox" name="crop_user_group">
        <item>
         <property name="text">
          <string>None</string>
@@ -112,14 +106,14 @@
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_26">
+      <widget class="QLabel" name="label_27">
        <property name="text">
         <string>Nucleotide Label</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QComboBox" name="bleach_nucleotide_group">
+      <widget class="QComboBox" name="crop_nucleotide_group">
        <item>
         <property name="text">
          <string>None</string>
@@ -163,7 +157,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="label">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -171,89 +165,109 @@
       </font>
      </property>
      <property name="text">
-      <string>Bleach Detection Settings</string>
+      <string>Crop Detection Settings</string>
      </property>
     </widget>
    </item>
    <item>
-    <layout class="QFormLayout" name="formLayout_2">
+    <layout class="QFormLayout" name="formLayout_3">
      <item row="0" column="0">
-      <widget class="QLabel" name="label_4">
+      <widget class="QCheckBox" name="filter1">
        <property name="text">
-        <string>Acceptor Threshold</string>
+        <string>Filter1</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="bleach_acceptor_threshold">
-       <property name="decimals">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <double>10000.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="value">
-        <double>0.200000000000000</double>
-       </property>
-      </widget>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="0">
+        <widget class="QComboBox" name="filter1_channel"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="filter1_criterion">
+         <item>
+          <property name="text">
+           <string>Above</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Below</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QDoubleSpinBox" name="filter1_value"/>
+       </item>
+      </layout>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_7">
+      <widget class="QCheckBox" name="filter2">
        <property name="text">
-        <string>Donor Threshold</string>
+        <string>Filter2</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="bleach_donor_threshold">
-       <property name="decimals">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <double>10000.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="value">
-        <double>0.200000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="bleach_sensitivity">
-       <property name="text">
-        <string>Events Ignored (#Events)</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QSpinBox" name="bleach_events_ignored"/>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="0">
+        <widget class="QComboBox" name="filter2_channel"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="filter2_criterion">
+         <item>
+          <property name="text">
+           <string>Above</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Below</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QDoubleSpinBox" name="filter2_value"/>
+       </item>
+      </layout>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_5">
+      <widget class="QCheckBox" name="filter3">
        <property name="text">
-        <string>Mininum Event Size (#Frames)</string>
+        <string>Filter3</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QSpinBox" name="bleach_event_size">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="value">
-        <number>5</number>
-       </property>
-      </widget>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="1" column="0">
+        <widget class="QComboBox" name="filter3_channel"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="filter3_criterion">
+         <item>
+          <property name="text">
+           <string>Above</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Below</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QDoubleSpinBox" name="filter3_value"/>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
    <item>
-    <spacer name="verticalSpacer_2">
+    <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -266,14 +280,14 @@
     </spacer>
    </item>
    <item>
-    <widget class="QPushButton" name="detect_bleach">
+    <widget class="QPushButton" name="detect_crop">
      <property name="text">
-      <string>Detect Bleaching in Datset Selection</string>
+      <string>Detect Crop Ranges</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QProgressBar" name="bleach_progressbar">
+    <widget class="QProgressBar" name="crop_progressbar">
      <property name="maximumSize">
       <size>
        <width>16777215</width>
