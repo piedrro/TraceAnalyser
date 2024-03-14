@@ -644,14 +644,17 @@ class _trace_plotting_methods:
                             plot_line.setData(data_x, data)
                             plot_line.setDownsampling(ds=downsample)
 
-                            if plot_ranges["xRange"][1] < np.max(data_x):
-                                plot_ranges["xRange"][1] = np.max(data_x)
-                            if plot_ranges["yRange"][1] < np.max(data):
-                                plot_ranges["yRange"][1] = np.max(data)
-                            if plot_ranges["yRange"][0] > np.min(data):
-                                plot_ranges["yRange"][0] = np.min(data)
-                            if plot_ranges["xRange"][0] < np.min(data_x):
-                                plot_ranges["xRange"][0] = np.min(data_x)
+                            try:
+                                if plot_ranges["xRange"][1] < np.max(data_x):
+                                    plot_ranges["xRange"][1] = np.max(data_x)
+                                if plot_ranges["yRange"][1] < np.max(data):
+                                    plot_ranges["yRange"][1] = np.max(data)
+                                if plot_ranges["yRange"][0] > np.min(data):
+                                    plot_ranges["yRange"][0] = np.min(data)
+                                if plot_ranges["xRange"][0] < np.min(data_x):
+                                    plot_ranges["xRange"][0] = np.min(data_x)
+                            except:
+                                pass
 
                         for line_index, (plot, line, plot_label) in enumerate(zip(sub_axes, plot_lines, plot_lines_labels)):
                             plot.setXRange(min=plot_ranges["xRange"][0], max=plot_ranges["xRange"][1])
