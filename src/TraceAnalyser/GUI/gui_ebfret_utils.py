@@ -192,10 +192,16 @@ class _ebFRET_methods:
                                 crop_range[1] = len(data)
                             data = data[int(crop_range[0]):int(crop_range[1])]
 
-                        if "efficiency" in data_name.lower():
-                            data = np.clip(data, 0, 1)
+                        # set NaNs to 0
+                        data = np.nan_to_num(data)
 
-                        ebfret_dataset[localisation_index] = data
+                        # # set 0s to random small value
+                        # data[data == 0] = np.random.rand() * 1e-10
+                        #
+                        # data = [float(x) for x in data]
+
+                        if len(data) > 0:
+                            ebfret_dataset[localisation_index] = data
 
         except:
             self.print_notification(traceback.format_exc())

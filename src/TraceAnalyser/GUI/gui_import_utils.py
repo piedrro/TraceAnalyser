@@ -967,7 +967,7 @@ class _import_methods:
             pass
 
 
-    def compute_fret_efficiency(self, donor, acceptor, correction_factors=None):
+    def compute_fret_efficiency(self, donor, acceptor, correction_factors=None, clip=True):
 
         corrected = False
         gamma = None
@@ -985,6 +985,9 @@ class _import_methods:
             donor = np.array(donor).copy()
             acceptor = np.array(acceptor).copy()
 
+            donor = self.preprocess_efficiecy_data(donor)
+            acceptor = self.preprocess_efficiecy_data(acceptor)
+
             fret_efficiency = acceptor / ((donor*gamma)+acceptor)
 
         except:
@@ -994,7 +997,7 @@ class _import_methods:
 
         return fret_efficiency, corrected
 
-    def compute_alex_efficiency(self, DD, DA, AA, correction_factors=None):
+    def compute_alex_efficiency(self, DD, DA, AA, correction_factors=None, clip=True):
 
         corrected = False
         corrected_DA = False
@@ -1023,6 +1026,10 @@ class _import_methods:
             DA = np.array(DA).copy()
             AA = np.array(AA).copy()
 
+            DA = self.preprocess_efficiecy_data(DA)
+            DD = self.preprocess_efficiecy_data(DD)
+            AA = self.preprocess_efficiecy_data(AA)
+
             if corrected_DA:
                 DA = DA - (d_leakage * DD) - (a_direct * AA)
 
@@ -1036,3 +1043,24 @@ class _import_methods:
             pass
 
         return efficiency, stoichiometry, corrected
+
+    def preprocess_efficiecy_data(self, data, lower_limit=0):
+
+        try:
+
+            closest_values = [v for v in data if v > lower_limit]
+
+            if len(closest_values) > 0:
+
+                closest_greater_value = min(closest_values, key=lambda x: x - lower_limit)
+
+                # Replace values below the limit with the closest greater value
+                processed_data = [v if v > lower_limit else closest_greater_value for v in data]
+
+            else:
+                processed_data = data
+
+        except:
+            processed_data = data
+
+        return np.array(processed_data)

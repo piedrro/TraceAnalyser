@@ -348,7 +348,9 @@ class AnalysisGUI(QtWidgets.QMainWindow,
     def dev_function(self):
 
         print("Dev function")
-        self.populate_detectcrop_combos()
+        self.compute_efficiencies()
+        self.initialise_plot()
+
 
     def enterEvent(self, event):
         self.setFocus()

@@ -624,8 +624,8 @@ class _trace_plotting_methods:
                             if live_smooth == True:
                                 data = self.apply_live_smooth(data)
 
-                            if "Efficiency" in plot_label:
-                                data = np.clip(data, 0, 1)
+                            # if "Efficiency" in plot_label:
+                            #     data = np.clip(data, 0, 1)
 
                             if crop_plots == True and len(crop_range) == 2:
                                 crop_range = sorted(crop_range)
@@ -633,7 +633,7 @@ class _trace_plotting_methods:
                                 data = data[crop_range[0]:crop_range[1]]
                                 data_x = data_x[crop_range[0]:crop_range[1]]
 
-                            if self.plot_settings.plot_normalise.isChecked() and "Efficiency" not in plot_label:
+                            if self.plot_settings.plot_normalise.isChecked() and "efficiency" not in plot_label.lower():
                                 data = (data - np.min(data)) / (np.max(data) - np.min(data))
 
                             self.plot_detected_states(state_means_x, state_means_y, plot, legend, plot_label, line_index, sub_axes, downsample=1)

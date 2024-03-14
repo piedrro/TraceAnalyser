@@ -172,19 +172,19 @@
    <item>
     <layout class="QFormLayout" name="formLayout_3">
      <item row="0" column="0">
-      <widget class="QCheckBox" name="filter1">
+      <widget class="QCheckBox" name="threshold1">
        <property name="text">
-        <string>Filter1</string>
+        <string>Threshold 1</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
       <layout class="QGridLayout" name="gridLayout">
        <item row="1" column="0">
-        <widget class="QComboBox" name="filter1_channel"/>
+        <widget class="QComboBox" name="threshold1_channel"/>
        </item>
        <item row="1" column="1">
-        <widget class="QComboBox" name="filter1_criterion">
+        <widget class="QComboBox" name="threshold1_criterion">
          <item>
           <property name="text">
            <string>Above</string>
@@ -198,24 +198,24 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QDoubleSpinBox" name="filter1_value"/>
+        <widget class="QDoubleSpinBox" name="threshold1_value"/>
        </item>
       </layout>
      </item>
      <item row="1" column="0">
-      <widget class="QCheckBox" name="filter2">
+      <widget class="QCheckBox" name="threshold2">
        <property name="text">
-        <string>Filter2</string>
+        <string>Threshold 2</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="1" column="0">
-        <widget class="QComboBox" name="filter2_channel"/>
+        <widget class="QComboBox" name="threshold2_channel"/>
        </item>
        <item row="1" column="1">
-        <widget class="QComboBox" name="filter2_criterion">
+        <widget class="QComboBox" name="threshold2_criterion">
          <item>
           <property name="text">
            <string>Above</string>
@@ -229,24 +229,24 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QDoubleSpinBox" name="filter2_value"/>
+        <widget class="QDoubleSpinBox" name="threshold2_value"/>
        </item>
       </layout>
      </item>
      <item row="2" column="0">
-      <widget class="QCheckBox" name="filter3">
+      <widget class="QCheckBox" name="threshold3">
        <property name="text">
-        <string>Filter3</string>
+        <string>Threshold 3</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="1" column="0">
-        <widget class="QComboBox" name="filter3_channel"/>
+        <widget class="QComboBox" name="threshold3_channel"/>
        </item>
        <item row="1" column="1">
-        <widget class="QComboBox" name="filter3_criterion">
+        <widget class="QComboBox" name="threshold3_criterion">
          <item>
           <property name="text">
            <string>Above</string>
@@ -260,7 +260,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QDoubleSpinBox" name="filter3_value"/>
+        <widget class="QDoubleSpinBox" name="threshold3_value"/>
        </item>
       </layout>
      </item>

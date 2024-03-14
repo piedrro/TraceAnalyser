@@ -1,7 +1,7 @@
 from functools import partial
 import traceback
 from TraceAnalyser.GUI.gui_worker import Worker
-
+import numpy as np
 
 class _detectcrop_utils:
 
@@ -13,10 +13,10 @@ class _detectcrop_utils:
 
             for i in range(1, n_checkbox+1):
 
-                checkbox = getattr(self.crop_window, f"filter{i}")
-                channel_combo = getattr(self.crop_window, f"filter{i}_channel")
-                criterion_combo = getattr(self.crop_window, f"filter{i}_criterion")
-                value_spinbox = getattr(self.crop_window, f"filter{i}_value")
+                checkbox = getattr(self.crop_window, f"threshold{i}")
+                channel_combo = getattr(self.crop_window, f"threshold{i}_channel")
+                criterion_combo = getattr(self.crop_window, f"threshold{i}_criterion")
+                value_spinbox = getattr(self.crop_window, f"threshold{i}_value")
 
                 if checkbox.isChecked():
                     channel_combo.setDisabled(False)
@@ -45,16 +45,16 @@ class _detectcrop_utils:
 
             for i in range(1, n_checkbox+1):
 
-                checkbox = getattr(self.crop_window, f"filter{i}")
+                checkbox = getattr(self.crop_window, f"threshold{i}")
 
                 self.update_channel_selection(window,
-                    dataset, f"filter{i}_channel",
+                    dataset, f"threshold{i}_channel",
                     channel_dict,True)
 
                 update_func = partial(
                     self.update_channel_selection,
                     window, dataset,
-                    f"filter{i}_channel",
+                    f"threshold{i}_channel",
                     channel_dict
                 )
 
@@ -84,12 +84,30 @@ class _detectcrop_utils:
 
     def crop_range_detection_function(self, data, criterion, value):
 
-        try:
+        crop_index = None
 
-            pass
+        try:
+            # Convert data to numpy array for efficient computation
+            data = np.array(data)
+
+            # Initialize a binary array based on the threshold
+            # 1 for values above the threshold, 0 for values below
+            if criterion == "Above":
+                threshold_array = np.where(data <= value, 1, 0)
+            else:
+                threshold_array = np.where(data >= value, 1, 0)
+
+            # Find the indices of the non-zero elements in the threshold array
+            # These are the indices of the data that are above the threshold
+            threshold_indices = np.nonzero(threshold_array)[0]
+
+            if len(threshold_indices) > 0:
+                crop_index = threshold_indices[0]
 
         except:
             pass
+
+        return crop_index
 
 
     def crop_range_detection(self, progress_callback, n_checkbox=3):
@@ -108,11 +126,11 @@ class _detectcrop_utils:
 
             check_box_dict = {}
             for i in range(1, n_checkbox+1):
-                checkbox = getattr(self.crop_window, f"filter{i}")
+                checkbox = getattr(self.crop_window, f"threshold{i}")
                 if checkbox.isChecked():
-                    channel_combo = getattr(self.crop_window, f"filter{i}_channel")
-                    criterion_combo = getattr(self.crop_window, f"filter{i}_criterion")
-                    value_spinbox = getattr(self.crop_window, f"filter{i}_value")
+                    channel_combo = getattr(self.crop_window, f"threshold{i}_channel")
+                    criterion_combo = getattr(self.crop_window, f"threshold{i}_criterion")
+                    value_spinbox = getattr(self.crop_window, f"threshold{i}_value")
 
                     check_box_dict[i] = {"channel": channel_combo.currentText(),
                                          "criterion": criterion_combo.currentText(),
@@ -132,13 +150,32 @@ class _detectcrop_utils:
 
                         if self.get_filter_status("detect_crop", user_label, nucleotide_label) == False:
 
+                            index_list = []
+
                             for args in check_box_dict.values():
 
                                 data = localisation_data[args["channel"]]
                                 criterion = args["criterion"]
                                 value = args["value"]
 
-                                self.crop_range_detection_function(data, criterion, value)
+                                crop_index = self.crop_range_detection_function(data,
+                                    criterion, value)
+
+                                if crop_index is not None:
+                                    index_list.append(crop_index)
+
+                            if index_list != []:
+
+                                crop_index = max(index_list)
+
+                                if crop_index > 0 and crop_index < len(data):
+                                    crop_range = [0, crop_index]
+                                elif crop_index == 0:
+                                    crop_range = []
+                                elif crop_index == len(data):
+                                    crop_range = [0, len(data)]
+
+                                localisation_data["crop_range"] = crop_range
 
         except:
             print(traceback.format_exc())
@@ -146,4 +183,6 @@ class _detectcrop_utils:
 
     def crop_range_detection_finished(self):
 
-        print("crop_range_detection_finished")
+        self.plot_traces(update_plot=False)
+
+        self.print_notification("Crop range detection complete")
