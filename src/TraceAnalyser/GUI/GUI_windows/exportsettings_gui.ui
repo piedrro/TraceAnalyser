@@ -60,6 +60,11 @@
        </item>
        <item>
         <property name="text">
+         <string>ebFRET SMD (.mat)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>OriginLab (.opju)</string>
         </property>
        </item>

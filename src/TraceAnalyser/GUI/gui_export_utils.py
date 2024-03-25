@@ -11,6 +11,9 @@ import matplotlib.pyplot as plt
 from TraceAnalyser.GUI.gui_worker import Worker
 import time
 import math
+import random
+import string
+
 class _export_methods:
 
 
@@ -38,11 +41,13 @@ class _export_methods:
             elif export_mode == "Export Trace Summary":
                 self.initialise_summary_export()
 
+            elif export_mode == "ebFRET SMD (.mat)":
+                self.initialise_ebfret_export()
+
+
         except:
             print(traceback.format_exc())
             pass
-
-
 
     def populate_export_combos(self):
 
@@ -191,6 +196,36 @@ class _export_methods:
             worker.signals.finished.connect(self.export_finished)
             self.threadpool.start(worker)
 
+    def initialise_ebfret_export(self):
+
+        if self.data_dict != {}:
+
+            export_location = self.export_settings.export_location.currentText()
+            split_datasets = self.export_settings.export_split_datasets.isChecked()
+            export_dataset_name = self.export_settings.export_dataset_selection.currentText()
+            export_channel_name = self.export_settings.export_channel_selection.currentText()
+            crop_mode = self.export_settings.export_crop_data.isChecked()
+            export_states = self.export_settings.export_fitted_states.isChecked()
+
+            export_paths = self.get_export_paths(extension="mat")
+
+            if export_location == "Select Directory":
+                export_dir = os.path.dirname(export_paths[0])
+
+                export_dir = QFileDialog.getExistingDirectory(self, "Select Directory", export_dir)
+
+                if export_dir != "":
+                    export_paths = [os.path.join(export_dir, os.path.basename(export_path)) for export_path in export_paths]
+                    export_paths = [os.path.abspath(export_path) for export_path in export_paths]
+
+            worker = Worker(self.export_ebFRET_data, export_dataset_name, export_channel_name,
+                            crop_mode, export_states, export_paths, split_datasets)
+            worker.signals.progress.connect(partial(self.gui_progrssbar, name="export"))
+            worker.signals.finished.connect(self.export_finished)
+            self.threadpool.start(worker)
+
+
+
     def initialise_origin_export(self):
 
         if self.data_dict != {}:
@@ -287,7 +322,6 @@ class _export_methods:
                 worker.signals.progress.connect(partial(self.gui_progrssbar, name="export"))
                 worker.signals.finished.connect(self.export_finished)
                 self.threadpool.start(worker)
-
 
     def export_summary(self, export_path, export_dataset, export_channel, crop_data, progress_callback=None):
 
@@ -460,6 +494,125 @@ class _export_methods:
             export_paths.append(export_path)
 
         return export_paths
+
+
+    def populate_smd_dict(self, export_dataset_name, export_channel_name,
+            crop_data, progress_callback=None):
+
+        try:
+
+            columns = self.export_selection_dict[export_channel_name]
+            columns = [column.lower() for column in columns]
+
+            for index, col in enumerate(columns):
+                if "efficiency" in col.lower():
+                    columns[index] = "fret"
+
+            smd_dict = {"attr": {"data_package": "TraceAnalyser"},
+                        "columns": columns,
+                        "data": {"attr": [], "id": [], "index": [], "values": []},
+                        "id": ''.join(random.choices(string.ascii_lowercase + string.digits, k=32)),
+                        "type": "TraceAnalyser",
+                        }
+
+            if export_dataset_name == "All Datasets":
+                dataset_list = list(self.data_dict.keys())
+            else:
+                dataset_list = [export_dataset_name]
+
+            for dataset_name in dataset_list:
+                dataset_data = self.data_dict[dataset_name]
+
+                for localisation_number, localisation_data in enumerate(dataset_data):
+
+                    user_label = localisation_data["user_label"]
+                    nucleotide_label = localisation_data["nucleotide_label"]
+                    crop_range = localisation_data["crop_range"]
+                    file_path = localisation_data["import_path"]
+                    file_name = os.path.basename(file_path)
+                    states = localisation_data["states"]
+
+                    if self.get_filter_status("data", user_label, nucleotide_label) == False:
+
+                        smd_values = []
+
+                        for data_name in self.export_selection_dict[export_channel_name]:
+
+                            data = localisation_data[data_name]
+
+                            if crop_data == True and len(crop_range) == 2:
+                                crop_range = [int(crop_range[0]), int(crop_range[1])]
+                                crop_range = sorted(crop_range)
+                                if crop_range[0] < 0:
+                                    crop_range[0] = 0
+                                if crop_range[0] >= 0 and crop_range[1] <= len(data):
+                                    data = data[crop_range[0]:crop_range[1]]
+
+                            data[data == 0] = np.random.rand() * 1e-10
+                            smd_values.append(data)
+
+                        smd_index = np.expand_dims(np.arange(1, len(smd_values[0])+1), -1).astype(float).tolist()
+                        smd_values = np.stack(smd_values, axis=1).tolist()
+
+                        lowerbound = np.min(smd_values)
+
+                        smd_id = ''.join(random.choices(string.ascii_lowercase + string.digits, k=32))
+                        smd_attr = {
+                            "file":os.path.basename(file_path),
+                            "layer" :data_name,
+                            "localisation_number" :localisation_number,
+                            "lowerbound" :lowerbound,
+                            "group": "group 1",
+                            "restart" :0,
+                            "crop_min" :0,
+                            "crop_max" :20,
+                        }
+
+                        smd_dict["data"]["attr"].append(smd_attr)
+                        smd_dict["data"]["id"].append(smd_id)
+                        smd_dict["data"]["index"].append(smd_index)
+                        smd_dict["data"]["values"].append(smd_values)
+
+        except:
+            print(traceback.format_exc())
+            smd_dict = {}
+
+        return smd_dict
+
+
+
+
+
+
+    def export_ebFRET_data(self, export_dataset_name, export_channel_name,
+            crop_mode, export_states=False, export_paths = [], split_datasets = False, progress_callback=None):
+
+        try:
+
+            if split_datasets == False:
+
+                export_path = export_paths[0]
+
+                smd_dict  = self.populate_smd_dict(export_dataset_name, export_channel_name,
+                    crop_mode, progress_callback)
+
+                import mat4py
+                mat4py.savemat(export_path, smd_dict)
+
+                self.print_notification(f"Exported SMD data to {export_path}")
+
+
+
+
+
+
+
+
+
+        except:
+            print(traceback.format_exc())
+
+
 
     def export_excel_data(self, export_dataset_name, export_channel_name,
             crop_mode, export_states=False, export_paths = [], split_datasets = False, progress_callback=None):

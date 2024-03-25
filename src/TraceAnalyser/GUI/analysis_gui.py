@@ -261,7 +261,8 @@ class AnalysisGUI(QtWidgets.QMainWindow,
                                    "fitted_states", "crop_data",
                                    "ml_class"]
 
-            elif export_mode in ["Excel (.xlsx)","OriginLab (.opju)"]:
+            elif export_mode in ["Excel (.xlsx)","OriginLab (.opju)",
+                                 "ebFRET SMD (.mat)"]:
 
                 hidden_controls = ["separator","ml_class"]
 
