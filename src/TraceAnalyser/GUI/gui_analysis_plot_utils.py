@@ -81,11 +81,13 @@ class _analysis_plotting_methods:
 
             dataset = self.analysis_graph_dataset.currentText()
             mode = self.analysis_graph_channel.currentText()
+            crop = self.analysis_crop_traces.isChecked()
 
             for localisation_index, localisation_data in enumerate(self.data_dict[dataset]):
 
                 user_label = localisation_data["user_label"]
                 nucleotide_label = localisation_data["nucleotide_label"]
+                crop_range = localisation_data["crop_range"]
 
                 if self.get_filter_status("analysis", user_label, nucleotide_label) == False:
 
@@ -93,6 +95,10 @@ class _analysis_plotting_methods:
                     state_data = localisation_data["states"]
 
                     if len(trace_data) > 0:
+
+                        if crop == True and len(crop_range) == 2:
+                            trace_data = trace_data[crop_range[0]:crop_range[1]]
+                            state_data = state_data[crop_range[0]:crop_range[1]]
 
                         trace_data_list.append(trace_data)
                         state_data_list.append(state_data)
@@ -146,7 +152,6 @@ class _analysis_plotting_methods:
                                 values = [noise]*len(data)
                             elif histogram_selection == "Dwell Times (Frames)":
                                 dwell_time = len(data)
-                                dwell_time = dwell_time * exposure_time
                                 values = [dwell_time]*len(data)
                             elif histogram_selection == "Dwell Times (Seconds)":
                                 dwell_time = len(data)
