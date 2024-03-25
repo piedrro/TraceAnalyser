@@ -44,6 +44,9 @@ class _export_methods:
             elif export_mode == "ebFRET SMD (.mat)":
                 self.initialise_ebfret_export()
 
+            elif export_mode == "Nero (.dat)":
+                self.initialise_nero_export()
+
 
         except:
             print(traceback.format_exc())
@@ -196,6 +199,34 @@ class _export_methods:
             worker.signals.finished.connect(self.export_finished)
             self.threadpool.start(worker)
 
+
+    def initialise_nero_export(self):
+
+        if self.data_dict != {}:
+            export_location = self.export_settings.export_location.currentText()
+            split_datasets = self.export_settings.export_split_datasets.isChecked()
+            export_dataset_name = self.export_settings.export_dataset_selection.currentText()
+            export_channel_name = self.export_settings.export_channel_selection.currentText()
+            crop_mode = False
+            export_states = self.export_settings.export_fitted_states.isChecked()
+
+            export_paths = self.get_export_paths(extension="dat")
+
+            if export_location == "Select Directory":
+                export_dir = os.path.dirname(export_paths[0])
+
+                export_dir = QFileDialog.getExistingDirectory(self, "Select Directory", export_dir)
+
+                if export_dir != "":
+                    export_paths = [os.path.join(export_dir, os.path.basename(export_path)) for export_path in export_paths]
+                    export_paths = [os.path.abspath(export_path) for export_path in export_paths]
+
+            worker = Worker(self.export_nero_data, export_dataset_name, export_channel_name,
+                crop_mode, export_paths, split_datasets)
+            worker.signals.progress.connect(partial(self.gui_progrssbar, name="export"))
+            worker.signals.finished.connect(self.export_finished)
+            self.threadpool.start(worker)
+
     def initialise_ebfret_export(self):
 
         if self.data_dict != {}:
@@ -223,8 +254,6 @@ class _export_methods:
             worker.signals.progress.connect(partial(self.gui_progrssbar, name="export"))
             worker.signals.finished.connect(self.export_finished)
             self.threadpool.start(worker)
-
-
 
     def initialise_origin_export(self):
 
@@ -580,12 +609,59 @@ class _export_methods:
         return smd_dict
 
 
+    def export_nero_data(self, export_dataset_name, export_channel_name,
+            crop_mode, export_paths = [], split_datasets = False, progress_callback=None):
+        try:
+            if self.data_dict != {}:
+
+                if split_datasets == False:
+
+                    export_path = export_paths[0]
+
+                    export_data_dict = self.get_export_data("data", export_dataset_name,
+                        export_channel_name, crop_mode, export_states=False, progress_callback=progress_callback)
+
+                    export_data = export_data_dict["data"]
+                    export_data = np.stack(export_data, axis=1)
+
+                    export_indices = np.array(export_data_dict["index"]).astype(int)
+                    export_indices += 1
+
+                    export_data = pd.DataFrame(export_data)
+                    export_data.columns = export_indices
+
+                    export_data.to_csv(export_path, index=False, sep=" ")
+
+                    self.print_notification(f"Exported Nero data to {export_path}")
+
+                else:
+
+                    for export_dataset_name, export_path in zip(self.data_dict.keys(), export_paths):
+
+                        export_data_dict = self.get_export_data("data", export_dataset_name,
+                            export_channel_name, crop_mode, export_states=False, progress_callback=progress_callback)
+
+                        export_data = export_data_dict["data"]
+                        export_data = np.stack(export_data, axis=1)
+
+                        export_indices = np.array(export_data_dict["index"]).astype(int)
+                        export_indices += 1
+
+                        export_data = pd.DataFrame(export_data)
+                        export_data.columns = export_indices
+
+                        export_data.to_csv(export_path, index=False, sep=" ")
+
+                        self.print_notification(f"Exported Nero data to {export_path}")
+
+        except:
+            print(traceback.format_exc())
 
 
 
 
     def export_ebFRET_data(self, export_dataset_name, export_channel_name,
-            crop_mode, export_states=False, export_paths = [], split_datasets = False, progress_callback=None):
+            crop_mode, export_paths = [], split_datasets = False, progress_callback=None):
 
         try:
 
@@ -601,6 +677,17 @@ class _export_methods:
 
                 self.print_notification(f"Exported SMD data to {export_path}")
 
+            else:
+
+                for export_dataset_name, export_path in zip(self.data_dict.keys(), export_paths):
+
+                    smd_dict = self.populate_smd_dict(export_dataset_name,
+                        export_channel_name, crop_mode, progress_callback)
+
+                    import mat4py
+                    mat4py.savemat(export_path, smd_dict)
+
+                self.print_notification(f"Exported SMD data to {export_path}")
 
 
 

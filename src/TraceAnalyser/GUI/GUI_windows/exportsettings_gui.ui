@@ -65,6 +65,11 @@
        </item>
        <item>
         <property name="text">
+         <string>Nero (.dat)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>OriginLab (.opju)</string>
         </property>
        </item>

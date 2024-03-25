@@ -261,8 +261,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
                                    "fitted_states", "crop_data",
                                    "ml_class"]
 
-            elif export_mode in ["Excel (.xlsx)","OriginLab (.opju)",
-                                 "ebFRET SMD (.mat)"]:
+            elif export_mode in ["Excel (.xlsx)","OriginLab (.opju)"]:
 
                 hidden_controls = ["separator","ml_class"]
 
@@ -279,6 +278,16 @@ class AnalysisGUI(QtWidgets.QMainWindow,
                     hidden_controls = ["separator", "split_datasets",
                                        "fitted_states", "crop_data",
                                        "ml_class"]
+
+            elif export_mode == "Nero (.dat)":
+
+                    hidden_controls = ["separator","fitted_states",
+                                       "crop_data", "ml_class"]
+
+            elif export_mode == "ebFRET SMD (.mat)":
+
+                        hidden_controls = ["separator",
+                                           "fitted_states", "ml_class"]
 
             for control in control_dict:
 
