@@ -941,12 +941,14 @@ class _import_methods:
                             donor = np.array(localisation_dict["Donor"])
                             acceptor = np.array(localisation_dict["Acceptor"])
 
-                            correction_factors = localisation_dict["correction_factors"]
+                            if len(donor) == len(acceptor):
 
-                            fret_efficiency, corrected = self.compute_fret_efficiency(donor, acceptor, correction_factors)
+                                correction_factors = localisation_dict["correction_factors"]
 
-                            localisation_dict["FRET Efficiency"] = fret_efficiency
-                            localisation_dict["FRET Efficiency Corrected"] = corrected
+                                fret_efficiency, corrected = self.compute_fret_efficiency(donor, acceptor, correction_factors)
+
+                                localisation_dict["FRET Efficiency"] = fret_efficiency
+                                localisation_dict["FRET Efficiency Corrected"] = corrected
 
                         if set(["DD", "DA","AA"]).issubset(localisation_dict_keys):
 
@@ -954,13 +956,15 @@ class _import_methods:
                             DA = np.array(localisation_dict["DA"])
                             AA = np.array(localisation_dict["AA"])
 
-                            correction_factors = localisation_dict["correction_factors"]
+                            if len(DD) == len(DA) == len(AA):
 
-                            alex_efficiency, stoichiometry, corrected = self.compute_alex_efficiency(DD, DA, AA, correction_factors)
+                                correction_factors = localisation_dict["correction_factors"]
 
-                            localisation_dict["ALEX Efficiency"] = alex_efficiency
-                            localisation_dict["ALEX Efficiency Corrected"] = corrected
-                            localisation_dict["ALEX Stoichiometry"] = stoichiometry
+                                alex_efficiency, stoichiometry, corrected = self.compute_alex_efficiency(DD, DA, AA, correction_factors)
+
+                                localisation_dict["ALEX Efficiency"] = alex_efficiency
+                                localisation_dict["ALEX Efficiency Corrected"] = corrected
+                                localisation_dict["ALEX Stoichiometry"] = stoichiometry
 
         except:
             print(traceback.format_exc())
