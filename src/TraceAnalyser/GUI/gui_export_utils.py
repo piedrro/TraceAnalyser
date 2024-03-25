@@ -97,6 +97,17 @@ class _export_methods:
 
         try:
 
+            export_mode = self.export_settings.export_mode.currentText()
+
+            if export_mode == "Nero (.dat)":
+                allowed_channels = ["Trace", "Donor", "Acceptor", "FRET Efficiency",
+                                    "ALEX Efficiency", "DD", "AA", "DA", "AD"]
+            elif export_mode == "ebFRET SMD (.mat)":
+                allowed_channels = ["FRET Data"]
+            else:
+                allowed_channels = []
+
+
             if len(self.data_dict.keys()) > 0:
 
                 channel_combo = getattr(self.export_settings, channel_combo_name)
@@ -162,6 +173,9 @@ class _export_methods:
                     self.export_selection_dict["AD"] = ["AD"]
 
                 combo_options = self.sort_channel_list(combo_options)
+
+                if allowed_channels != []:
+                    combo_options = [channel for channel in combo_options if channel in allowed_channels]
 
                 channel_combo.blockSignals(True)
                 channel_combo.clear()
@@ -250,7 +264,7 @@ class _export_methods:
                     export_paths = [os.path.abspath(export_path) for export_path in export_paths]
 
             worker = Worker(self.export_ebFRET_data, export_dataset_name, export_channel_name,
-                            crop_mode, export_states, export_paths, split_datasets)
+                            crop_mode, export_paths, split_datasets)
             worker.signals.progress.connect(partial(self.gui_progrssbar, name="export"))
             worker.signals.finished.connect(self.export_finished)
             self.threadpool.start(worker)
@@ -577,7 +591,8 @@ class _export_methods:
                                 if crop_range[0] >= 0 and crop_range[1] <= len(data):
                                     data = data[crop_range[0]:crop_range[1]]
 
-                            data[data == 0] = np.random.rand() * 1e-10
+                            data = np.nan_to_num(data)
+                            data[data <= 0] = np.random.rand() * 1e-10
                             smd_values.append(data)
 
                         smd_index = np.expand_dims(np.arange(1, len(smd_values[0])+1), -1).astype(float).tolist()
