@@ -426,10 +426,8 @@ class _analysis_plotting_methods:
                 for state_index, state in enumerate(histogram_data["values"].keys()):
 
                     histogram_values = histogram_data["values"][state]
-                    data_indices = histogram_data["data_index"][state]
-                    trace_indices = histogram_data["trace_index"][state]
 
-                    for value, data_index, trace_index in zip(histogram_values,data_indices,trace_indices):
+                    for value in histogram_values:
 
                         if "Raw Data" in histogram:
                             dat = {"dataset": histogram_dataset,
