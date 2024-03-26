@@ -253,7 +253,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
                 self.analysis_exposure_time_label.hide()
                 self.analysis_exposure_time_label.setVisible(False)
 
-            elif "dwell" in histogram.lower():
+            elif histogram == "Dwell Times (Seconds)":
 
                 self.analysis_state.show()
                 self.analysis_exposure_time.setVisible(True)
