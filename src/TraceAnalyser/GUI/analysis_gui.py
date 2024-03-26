@@ -213,6 +213,8 @@ class AnalysisGUI(QtWidgets.QMainWindow,
 
         self.crop_window.detect_crop.clicked.connect(self.initialise_crop_detection)
 
+        self.analysis_histogram.currentIndexChanged.connect(self.update_histogram_options)
+
         # Set the color of the status bar text
         self.statusBar().setStyleSheet("QStatusBar{color: red;}")
 
@@ -227,11 +229,56 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.update_simulation_options()
         self.update_export_options()
         self.update_detectcrop_options()
+        self.update_histogram_options()
 
         self.current_dialog = None
         self.updating_combos = False
 
         self.plot_queue = queue.Queue()
+
+
+    def update_histogram_options(self):
+
+        try:
+            histogram = self.analysis_histogram.currentText()
+
+            if histogram == "Raw Data":
+                self.analysis_state.hide()
+                self.analysis_state.setVisible(False)
+                self.analysis_state_label.hide()
+                self.analysis_state_label.setVisible(False)
+
+                self.analysis_exposure_time.hide()
+                self.analysis_exposure_time.setVisible(False)
+                self.analysis_exposure_time_label.hide()
+                self.analysis_exposure_time_label.setVisible(False)
+
+            elif "dwell" in histogram.lower():
+
+                self.analysis_state.show()
+                self.analysis_exposure_time.setVisible(True)
+                self.analysis_state_label.show()
+                self.analysis_exposure_time_label.show()
+
+                self.analysis_exposure_time.show()
+                self.analysis_exposure_time.setVisible(True)
+                self.analysis_exposure_time_label.show()
+                self.analysis_exposure_time_label.setVisible(True)
+
+            else:
+                self.analysis_state.show()
+                self.analysis_state.setVisible(True)
+                self.analysis_state_label.show()
+                self.analysis_state_label.setVisible(True)
+
+                self.analysis_exposure_time.hide()
+                self.analysis_exposure_time.setVisible(False)
+                self.analysis_exposure_time_label.hide()
+                self.analysis_exposure_time_label.setVisible(False)
+
+        except:
+            print(traceback.format_exc())
+
 
 
     def update_export_options(self):
@@ -325,7 +372,6 @@ class AnalysisGUI(QtWidgets.QMainWindow,
             pass
 
 
-
     def update_measurement_labels(self):
 
         try:
@@ -358,9 +404,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
     def dev_function(self):
 
         print("Dev function")
-        self.compute_efficiencies()
-        self.initialise_plot()
-
+        self.update_histogram_options()
 
     def enterEvent(self, event):
         self.setFocus()

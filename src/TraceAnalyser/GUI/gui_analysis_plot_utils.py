@@ -117,6 +117,7 @@ class _analysis_plotting_methods:
         try:
 
             histogram_selection = self.analysis_histogram.currentText()
+            state_selection = self.analysis_state.currentText()
             exposure_time = self.analysis_exposure_time.value()
 
             if len(trace_data) > 0:
@@ -139,26 +140,28 @@ class _analysis_plotting_methods:
 
                             state = state[0]
 
-                            if state not in histogram_data["values"].keys():
-                                histogram_data["values"][state] = []
+                            if state_selection == "All States" or str(state) == state_selection:
 
-                            if histogram_selection == "Intensity":
-                                values = data.tolist()
-                            elif histogram_selection == "Centres":
-                                centres = np.mean(data)
-                                values = [centres]*len(data)
-                            elif histogram_selection == "Noise":
-                                noise = np.std(data)
-                                values = [noise]*len(data)
-                            elif histogram_selection == "Dwell Times (Frames)":
-                                dwell_time = len(data)
-                                values = [dwell_time]*len(data)
-                            elif histogram_selection == "Dwell Times (Seconds)":
-                                dwell_time = len(data)
-                                dwell_time = dwell_time * exposure_time * 1e-3
-                                values = [dwell_time] * len(data)
+                                if state not in histogram_data["values"].keys():
+                                    histogram_data["values"][state] = []
 
-                            histogram_data["values"][state].extend(values)
+                                if histogram_selection == "Intensity":
+                                    values = data.tolist()
+                                elif histogram_selection == "Centres":
+                                    centres = np.mean(data)
+                                    values = [centres]*len(data)
+                                elif histogram_selection == "Noise":
+                                    noise = np.std(data)
+                                    values = [noise]*len(data)
+                                elif histogram_selection == "Dwell Times (Frames)":
+                                    dwell_time = len(data)
+                                    values = [dwell_time]*len(data)
+                                elif histogram_selection == "Dwell Times (Seconds)":
+                                    dwell_time = len(data)
+                                    dwell_time = dwell_time * exposure_time * 1e-3
+                                    values = [dwell_time] * len(data)
+
+                                histogram_data["values"][state].extend(values)
 
                 else:
 
@@ -400,6 +403,7 @@ class _analysis_plotting_methods:
         try:
 
             histogram = self.analysis_histogram.currentText()
+            state_selection = self.analysis_state.currentText()
             histogram_dataset = self.analysis_graph_dataset.currentText()
             histogram_channel = self.analysis_graph_channel.currentText()
             group_label = self.analysis_user_group.currentText()
@@ -416,8 +420,10 @@ class _analysis_plotting_methods:
                 metric = f"{histogram_channel} Centres"
             elif histogram == "Noise":
                 metric = f"{histogram_channel} Noise"
-            elif histogram == "Dwell Times":
-                metric = f"{histogram_channel} Dwell Times"
+            elif histogram == "Dwell Times (Frames)":
+                metric = f"{histogram_channel} Dwell Times (Frames)"
+            elif histogram == "Dwell Times (Seconds)":
+                metric = f"{histogram_channel} Dwell Times (Seconds)"
 
             export_data = []
 
@@ -425,30 +431,32 @@ class _analysis_plotting_methods:
 
                 for state_index, state in enumerate(histogram_data["values"].keys()):
 
-                    histogram_values = histogram_data["values"][state]
+                    if state_selection == "All States" or str(state) == state_selection:
 
-                    for value in histogram_values:
+                        histogram_values = histogram_data["values"][state]
 
-                        if "Raw Data" in histogram:
-                            dat = {"dataset": histogram_dataset,
-                                   "group": group_label,
-                                   "nucleotide": nucleotide_label,
-                                   metric: value,
-                                   }
-                        else:
-                            dat = {"dataset": histogram_dataset,
-                                   "group": group_label,
-                                   "nucleotide": nucleotide_label,
-                                   metric: value,
-                                   "state": state,
-                                   }
+                        for value in histogram_values:
 
-                        if dat["nucleotide"] in ["None",None]:
-                            dat.pop("nucleotide")
-                        if dat["group"] in ["None",None]:
-                            dat.pop("group")
+                            if "Raw Data" in histogram:
+                                dat = {"dataset": histogram_dataset,
+                                       "group": group_label,
+                                       "nucleotide": nucleotide_label,
+                                       metric: value,
+                                       }
+                            else:
+                                dat = {"dataset": histogram_dataset,
+                                       "group": group_label,
+                                       "nucleotide": nucleotide_label,
+                                       metric: value,
+                                       "state": state,
+                                       }
 
-                        export_data.append(dat)
+                            if dat["nucleotide"] in ["None",None]:
+                                dat.pop("nucleotide")
+                            if dat["group"] in ["None",None]:
+                                dat.pop("group")
+
+                            export_data.append(dat)
 
             export_data = pd.DataFrame(export_data)
 
