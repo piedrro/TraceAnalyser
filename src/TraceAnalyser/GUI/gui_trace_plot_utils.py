@@ -658,7 +658,7 @@ class _trace_plotting_methods:
 
                         for line_index, (plot, line, plot_label) in enumerate(zip(sub_axes, plot_lines, plot_lines_labels)):
                             plot.setXRange(min=plot_ranges["xRange"][0], max=plot_ranges["xRange"][1])
-                            plot.enableAutoRange(axis="y")
+                            # plot.enableAutoRange(axis="y")
 
         except:
             print(traceback.format_exc())
