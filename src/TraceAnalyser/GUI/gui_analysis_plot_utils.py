@@ -159,17 +159,21 @@ class _analysis_plotting_methods:
                                             values = data.tolist()
                                         elif histogram_selection == "Centres":
                                             centres = np.mean(data)
-                                            values = [centres]*len(data)
+                                            values = [centres]
+                                            # values = [centres]*len(data)
                                         elif histogram_selection == "Noise":
                                             noise = np.std(data)
-                                            values = [noise]*len(data)
+                                            values = [noise]
+                                            # values = [noise]*len(data)
                                         elif histogram_selection == "Dwell Times (Frames)":
                                             dwell_time = len(data)
-                                            values = [dwell_time]*len(data)
+                                            values = [dwell_time]
+                                            # values = [dwell_time]*len(data)
                                         elif histogram_selection == "Dwell Times (Seconds)":
                                             dwell_time = len(data)
                                             dwell_time = dwell_time * exposure_time * 1e-3
-                                            values = [dwell_time] * len(data)
+                                            values = [dwell_time]
+                                            # values = [dwell_time] * len(data)
 
                                         histogram_data["values"][state].extend(values)
 
