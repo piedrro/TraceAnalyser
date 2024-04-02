@@ -103,7 +103,8 @@ class _export_methods:
                 allowed_channels = ["Trace", "Donor", "Acceptor", "FRET Efficiency",
                                     "ALEX Efficiency", "DD", "AA", "DA", "AD"]
             elif export_mode == "ebFRET SMD (.mat)":
-                allowed_channels = ["FRET Data"]
+                allowed_channels = ["FRET Data", "Trace", "Donor", "Acceptor", "FRET Efficiency",
+                                    "ALEX Efficiency", "DD", "AA", "DA", "AD"]
             else:
                 allowed_channels = []
 
@@ -538,18 +539,111 @@ class _export_methods:
 
         return export_paths
 
+    def infer_efficiency(self, data, ia_range=[10,20]):
+
+        E = np.array(data)  # Ensure data is in numpy array form for vectorized operations
+        # Generate random IA values within the specified range for each efficiency value
+        IA = np.random.uniform(low=ia_range[0], high=ia_range[1], size=E.shape)
+        ID = IA * (1 - E) / E  # Calculate ID based on the efficiency values and randomly chosen IA
+
+        return ID, IA
+
+
+    def populate_ebfret_session(self, export_dataset_name, export_channel_name,
+            crop_data, progress_callback=None):
+
+        try:
+
+            ebfret_session = {"series": {"file": [],"label": [],"group": [],"time": [],
+                                         "donor": [],"acceptor": [],"signal": [],
+                                         "crop": [], "exclude": []},
+                              "controls": {"ensemble": [{"min": 2, "max": 6, "value":2}],
+                                           "series":[],
+                                           "run_analysis":[False]},
+                              "analysis": [[]],
+                              # "analysis": {"dim":[[], [{"states":2}], [{"states":3}],[{"states":4}], [{"states":5}], [{"states":6}]],
+                              #              "viterbi":[[]]},
+                              }
+
+            if export_dataset_name == "All Datasets":
+                dataset_list = list(self.data_dict.keys())
+            else:
+                dataset_list = [export_dataset_name]
+
+            n_traces = 0
+
+            for dataset_name in dataset_list:
+                dataset_data = self.data_dict[dataset_name]
+
+                for localisation_number, localisation_data in enumerate(dataset_data):
+                    user_label = localisation_data["user_label"]
+                    nucleotide_label = localisation_data["nucleotide_label"]
+                    crop_range = localisation_data["crop_range"]
+                    file_path = localisation_data["import_path"]
+                    file_name = os.path.basename(file_path)
+                    states = localisation_data["states"]
+
+                    if self.get_filter_status("data", user_label, nucleotide_label) == False:
+
+                        n_traces += 1
+                        session_values = []
+
+                        for data_name in self.export_selection_dict[export_channel_name]:
+                            data = localisation_data[data_name]
+
+                            if crop_data == True and len(crop_range) == 2:
+                                crop_range = [int(crop_range[0]), int(crop_range[1])]
+                                crop_range = sorted(crop_range)
+                                if crop_range[0] < 0:
+                                    crop_range[0] = 0
+                                if crop_range[0] >= 0 and crop_range[1] <= len(data):
+                                    data = data[crop_range[0]:crop_range[1]]
+
+                            data = np.nan_to_num(data)
+                            session_values.append(data)
+
+                        if len(session_values) == 1:
+                            signal = session_values[0]
+                            donor, acceptor = self.infer_efficiency(signal)
+                        else:
+                            donor, acceptor = session_values
+                            signal = acceptor/(donor + acceptor)
+
+                        session_label = ''.join(random.choices(string.ascii_lowercase + string.digits, k=32))
+                        time_data = np.expand_dims(np.arange(1, len(session_values[0])+1), -1).astype(float).tolist()
+
+                        donor = np.expand_dims(donor, -1).astype(float).tolist()
+                        acceptor = np.expand_dims(acceptor, -1).astype(float).tolist()
+                        signal = np.expand_dims(signal, -1).astype(float).tolist()
+                        crop = {"min": 1, "max": len(signal)-1}
+
+                        ebfret_session["series"]["file"].append(file_name)
+                        ebfret_session["series"]["label"].append(session_label)
+                        ebfret_session["series"]["group"].append("group 1")
+                        ebfret_session["series"]["time"].append(time_data)
+                        ebfret_session["series"]["donor"].append(donor)
+                        ebfret_session["series"]["acceptor"].append(acceptor)
+                        ebfret_session["series"]["signal"].append(signal)
+                        ebfret_session["series"]["crop"].append(crop)
+                        ebfret_session["series"]["exclude"].append(False)
+
+            ebfret_session["controls"]["series"] = [{"value":1, "min": 1, "max": n_traces,}]
+
+        except:
+            print(traceback.format_exc())
+            pass
+
+        return ebfret_session
+
+
+
 
     def populate_smd_dict(self, export_dataset_name, export_channel_name,
             crop_data, progress_callback=None):
 
         try:
 
-            columns = self.export_selection_dict[export_channel_name]
-            columns = [column.lower() for column in columns]
-
-            for index, col in enumerate(columns):
-                if "efficiency" in col.lower():
-                    columns[index] = "fret"
+            columns = ["donor","acceptor","fret"]
 
             smd_dict = {"attr": {"data_package": "TraceAnalyser"},
                         "columns": columns,
@@ -592,8 +686,19 @@ class _export_methods:
                                     data = data[crop_range[0]:crop_range[1]]
 
                             data = np.nan_to_num(data)
-                            data[data <= 0] = np.random.rand() * 1e-10
+                            # data[data <= 0] = np.random.rand() * 1e-10
                             smd_values.append(data)
+
+                        if len(smd_values) == 1:
+                            data = smd_values[0]
+                            # data = np.random.uniform(low=-1, high=1, size=data.shape)
+                            ID, IA = self.infer_efficiency(data)
+                            fret = IA/(ID + IA)
+                            smd_values = [list(ID), list(IA), list(fret)]
+                        elif len(smd_values) == 2:
+                            ID, IA = smd_values
+                            fret = IA/(ID + IA)
+                            smd_values = [list(ID), list(IA), list(fret)]
 
                         smd_index = np.expand_dims(np.arange(1, len(smd_values[0])+1), -1).astype(float).tolist()
                         smd_values = np.stack(smd_values, axis=1).tolist()
@@ -687,6 +792,9 @@ class _export_methods:
                 smd_dict  = self.populate_smd_dict(export_dataset_name, export_channel_name,
                     crop_mode, progress_callback)
 
+                # smd_dict  = self.populate_ebfret_session(export_dataset_name, export_channel_name,
+                #     crop_mode, progress_callback)
+
                 import mat4py
                 mat4py.savemat(export_path, smd_dict)
 
@@ -696,7 +804,7 @@ class _export_methods:
 
                 for export_dataset_name, export_path in zip(self.data_dict.keys(), export_paths):
 
-                    smd_dict = self.populate_smd_dict(export_dataset_name,
+                    smd_dict = self.populate_ebfret_session(export_dataset_name,
                         export_channel_name, crop_mode, progress_callback)
 
                     import mat4py

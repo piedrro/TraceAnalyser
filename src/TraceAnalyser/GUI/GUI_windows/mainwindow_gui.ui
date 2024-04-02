@@ -666,6 +666,13 @@
                </layout>
               </item>
               <item>
+               <widget class="QCheckBox" name="analysis_exclude_partial">
+                <property name="text">
+                 <string>Exclude Partial States</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QPushButton" name="draw_analysis_plot">
                 <property name="text">
                  <string>Draw Histogram</string>
@@ -1140,7 +1147,7 @@
      <x>0</x>
      <y>0</y>
      <width>868</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">

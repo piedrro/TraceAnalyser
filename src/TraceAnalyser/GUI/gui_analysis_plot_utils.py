@@ -119,6 +119,7 @@ class _analysis_plotting_methods:
             histogram_selection = self.analysis_histogram.currentText()
             state_selection = self.analysis_state.currentText()
             exposure_time = self.analysis_exposure_time.value()
+            exclude_partial = self.analysis_exclude_partial.isChecked()
 
             if len(trace_data) > 0:
 
@@ -128,40 +129,49 @@ class _analysis_plotting_methods:
 
                     if len(state_data) == len(trace_data) and len(np.unique(state_data)) > 1:
 
-                        trace_data = np.concatenate(trace_data)
-                        state_data = np.concatenate(state_data)
+                        for trace_dat, state_dat in zip(trace_data, state_data):
 
-                        change_indices = np.where(np.diff(state_data) != 0)[0] + 1
+                            change_indices = np.where(np.diff(state_dat) != 0)[0] + 1
 
-                        split_trace_data = np.split(trace_data, change_indices)
-                        split_state_data = np.split(state_data, change_indices)
+                            split_trace_data = np.split(trace_dat, change_indices)
+                            split_state_data = np.split(state_dat, change_indices)
 
-                        for data, state in zip(split_trace_data, split_state_data):
+                            n_states = len(np.unique(state_data))
 
-                            state = state[0]
+                            for state_index, (data, state) in enumerate(zip(split_trace_data, split_state_data)):
 
-                            if state_selection == "All States" or str(state) == state_selection:
+                                append = True
 
-                                if state not in histogram_data["values"].keys():
-                                    histogram_data["values"][state] = []
+                                if exclude_partial == True:
+                                    if state_index == 0 or state_index == n_states:
+                                        append=False
 
-                                if histogram_selection == "Intensity":
-                                    values = data.tolist()
-                                elif histogram_selection == "Centres":
-                                    centres = np.mean(data)
-                                    values = [centres]*len(data)
-                                elif histogram_selection == "Noise":
-                                    noise = np.std(data)
-                                    values = [noise]*len(data)
-                                elif histogram_selection == "Dwell Times (Frames)":
-                                    dwell_time = len(data)
-                                    values = [dwell_time]*len(data)
-                                elif histogram_selection == "Dwell Times (Seconds)":
-                                    dwell_time = len(data)
-                                    dwell_time = dwell_time * exposure_time * 1e-3
-                                    values = [dwell_time] * len(data)
+                                if append == True:
 
-                                histogram_data["values"][state].extend(values)
+                                    state = state[0]
+
+                                    if state_selection == "All States" or str(state) == state_selection:
+
+                                        if state not in histogram_data["values"].keys():
+                                            histogram_data["values"][state] = []
+
+                                        if histogram_selection == "Intensity":
+                                            values = data.tolist()
+                                        elif histogram_selection == "Centres":
+                                            centres = np.mean(data)
+                                            values = [centres]*len(data)
+                                        elif histogram_selection == "Noise":
+                                            noise = np.std(data)
+                                            values = [noise]*len(data)
+                                        elif histogram_selection == "Dwell Times (Frames)":
+                                            dwell_time = len(data)
+                                            values = [dwell_time]*len(data)
+                                        elif histogram_selection == "Dwell Times (Seconds)":
+                                            dwell_time = len(data)
+                                            dwell_time = dwell_time * exposure_time * 1e-3
+                                            values = [dwell_time] * len(data)
+
+                                        histogram_data["values"][state].extend(values)
 
                 else:
 
