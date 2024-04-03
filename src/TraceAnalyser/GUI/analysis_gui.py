@@ -123,8 +123,26 @@ class AnalysisGUI(QtWidgets.QMainWindow,
 
         self.fitting_window.hmm_detect_states.clicked.connect(self.detect_hmm_states)
 
-        self.plot_settings.crop_reset_active.clicked.connect(partial(self.reset_crop_ranges, mode = "active"))
-        self.plot_settings.crop_reset_all.clicked.connect(partial(self.reset_crop_ranges, mode = "all"))
+        self.plot_settings.crop_reset_active.clicked.connect(partial(self.reset_graphics_overlays,
+            mode = "crop", loc_mode ="active"))
+        self.plot_settings.crop_reset_all.clicked.connect(partial(self.reset_graphics_overlays,
+            mode = "crop", loc_mode ="all"))
+
+        self.plot_settings.measurment_reset_active.clicked.connect(partial(self.reset_graphics_overlays,
+            mode = "measurement", loc_mode ="active"))
+        self.plot_settings.measurment_reset_all.clicked.connect(partial(self.reset_graphics_overlays,
+            mode = "measurement", loc_mode ="all"))
+
+        self.plot_settings.bleach_reset_active.clicked.connect(partial(self.reset_graphics_overlays,
+            mode = "bleach", loc_mode ="active"))
+        self.plot_settings.bleach_reset_all.clicked.connect(partial(self.reset_graphics_overlays,
+            mode = "bleach", loc_mode ="all"))
+
+        self.plot_settings.gamma_reset_active.clicked.connect(partial(self.reset_graphics_overlays,
+            mode = "gamma", loc_mode ="active"))
+        self.plot_settings.gamma_reset_all.clicked.connect(partial(self.reset_graphics_overlays,
+            mode = "gamma", loc_mode ="all"))
+
 
         self.data_dict = {}
 

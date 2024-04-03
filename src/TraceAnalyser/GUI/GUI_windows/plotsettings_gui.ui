@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>316</width>
+    <width>396</width>
     <height>575</height>
    </rect>
   </property>
@@ -165,10 +165,17 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_5">
-     <item row="0" column="0">
-      <widget class="QCheckBox" name="show_crop_range">
+     <item row="0" column="1">
+      <widget class="QPushButton" name="crop_reset_active">
        <property name="text">
-        <string>Crop Ranges</string>
+        <string>Reset (Active Plot)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="show_bleach_range">
+       <property name="text">
+        <string>Bleach Ranges [B]</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -176,32 +183,81 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QCheckBox" name="show_bleach_range">
+      <widget class="QCheckBox" name="show_measurement_range">
        <property name="text">
-        <string>Bleach Ranges</string>
+        <string>Measurement Ranges [M]</string>
        </property>
        <property name="checked">
         <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QCheckBox" name="show_measurement_range">
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="show_gamma_range">
        <property name="text">
-        <string>Measurement Ranges</string>
+        <string>Gamma Ranges [G]</string>
        </property>
        <property name="checked">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="show_crop_range">
+       <property name="text">
+        <string>Crop Ranges [C]</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="crop_reset_all">
+       <property name="text">
+        <string>Reset (All Plots)</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QCheckBox" name="show_gamma_range">
+      <widget class="QPushButton" name="measurment_reset_active">
        <property name="text">
-        <string>Gamma Ranges</string>
+        <string>Reset (Active Plot)</string>
        </property>
-       <property name="checked">
-        <bool>true</bool>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="bleach_reset_active">
+       <property name="text">
+        <string>Reset (Active Plot)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="gamma_reset_active">
+       <property name="text">
+        <string>Reset (Active Plot)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="measurment_reset_all">
+       <property name="text">
+        <string>Reset (All Plots)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QPushButton" name="bleach_reset_all">
+       <property name="text">
+        <string>Reset (All Plots)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="gamma_reset_all">
+       <property name="text">
+        <string>Reset (All Plots)</string>
        </property>
       </widget>
      </item>
@@ -312,20 +368,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="1">
-      <widget class="QPushButton" name="crop_reset_active">
-       <property name="text">
-        <string>Reset (Active Plot)</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QPushButton" name="crop_reset_all">
-       <property name="text">
-        <string>Reset (All Plots)</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QCheckBox" name="crop_plots">
        <property name="text">

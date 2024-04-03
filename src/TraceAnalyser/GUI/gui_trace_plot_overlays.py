@@ -16,17 +16,38 @@ from PyQt5.QtGui import QColor, QFont
 
 class _trace_plot_overlays:
 
-    def reset_crop_ranges(self, mode="active"):
+    def reset_graphics_overlays(self, mode = "crop", loc_mode="active"):
+
         slider_value = self.plot_localisation_number.value()
         localisation_number = self.localisation_numbers[slider_value]
 
-        if mode == "active":
-            for dataset_name in self.data_dict.keys():
-                self.data_dict[dataset_name][localisation_number]["crop_range"] = []
-        else:
-            for dataset_name, dataset_data in self.data_dict.items():
-                for localisation_number in range(len(dataset_data)):
-                    self.data_dict[dataset_name][localisation_number]["crop_range"] = []
+        if mode == "crop":
+            range_name = "crop_range"
+            range_value = []
+        elif mode == "gamma":
+            range_name = "gamma_ranges"
+            range_value = []
+        elif mode == "measurement":
+            range_name = "measure_dict"
+            range_value = {}
+
+        for dataset_name in self.data_dict.keys():
+
+            if loc_mode == "active":
+                loc_list = [localisation_number]
+            else:
+                loc_list = range(len(self.data_dict[dataset_name]))
+
+            for localisation_number in loc_list:
+
+                localisation_data = self.data_dict[dataset_name][localisation_number]
+
+                if mode != "bleach":
+                    if range_name in localisation_data.keys():
+                        localisation_data[range_name] = range_value
+                else:
+                    localisation_data["correction_factors"]["donor_bleach_index"] = None
+                    localisation_data["correction_factors"]["acceptor_bleach_index"] = None
 
         self.plot_traces(update_plot=False)
 
