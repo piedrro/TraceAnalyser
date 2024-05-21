@@ -26,12 +26,15 @@ class _DeepLasi_methods:
 
                 for dataset_name in self.data_dict.keys():
                     for plot_name, plot_value in self.data_dict[dataset_name][0].items():
-                        if plot_name in ["Trace","Donor", "Acceptor", "FRET Efficiency", "ALEX Efficiency", "DD", "AA", "DA", "AD"]:
+                        if plot_name in ["Data","Trace","Donor", "Acceptor",
+                                         "FRET Efficiency", "ALEX Efficiency", "DD", "AA", "DA", "AD"]:
                             if len(plot_value) > 0:
                                 plot_names.append(plot_name)
 
                 if "Trace" in plot_names:
                     self.fitting_window.deeplasi_fit_data.addItem("Trace")
+                if "Data" in plot_names:
+                    self.fitting_window.deeplasi_fit_data.addItem("Data")
                 if "Donor" in plot_names:
                     self.fitting_window.deeplasi_fit_data.addItem("Donor")
                 if "Acceptor" in plot_names:
@@ -74,6 +77,9 @@ class _DeepLasi_methods:
 
                         if data_name == "Trace":
                             data = localisation_data["Trace"]
+                            n_colors = 1
+                        if data_name == "Data":
+                            data = localisation_data["Data"]
                             n_colors = 1
                         if data_name == "Donor":
                             data = localisation_data["Donor"]

@@ -301,7 +301,8 @@ class _import_methods:
     def import_gapseq_json(self):
 
         try:
-            expected_data = {"Trace": np.array([]),"Donor": np.array([]), "Acceptor": np.array([]),
+            expected_data = {"Trace": np.array([]),"Data": np.array([]),
+                             "Donor": np.array([]), "Acceptor": np.array([]),
                              "FRET Efficiency": np.array([]), "ALEX Efficiency": np.array([]),
                              "gap_label": np.array([]), "sequence_label": np.array([]),
                              "picasso_loc": np.array([]),
@@ -579,7 +580,7 @@ class _import_methods:
                 if "state_means" not in trace_data:
                     trace_data["state_means"] = {}
 
-                for plot in ["Trace","Donor", "Acceptor",
+                for plot in ["Data","Trace","Donor", "Acceptor",
                              "FRET Efficiency", "ALEX Efficiency",
                              "DD", "AA", "DA", "AD"]:
 
@@ -663,12 +664,14 @@ class _import_methods:
 
         for dataset_name in self.data_dict.keys():
             for plot_name, plot_value in self.data_dict[dataset_name][0].items():
-                if plot_name in ["Trace","Donor", "Acceptor", "FRET Efficiency", "ALEX Efficiency", "DD", "AA", "DA", "AD"]:
+                if plot_name in ["Data","Trace","Donor", "Acceptor", "FRET Efficiency", "ALEX Efficiency", "DD", "AA", "DA", "AD"]:
                     if len(plot_value) > 0:
                         plot_names.append(plot_name)
 
         if "Trace" in plot_names:
             plot_channels.append("Trace")
+        if "Data" in plot_names:
+            plot_channels.append("Data")
         if "Donor" in plot_names:
             plot_channels.append("Donor")
         if "Acceptor" in plot_names:
@@ -739,7 +742,7 @@ class _import_methods:
             for dataset_name in plot_datasets:
                 if dataset_name in self.data_dict.keys():
                     for plot_name, plot_value in self.data_dict[dataset_name][0].items():
-                        if plot_name in ["Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency", "DD", "AA", "DA", "AD"]:
+                        if plot_name in ["Data","Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency", "DD", "AA", "DA", "AD"]:
                             if len(plot_value) > 0:
                                 plot_channels.append(plot_name)
 
@@ -785,11 +788,13 @@ class _import_methods:
 
         for dataset_name in self.data_dict.keys():
             for plot_name, plot_value in self.data_dict[dataset_name][0].items():
-                if plot_name in ["Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency", "DD", "AA", "DA", "AD"]:
+                if plot_name in ["Data","Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency", "DD", "AA", "DA", "AD"]:
                     if len(plot_value) > 0:
                         plot_names.append(plot_name)
         if "Trace" in plot_names:
             self.analysis_graph_channel.addItem("Trace")
+        if "Data" in plot_names:
+            self.analysis_graph_channel.addItem("Data")
         if "Donor" in plot_names:
             self.analysis_graph_channel.addItem("Donor")
         if "Acceptor" in plot_names:
@@ -815,11 +820,13 @@ class _import_methods:
 
         for dataset_name in self.data_dict.keys():
             for plot_name, plot_value in self.data_dict[dataset_name][0].items():
-                if plot_name in ["Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency", "DD", "AA", "DA", "AD"]:
+                if plot_name in ["Data", "Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency", "DD", "AA", "DA", "AD"]:
                     if len(plot_value) > 0:
                         plot_names.append(plot_name)
         if "Trace" in plot_names:
             self.measure_graph_channel.addItem("Trace")
+        if "Data" in plot_names:
+            self.measure_graph_channel.addItem("Data")
         if "Donor" in plot_names:
             self.measure_graph_channel.addItem("Donor")
         if "Acceptor" in plot_names:

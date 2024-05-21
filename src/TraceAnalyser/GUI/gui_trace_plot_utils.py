@@ -113,7 +113,7 @@ class _trace_plotting_methods:
 
         try:
 
-            reference_list = ["Trace","Donor", "Acceptor", "FRET Efficiency",
+            reference_list = ["Data","Trace","Donor", "Acceptor", "FRET Efficiency",
                               "DD", "DA", "AD", "AA","ALEX Efficiency",]
 
             order = {key: i for i, key in enumerate(reference_list)}
@@ -150,7 +150,7 @@ class _trace_plotting_methods:
 
                     for dataset_name in self.plot_datasets:
                         plot_labels = list(self.data_dict[dataset_name][0].keys())
-                        plot_labels = [label for label in plot_labels if label in ["Trace","Donor", "Acceptor", "FRET Efficiency",
+                        plot_labels = [label for label in plot_labels if label in ["Data","Trace","Donor", "Acceptor", "FRET Efficiency",
                                                                                    "DD", "AA", "DA", "AD","ALEX Efficiency",]]
 
                         if dataset_name not in plot_label_dict.keys():
@@ -174,6 +174,8 @@ class _trace_plotting_methods:
                             plot_label_dict[dataset_name].extend(["Donor", "Acceptor", "FRET Efficiency"])
                         elif plot_mode == "Trace" and "Trace" in plot_labels:
                             plot_label_dict[dataset_name].append("Trace")
+                        elif plot_mode == "Data" and "Data" in plot_labels:
+                            plot_label_dict[dataset_name].append("Data")
                         elif plot_mode == "DA" and "DA" in plot_labels:
                             plot_label_dict[dataset_name].append("DA")
                         elif plot_mode == "DD" and "DD" in plot_labels:

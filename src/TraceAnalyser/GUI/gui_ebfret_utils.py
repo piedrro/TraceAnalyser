@@ -27,6 +27,8 @@ class _ebFRET_methods:
 
                 if "Trace" in plot_mode_items:
                     self.fitting_window.ebfret_fit_data.addItem("Trace")
+                if "Data" in plot_mode_items:
+                    self.fitting_window.ebfret_fit_data.addItem("Data")
                 if "Donor" in plot_mode_items:
                     self.fitting_window.ebfret_fit_data.addItem("Donor")
                 if "Acceptor" in plot_mode_items:

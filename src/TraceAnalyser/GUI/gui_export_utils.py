@@ -100,10 +100,10 @@ class _export_methods:
             export_mode = self.export_settings.export_mode.currentText()
 
             if export_mode == "Nero (.dat)":
-                allowed_channels = ["Trace", "Donor", "Acceptor", "FRET Efficiency",
+                allowed_channels = ["Data","Trace", "Donor", "Acceptor", "FRET Efficiency",
                                     "ALEX Efficiency", "DD", "AA", "DA", "AD"]
             elif export_mode == "ebFRET SMD (.mat)":
-                allowed_channels = ["FRET Data", "Trace", "Donor", "Acceptor", "FRET Efficiency",
+                allowed_channels = ["FRET Data", "Data","Trace", "Donor", "Acceptor", "FRET Efficiency",
                                     "ALEX Efficiency", "DD", "AA", "DA", "AD"]
             else:
                 allowed_channels = []
@@ -127,7 +127,8 @@ class _export_methods:
 
                 for dataset_name in dataset_list:
                     for channel_name in self.data_dict[dataset_name][0].keys():
-                        if channel_name in ["Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency","DD", "AA", "DA", "AD"]:
+                        if channel_name in ["Data", "Trace","Donor", "Acceptor",
+                                            "FRET Efficiency","ALEX Efficiency","DD", "AA", "DA", "AD"]:
                             data_length = len(self.data_dict[dataset_name][0][channel_name])
                             if data_length > 1:
                                 if channel_name not in all_export_names:
@@ -154,6 +155,9 @@ class _export_methods:
                 if "Trace" in all_export_names:
                     combo_options.append("Trace")
                     self.export_selection_dict["Trace"] = ["Trace"]
+                if "Data" in all_export_names:
+                    combo_options.append("Data")
+                    self.export_selection_dict["Data"] = ["Data"]
                 if "Donor" in all_export_names:
                     combo_options.append("Donor")
                     self.export_selection_dict["Donor"] = ["Donor"]
@@ -1415,7 +1419,8 @@ class _export_methods:
 
             json_dataset_dict = {"metadata":{}, "data":{}}
 
-            json_list_keys = ["Trace", "Donor", "Acceptor", "FRET Efficiency", "ALEX Efficiency",
+            json_list_keys = ["Data", "Trace", "Donor", "Acceptor",
+                              "FRET Efficiency", "ALEX Efficiency",
                               "DD", "AA", "DA", "AD",
                               "states",
                               "break_points", "crop_range", "gamma_ranges",

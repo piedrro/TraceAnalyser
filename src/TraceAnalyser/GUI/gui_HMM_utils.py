@@ -57,6 +57,8 @@ class _HMM_methods:
 
                 if "Trace" in plot_mode_items:
                     hmm_channels.append("Trace")
+                if "Data" in plot_mode_items:
+                    hmm_channels.append("Data")
                 if "Donor" in plot_mode_items:
                     hmm_channels.append("Donor")
                 if "Acceptor" in plot_mode_items:

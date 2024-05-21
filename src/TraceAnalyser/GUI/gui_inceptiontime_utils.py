@@ -69,7 +69,7 @@ class _inceptiontime_methods:
 
                 for dataset_name in dataset_list:
                     for channel_name in self.data_dict[dataset_name][0].keys():
-                        if channel_name in ["Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency","DD", "AA", "DA", "AD"]:
+                        if channel_name in ["Data","Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency","DD", "AA", "DA", "AD"]:
                             data_length = len(self.data_dict[dataset_name][0][channel_name])
                             if data_length > 1:
                                 if channel_name not in all_export_names:
@@ -79,6 +79,8 @@ class _inceptiontime_methods:
                     combo_options.append("FRET Efficiency")
                 if "ALEX Efficiency" in all_export_names:
                     combo_options.append("ALEX Efficiency")
+                if "Data" in all_export_names:
+                    combo_options.append("Data")
                 if "Trace" in all_export_names:
                     combo_options.append("Trace")
                 if "Donor" in all_export_names:

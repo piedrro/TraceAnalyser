@@ -27,6 +27,7 @@ class _window_utils:
         try:
 
             reference_list = ["All Channels",
+                              "Data",
                               "Trace",
                               "Donor", "Acceptor",
                               "FRET Efficiency",
@@ -104,7 +105,7 @@ class _window_utils:
 
                 for dataset_name in dataset_list:
                     for channel_name in self.data_dict[dataset_name][0].keys():
-                        if channel_name in ["Trace", "Donor", "Acceptor", "FRET Efficiency", "ALEX Efficiency", "DD", "AA", "DA", "AD"]:
+                        if channel_name in ["Data","Trace", "Donor", "Acceptor", "FRET Efficiency", "ALEX Efficiency", "DD", "AA", "DA", "AD"]:
                             data_length = len(self.data_dict[dataset_name][0][channel_name])
                             if data_length > 1:
                                 if channel_name not in channel_names:
@@ -128,6 +129,9 @@ class _window_utils:
                 if "Trace" in channel_names:
                     combo_options.append("Trace")
                     channel_dict["Trace"] = ["Trace"]
+                if "Data" in channel_names:
+                    combo_options.append("Data")
+                    channel_dict["Data"] = ["Data"]
                 if "Donor" in channel_names:
                     combo_options.append("Donor")
                     channel_dict["Donor"] = ["Donor"]
