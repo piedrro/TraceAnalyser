@@ -311,8 +311,10 @@ class _HMM_methods:
             else:
 
                 if hmm_package == "Pomegranate":
+
                     fit_data = list(fit_dataset.values())
                     model = pg_fit_hmm(fit_data, n_states)
+
                 elif hmm_package == "HMM Learn":
 
                     lengths = [len(trace) for trace in fit_dataset.values()]
