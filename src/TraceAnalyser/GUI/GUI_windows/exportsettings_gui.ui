@@ -397,6 +397,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="export_state_means">
+     <property name="text">
+      <string>Export State Means</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QCheckBox" name="export_crop_data">
      <property name="text">
       <string>Crop Data using Crop Ranges</string>

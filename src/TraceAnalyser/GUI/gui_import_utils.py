@@ -270,10 +270,10 @@ class _import_methods:
                                 alex_dict = self.get_alex_data(group_dict["Donor"], group_dict["Acceptor"])
 
                                 for key, value in alex_dict.items():
-                                    loc_data[key] = value
+                                    loc_data[key] = np.array(value)
                             else:
                                 for key, value in group_dict.items():
-                                    loc_data[key] = value
+                                    loc_data[key] = np.array(value)
 
                             self.data_dict[dataset_name].append(loc_data)
                             n_traces += 1

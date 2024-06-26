@@ -312,6 +312,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
                             "separator": "export_separator",
                             "split_datasets": "export_split_datasets",
                             "fitted_states": "export_fitted_states",
+                            "state_means": "export_state_means",
                             "crop_data": "export_crop_data",
                             "ml_class": "ml_export_class",
                             }
@@ -341,18 +342,19 @@ class AnalysisGUI(QtWidgets.QMainWindow,
             elif export_mode == "Export Trace Summary":
 
                     hidden_controls = ["separator", "split_datasets",
-                                       "fitted_states", "crop_data",
+                                       "fitted_states", "state_means", "crop_data",
                                        "ml_class"]
 
             elif export_mode == "Nero (.dat)":
 
-                    hidden_controls = ["separator","fitted_states",
+                    hidden_controls = ["separator","fitted_states","state_means",
                                        "crop_data", "ml_class"]
 
             elif export_mode == "ebFRET SMD (.mat)":
 
                         hidden_controls = ["separator",
-                                           "fitted_states", "ml_class"]
+                                           "fitted_states", "state_means",
+                                           "ml_class"]
 
             for control in control_dict:
 

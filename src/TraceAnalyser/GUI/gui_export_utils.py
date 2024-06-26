@@ -200,6 +200,7 @@ class _export_methods:
             export_channel_name = self.export_settings.export_channel_selection.currentText()
             crop_mode = self.export_settings.export_crop_data.isChecked()
             export_states = self.export_settings.export_fitted_states.isChecked()
+            export_state_means = self.export_settings.export_state_means.isChecked()
 
             export_paths = self.get_export_paths(extension="xlsx")
 
@@ -213,7 +214,7 @@ class _export_methods:
                     export_paths = [os.path.abspath(export_path) for export_path in export_paths]
 
             worker = Worker(self.export_excel_data, export_dataset_name, export_channel_name,
-                            crop_mode, export_states, export_paths, split_datasets)
+                            crop_mode, export_states, export_state_means, export_paths, split_datasets)
             worker.signals.progress.connect(partial(self.gui_progrssbar, name="export"))
             worker.signals.finished.connect(self.export_finished)
             self.threadpool.start(worker)
@@ -284,6 +285,7 @@ class _export_methods:
             export_channel_name = self.export_settings.export_channel_selection.currentText()
             crop_mode = self.export_settings.export_crop_data.isChecked()
             export_states = self.export_settings.export_fitted_states.isChecked()
+            export_state_means = self.export_settings.export_state_means.isChecked()
 
             export_paths = self.get_export_paths(extension="opju")
 
@@ -297,7 +299,7 @@ class _export_methods:
                     export_paths = [os.path.abspath(export_path) for export_path in export_paths]
 
             worker = Worker(self.export_origin_data, export_dataset_name, export_channel_name,
-                            crop_mode, export_states, export_paths, split_datasets)
+                            crop_mode, export_states, export_state_means, export_paths, split_datasets)
             worker.signals.progress.connect(partial(self.gui_progrssbar, name="export"))
             worker.signals.finished.connect(self.export_finished)
             self.threadpool.start(worker)
@@ -483,6 +485,7 @@ class _export_methods:
             crop_mode = self.export_settings.export_crop_data.isChecked()
             data_separator = self.export_settings.export_separator.currentText()
             export_states = self.export_settings.export_fitted_states.isChecked()
+            export_state_means = self.export_settings.export_state_means.isChecked()
 
             if export_mode == "DAT (.dat)":
                 export_paths = self.get_export_paths(extension="dat")
@@ -508,7 +511,7 @@ class _export_methods:
                     export_paths = [os.path.abspath(export_path) for export_path in export_paths]
 
             worker = Worker(self.export_dat, export_dataset_name, export_channel_name,
-                            crop_mode, export_states, data_separator, export_paths, split_datasets)
+                            crop_mode, export_states, export_state_means, data_separator, export_paths, split_datasets)
             worker.signals.progress.connect(partial(self.gui_progrssbar, name="export"))
             worker.signals.finished.connect(self.export_finished)
             self.threadpool.start(worker)
@@ -829,7 +832,8 @@ class _export_methods:
 
 
     def export_excel_data(self, export_dataset_name, export_channel_name,
-            crop_mode, export_states=False, export_paths = [], split_datasets = False, progress_callback=None):
+            crop_mode, export_states=False, export_state_means = False,
+            export_paths = [], split_datasets = False, progress_callback=None):
 
         try:
             if self.data_dict != {}:
@@ -839,7 +843,8 @@ class _export_methods:
                     export_path = export_paths[0]
 
                     export_data_dict = self.get_export_data("excel",
-                        export_dataset_name, export_channel_name, crop_mode, export_states,
+                        export_dataset_name, export_channel_name, crop_mode,
+                        export_states,export_state_means,
                         progress_callback=progress_callback)
 
                     export_data = export_data_dict["data"]
@@ -870,7 +875,8 @@ class _export_methods:
                     for export_dataset_name, export_path in zip(self.data_dict.keys(), export_paths):
 
                         export_data_dict = self.get_export_data("excel",
-                            export_dataset_name, export_channel_name, crop_mode, export_states,
+                            export_dataset_name, export_channel_name, crop_mode,
+                            export_states, export_state_means,
                             progress_callback=progress_callback)
 
                         export_data = np.stack(export_data_dict["data"], axis=0).T
@@ -892,7 +898,8 @@ class _export_methods:
             print(traceback.format_exc())
 
     def export_origin_data(self, export_dataset_name, export_channel_name,
-            crop_mode, export_states=False, export_paths = [], split_datasets = False, progress_callback=None):
+            crop_mode, export_states=False, export_state_means=False, export_paths = [],
+            split_datasets = False, progress_callback=None):
 
          try:
 
@@ -901,7 +908,8 @@ class _export_methods:
                      export_path = export_paths[0]
 
                      export_data_dict = self.get_export_data("origin",
-                         export_dataset_name, export_channel_name, crop_mode, export_states,
+                         export_dataset_name, export_channel_name, crop_mode,
+                         export_states, export_state_means,
                          progress_callback=progress_callback)
 
                      export_data = export_data_dict["data"]
@@ -958,7 +966,8 @@ class _export_methods:
                      for export_dataset_name, export_path in zip(self.data_dict.keys(), export_paths):
 
                          export_data_dict = self.get_export_data("origin",
-                             export_dataset_name, export_channel_name, crop_mode, export_states,
+                             export_dataset_name, export_channel_name, crop_mode,
+                             export_states, export_state_means,
                              progress_callback=progress_callback)
 
                          export_dataset = np.stack(export_data_dict["data"], axis=0).T
@@ -1009,7 +1018,8 @@ class _export_methods:
              print(traceback.format_exc())
 
     def export_dat(self, export_dataset_name, export_channel_name, crop_mode,
-            export_states = False, data_separator=",", export_paths = [], split_datasets = False, progress_callback=None):
+            export_states = False, export_state_means = False,
+            data_separator=",", export_paths = [], split_datasets = False, progress_callback=None):
 
             try:
 
@@ -1023,7 +1033,8 @@ class _export_methods:
                         if os.path.exists(export_dir):
 
                             export_data_dict = self.get_export_data("data",
-                                export_dataset_name, export_channel_name, crop_mode, export_states,
+                                export_dataset_name, export_channel_name, crop_mode,
+                                export_states, export_state_means,
                                 progress_callback = progress_callback)
 
                             export_dataset = np.stack(export_data_dict["data"], axis=0).T
@@ -1049,7 +1060,8 @@ class _export_methods:
                             if os.path.exists(export_dir):
 
                                 export_data_dict = self.get_export_data("data",
-                                    export_dataset_name, export_channel_name, crop_mode, export_states,
+                                    export_dataset_name, export_channel_name, crop_mode,
+                                    export_states, export_state_means,
                                     progress_callback=progress_callback,)
 
                                 export_dataset = np.stack(export_data_dict["data"], axis=0).T
@@ -1154,7 +1166,8 @@ class _export_methods:
         return ml_dict
 
     def get_export_data(self, export_mode, export_dataset_name, export_channel_name,
-            crop_data, export_states, pad_data = True, pad_value = np.nan, progress_callback = None):
+            crop_data, export_states=False, export_state_means=False,
+            pad_data = True, pad_value = np.nan, progress_callback = None):
 
         loc_index = []
         loc_dataset = []
@@ -1201,6 +1214,7 @@ class _export_methods:
 
                         data = localisation_data[data_name]
                         state_means_x, state_means_y = localisation_data["state_means"][data_name]
+                        states = localisation_data["states"]
 
                         if crop_data == True and len(crop_range) == 2:
                             crop_range = [int(crop_range[0]), int(crop_range[1])]
@@ -1210,6 +1224,7 @@ class _export_methods:
                             if crop_range[0] >= 0 and crop_range[1] <= len(data):
                                 data = data[crop_range[0]:crop_range[1]]
                                 state_means_y = state_means_y[crop_range[0]:crop_range[1]]
+                                states = states[crop_range[0]:crop_range[1]]
                         else:
                             if len(state_means_y) < len(data):
                                 state_indeces = state_means_x
@@ -1217,6 +1232,12 @@ class _export_methods:
                                 for index, value in zip(state_indeces, state_means_y):
                                     padded_state_means_y[index] = value
                                 state_means_y = padded_state_means_y
+                            if len(states) < len(data):
+                                state_indeces = state_means_x
+                                padded_states = [pad_value] * len(data)
+                                for index, value in zip(state_indeces, states):
+                                    padded_states[index] = value
+                                states = padded_states
 
                         loc_index.append(int(localisation_number))
                         loc_dataset.append(str(dataset_name))
@@ -1234,8 +1255,19 @@ class _export_methods:
                             loc_dataset.append(dataset_name)
                             loc_user_label.append(user_label)
                             loc_nucleotide_label.append(nucleotide_label)
-                            loc_data.append(state_means_y)
+                            loc_data.append(states)
                             loc_data_name.append(data_name+"_states")
+                            loc_file_name.append(file_name)
+                            loc_path.append(file_path)
+
+                        if export_state_means:
+
+                            loc_index.append(localisation_number)
+                            loc_dataset.append(dataset_name)
+                            loc_user_label.append(user_label)
+                            loc_nucleotide_label.append(nucleotide_label)
+                            loc_data.append(state_means_y)
+                            loc_data_name.append(data_name+"_state_mean")
                             loc_file_name.append(file_name)
                             loc_path.append(file_path)
 
@@ -1262,9 +1294,18 @@ class _export_methods:
 
             max_length = max([len(data) for data in data])
 
-            padded_data = [np.pad(data, (0, max_length - len(data)), mode="constant", constant_values=pad_value) for data in data]
+            if pad_data == True:
+                for dat_index, dat in enumerate(data):
 
-            export_data_dict["data"] = padded_data
+                    dat = np.array(dat)
+
+                    if np.issubdtype(dat.dtype, np.integer) and np.isnan(pad_value):
+                        dat = dat.astype(float)
+
+                    dat_pad = np.pad(dat, (0, max_length - len(dat)), mode="constant", constant_values=pad_value)
+                    data[dat_index] = list(dat_pad)
+
+            export_data_dict["data"] = data
 
         return export_data_dict
 

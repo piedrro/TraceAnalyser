@@ -491,8 +491,11 @@ class _trace_plotting_methods:
             elif "Efficiency" in label:
                 pen = pg.mkPen(pg.mkPen('b', width=width))
 
+            elif label in ["Data", "Trace"]:
+                pen = pg.mkPen(pg.mkPen('r', width=width))
+
             else:
-                pen = pg.mkPen(pg.mkPen('w', width=width))
+                pen = pg.mkPen(pg.mkPen('w', width=width+1))
 
         except:
             print(traceback.format_exc())
