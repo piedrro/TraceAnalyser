@@ -123,11 +123,17 @@ class _analysis_plotting_methods:
 
             if len(trace_data) > 0:
 
-                histogram_data = {"metric":histogram_selection, "values": {},"trace_index": {}, "data_index":{}}
+                histogram_data = {"metric":histogram_selection,
+                                  "values": {},
+                                  "trace_index": {},
+                                  "data_index":{}}
 
                 if "Raw Data" not in histogram_selection:
 
-                    if len(state_data) == len(trace_data) and len(np.unique(state_data)) > 1:
+                    state_data_flat = np.array([item for sublist in state_data for item in sublist])
+                    n_states = len(np.unique(state_data_flat))
+
+                    if len(state_data) == len(trace_data) and n_states > 0:
 
                         for trace_dat, state_dat in zip(trace_data, state_data):
 
@@ -135,8 +141,6 @@ class _analysis_plotting_methods:
 
                             split_trace_data = np.split(trace_dat, change_indices)
                             split_state_data = np.split(state_dat, change_indices)
-
-                            n_states = len(np.unique(state_data))
 
                             for state_index, (data, state) in enumerate(zip(split_trace_data, split_state_data)):
 
