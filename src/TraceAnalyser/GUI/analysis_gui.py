@@ -227,6 +227,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.manage_window.manage_delete_dataset.clicked.connect(self.delete_dataset)
         self.manage_window.manage_rename_dataset.clicked.connect(self.rename_dataset)
         self.manage_window.manage_rename_measurement_label.clicked.connect(self.rename_measurement_label)
+        self.manage_window.assign_gapseq_sequences.clicked.connect(self.assign_gapseq_sequences)
 
         self.crop_window.detect_crop.clicked.connect(self.initialise_crop_detection)
 

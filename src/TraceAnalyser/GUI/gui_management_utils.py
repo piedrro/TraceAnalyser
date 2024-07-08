@@ -10,12 +10,16 @@ class _management_utils:
 
             delete_combo = self.manage_window.delete_dataset_combo
             rename_combo = self.manage_window.rename_dataset_combo
+            sequence_combo = self.manage_window.sequence_dataset_combo
 
             delete_combo.clear()
             delete_combo.addItems(dataset_names)
 
             rename_combo.clear()
             rename_combo.addItems(dataset_names)
+
+            sequence_combo.clear()
+            sequence_combo.addItems(dataset_names)
 
         except:
             print(traceback.format_exc())
@@ -118,6 +122,31 @@ class _management_utils:
         except:
             print(traceback.format_exc())
             pass
+
+
+    def assign_gapseq_sequences(self):
+
+        try:
+
+            dataset = self.manage_window.sequence_dataset_combo.currentText()
+            gap_sequence = self.manage_window.gap_sequence.text()
+            seal_sequence = self.manage_window.seal_sequence.text()
+
+            if len(gap_sequence) == 0 or len(seal_sequence) == 0:
+                self.print_notification("Please enter gap and seal sequences.")
+                return
+
+            if len(gap_sequence) != len(seal_sequence):
+                self.print_notification("Gap and seal sequences must be the same length.")
+                return
+
+            for dataset in self.data_dict.keys():
+                for localisation_dict in self.data_dict[dataset]:
+                    localisation_dict["gap_sequence"] = gap_sequence
+                    localisation_dict["seal_sequence"] = seal_sequence
+
+        except:
+            print(traceback.format_exc())
 
 
     def delete_active_trace(self):
