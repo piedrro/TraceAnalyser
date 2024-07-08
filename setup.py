@@ -16,18 +16,15 @@ def list_DL_models(directory):
                 yield os.path.relpath(os.path.join(root, file), 'src')
 
 matlab_files_directory = 'src/ebFRET'
-deeplasi_models_directory = 'src/TraceAnalyser/DeepLASI/models'
 inceptiontime_models_directory = 'src/TraceAnalyser/InceptionTime/models'
 
 matlab_files = list(list_matlab_files(matlab_files_directory))
-deeplasi_models = list(list_DL_models(deeplasi_models_directory))
 inceptiontime_models = list(list_DL_models(inceptiontime_models_directory))
 
 setup(
     package_data={
         # Include files in the package
         'TraceAnalyser': matlab_files,
-        'TraceAnalyser': deeplasi_models,
         'TraceAnalyser': inceptiontime_models,
     },
 )

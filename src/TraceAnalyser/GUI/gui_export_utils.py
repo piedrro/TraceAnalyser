@@ -1328,8 +1328,6 @@ class _export_methods:
             user_filter = self.crop_window.crop_user_group.currentText()
         elif export_mode.lower() == "ebfret":
             user_filter = self.fitting_window.ebfret_user_group.currentText()
-        elif export_mode.lower() == "deeplasi":
-            user_filter = self.fitting_window.deeplasi_user_group.currentText()
         elif export_mode.lower() == "analysis":
             user_filter = self.analysis_user_group.currentText()
         elif export_mode.lower() == "inceptiontime":

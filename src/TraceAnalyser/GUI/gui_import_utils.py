@@ -854,7 +854,6 @@ class _import_methods:
 
         self.populate_analysis_graph_combos()
         self.populate_measure_graph_combos()
-        self.populate_deeplasi_options()
 
         self.populate_smooth_combos()
         self.populate_bleach_combos()

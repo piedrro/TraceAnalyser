@@ -21,7 +21,6 @@ from TraceAnalyser.GUI.gui_analysis_plot_utils import  CustomMatplotlibWidget, _
 from TraceAnalyser.GUI.gui_import_utils import _import_methods
 from TraceAnalyser.GUI.gui_export_utils import _export_methods
 from TraceAnalyser.GUI.gui_ebfret_utils import _ebFRET_methods
-from TraceAnalyser.GUI.gui_deeplasi_utils import _DeepLasi_methods
 from TraceAnalyser.GUI.gui_inceptiontime_utils import _inceptiontime_methods
 from TraceAnalyser.GUI.gui_HMM_utils import _HMM_methods
 from TraceAnalyser.GUI.gui_smoothing_utils import _smoothing_utils
@@ -37,7 +36,7 @@ from TraceAnalyser.GUI.gui_detectcrop_utils import _detectcrop_utils
 class AnalysisGUI(QtWidgets.QMainWindow,
     Ui_MainWindow, _trace_plotting_methods,
     _import_methods, _export_methods,
-    _ebFRET_methods, _DeepLasi_methods,
+    _ebFRET_methods,
     _analysis_plotting_methods, _inceptiontime_methods,
     _HMM_methods, _window_utils, _smoothing_utils,
     _bleach_utils, _correction_utils, _group_utils,
@@ -118,8 +117,6 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.fitting_window.ebfret_connect_matlab.clicked.connect(self.launch_ebFRET)
         self.fitting_window.ebfret_run_analysis.clicked.connect(self.run_ebFRET_analysis)
         self.fitting_window.ebfret_visualisation_state.currentIndexChanged.connect(self.gapseq_visualise_ebfret)
-
-        self.fitting_window.deeplasi_detect_states.clicked.connect(self.detect_deeplasi_states)
 
         self.fitting_window.hmm_detect_states.clicked.connect(self.detect_hmm_states)
 
@@ -431,8 +428,6 @@ class AnalysisGUI(QtWidgets.QMainWindow,
 
     def gui_progrssbar(self,progress, name):
 
-        if name.lower() == "deeplasi":
-            self.fitting_window.deeplasi_progressbar.setValue(progress)
         if name.lower() == "inceptiontime":
             self.detect_window.inceptiontime_progressbar.setValue(progress)
         if name.lower() == "hmm":
