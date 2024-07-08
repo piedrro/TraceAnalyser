@@ -140,10 +140,13 @@ class _management_utils:
                 self.print_notification("Gap and seal sequences must be the same length.")
                 return
 
-            for dataset in self.data_dict.keys():
+            if dataset in self.data_dict.keys():
                 for localisation_dict in self.data_dict[dataset]:
                     localisation_dict["gap_sequence"] = gap_sequence
                     localisation_dict["seal_sequence"] = seal_sequence
+
+            self.print_notification(f"Assigned sequences to {dataset}")
+            self.plot_traces(update_plot=False)
 
         except:
             print(traceback.format_exc())

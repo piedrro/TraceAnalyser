@@ -169,6 +169,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
 
         self.plot_settings.plot_show_correction_factors.stateChanged.connect(partial(self.plot_traces, update_plot=False))
         self.plot_settings.plot_show_ml_predictions.stateChanged.connect(partial(self.plot_traces, update_plot=False))
+        self.plot_settings.plot_show_gapseq.stateChanged.connect(partial(self.plot_traces, update_plot=False))
 
         self.plot_settings.plot_normalise.stateChanged.connect(partial(self.plot_traces, update_plot=False))
         self.plot_settings.show_detected_states.stateChanged.connect(partial(self.plot_traces, update_plot=False))
