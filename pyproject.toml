@@ -65,7 +65,8 @@ testing = [
 
 [project.scripts]
 ebfret = "TraceAnalyser.GUI.ebfret_utils:launch_ebfret_instance"
-analysis = "TraceAnalyser.GUI.analysis_gui:start_gui"
+analysis = "TraceAnalyser.main_window:start_gui"
+traceanalyser = "TraceAnalyser.main_window:start_gui"
 
 [project.urls]
 "Bug Tracker" = "https://github.com/piedrro/TraceAnalyser/issues"

@@ -4,7 +4,7 @@ import pickle
 import traceback
 import matplotlib.pyplot as plt
 
-from TraceAnalyser.GUI.gui_HMM_utils import (pg_fit_hmm, hmmlearn_fit_hmm, pg_predict_hmm,
+from TraceAnalyser.funcs.gui_HMM_utils import (pg_fit_hmm, hmmlearn_fit_hmm, pg_predict_hmm,
     hmmlearn_predict_hmm, reasign_hmm_states)
 
 

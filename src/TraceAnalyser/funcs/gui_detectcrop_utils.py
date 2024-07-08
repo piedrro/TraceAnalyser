@@ -1,6 +1,6 @@
 from functools import partial
 import traceback
-from TraceAnalyser.GUI.gui_worker import Worker
+from TraceAnalyser.funcs.gui_worker import Worker
 import numpy as np
 
 class _detectcrop_utils:

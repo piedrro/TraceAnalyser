@@ -1,14 +1,9 @@
-import numpy as np
 import traceback
-import abc
 import pomegranate as pg
 import numpy as np
 import hmmlearn.hmm as hmm
-import itertools
-from TraceAnalyser.GUI.gui_worker import Worker
+from TraceAnalyser.funcs.gui_worker import Worker
 from functools import partial
-from scipy.signal import find_peaks
-from matplotlib import pyplot as plt
 
 
 class _HMM_methods:

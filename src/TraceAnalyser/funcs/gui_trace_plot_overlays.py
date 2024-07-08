@@ -489,15 +489,16 @@ class _trace_plot_overlays:
 
                 if hasattr(self, "measure_refs"):
 
-                    measure_refs = self.measure_refs[dataset][localisation_number]
+                    if dataset in self.measure_refs.keys():
+                        measure_refs = self.measure_refs[dataset][localisation_number]
 
-                    updated_range = event.getRegion()
-                    updated_range = [int(updated_range[0]), int(updated_range[1])]
+                        updated_range = event.getRegion()
+                        updated_range = [int(updated_range[0]), int(updated_range[1])]
 
-                    for ref_plot, refs in measure_refs.items():
-                        if ref_plot != plot:
-                            region = refs[range_index]
-                            region.setRegion(updated_range)
+                        for ref_plot, refs in measure_refs.items():
+                            if ref_plot != plot:
+                                region = refs[range_index]
+                                region.setRegion(updated_range)
 
             measure_ranges = []
             for item in plot.items:
@@ -615,7 +616,7 @@ class _trace_plot_overlays:
                 unique_sub_axes = grid["unique_sub_axes"]
                 localisation_dict = self.data_dict[plot_dataset][localisation_number]
 
-                if hasattr(self, "measure_refs"):
+                if hasattr(self, "measure_refs") == False:
                     self.measure_refs = {}
 
                 for plot_index, plot in enumerate(sub_axes):

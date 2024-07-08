@@ -1,15 +1,8 @@
-import os
-import sys
 import subprocess
 import atexit
 import platform
-import scipy
 import numpy as np
 import traceback
-from TraceAnalyser.GUI.gui_worker import Worker
-from functools import partial
-import threading
-import time
 import pandas as pd
 import os
 import threading

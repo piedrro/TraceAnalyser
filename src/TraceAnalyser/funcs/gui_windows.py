@@ -1,16 +1,15 @@
-from TraceAnalyser.GUI.GUI_windows.mainwindow_gui import Ui_MainWindow
-from TraceAnalyser.GUI.GUI_windows.plotsettings_gui import Ui_Form as plotsettings_gui
-from TraceAnalyser.GUI.GUI_windows.importwindow_gui import Ui_Form as importwindow_gui
-from TraceAnalyser.GUI.GUI_windows.exportsettings_gui import Ui_Form as exportwindow_gui
-from TraceAnalyser.GUI.GUI_windows.fittingwindow_gui import Ui_Form as fittingwindow_gui
-from TraceAnalyser.GUI.GUI_windows.detectwindow_gui import Ui_Form as detectwindow_gui
-from TraceAnalyser.GUI.GUI_windows.smoothingwindow_gui import Ui_Form as smoothingwindow_gui
-from TraceAnalyser.GUI.GUI_windows.bleachwindow_gui import Ui_Form as bleachwindow_gui
-from TraceAnalyser.GUI.GUI_windows.correctionwindow_gui import Ui_Form as correctionwindow_gui
-from TraceAnalyser.GUI.GUI_windows.groupwindow_gui import Ui_Form as groupwindow_gui
-from TraceAnalyser.GUI.GUI_windows.simulatorwindow_gui import Ui_Form as simulatorwindow_gui
-from TraceAnalyser.GUI.GUI_windows.managewindow_gui import Ui_Form as managewindow_gui
-from TraceAnalyser.GUI.GUI_windows.cropwindow_gui import Ui_Form as cropwindow_gui
+from TraceAnalyser.GUI.plotsettings_gui import Ui_Form as plotsettings_gui
+from TraceAnalyser.GUI.importwindow_gui import Ui_Form as importwindow_gui
+from TraceAnalyser.GUI.exportsettings_gui import Ui_Form as exportwindow_gui
+from TraceAnalyser.GUI.fittingwindow_gui import Ui_Form as fittingwindow_gui
+from TraceAnalyser.GUI.detectwindow_gui import Ui_Form as detectwindow_gui
+from TraceAnalyser.GUI.smoothingwindow_gui import Ui_Form as smoothingwindow_gui
+from TraceAnalyser.GUI.bleachwindow_gui import Ui_Form as bleachwindow_gui
+from TraceAnalyser.GUI.correctionwindow_gui import Ui_Form as correctionwindow_gui
+from TraceAnalyser.GUI.groupwindow_gui import Ui_Form as groupwindow_gui
+from TraceAnalyser.GUI.simulatorwindow_gui import Ui_Form as simulatorwindow_gui
+from TraceAnalyser.GUI.managewindow_gui import Ui_Form as managewindow_gui
+from TraceAnalyser.GUI.cropwindow_gui import Ui_Form as cropwindow_gui
 
 
 

@@ -1,6 +1,6 @@
 import traceback
 from functools import partial
-from TraceAnalyser.GUI.gui_worker import Worker
+from TraceAnalyser.funcs.gui_worker import Worker
 from scipy.ndimage import gaussian_filter1d
 import numpy as np
 

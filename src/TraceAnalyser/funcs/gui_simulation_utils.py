@@ -2,7 +2,7 @@ import traceback
 
 import numpy as np
 
-from TraceAnalyser.GUI.gui_worker import Worker
+from TraceAnalyser.funcs.gui_worker import Worker
 from TraceAnalyser.DeepFretSimulate.utils import numstring_to_ls
 from TraceAnalyser.DeepFretSimulate.math import generate_traces
 

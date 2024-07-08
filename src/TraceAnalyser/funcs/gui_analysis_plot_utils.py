@@ -3,15 +3,11 @@ import os.path
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from PyQt5.QtWidgets import QVBoxLayout, QWidget
-import traceback
-import numpy as np
-from TraceAnalyser.GUI.gui_worker import Worker
-import threading
+from TraceAnalyser.funcs.gui_worker import Worker
 import queue
 import traceback
 import numpy as np
 import matplotlib.pyplot as plt
-import itertools
 import pandas as pd
 import os
 from PyQt5.QtWidgets import QFileDialog

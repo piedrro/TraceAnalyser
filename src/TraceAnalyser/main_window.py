@@ -2,36 +2,35 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 from qtpy.QtCore import QThreadPool
-from qtpy.QtWidgets import (QWidget, QDialog, QVBoxLayout, QSizePolicy,QSlider, QLabel)
-import traceback
+from qtpy.QtWidgets import (QWidget, QVBoxLayout, QSizePolicy,QSlider, QLabel)
 from functools import partial
 import queue
 import traceback
 
-from TraceAnalyser.GUI.GUI_windows.mainwindow_gui import Ui_MainWindow
+from TraceAnalyser.GUI.mainwindow_gui import Ui_MainWindow
 
-from TraceAnalyser.GUI.gui_windows import (_window_utils,
+from TraceAnalyser.funcs.gui_windows import (_window_utils,
     PlotSettingsWindow, ImportSettingsWindow,
     ExportSettingsWindow, FittingWindow,
     DetectWindow, SmoothingWindow, BleachWindow, CorrectionWindow,
     GroupWindow, SimulatorWindow, ManageWindow, CropWindow)
 
-from TraceAnalyser.GUI.gui_trace_plot_utils import CustomPyQTGraphWidget, _trace_plotting_methods
-from TraceAnalyser.GUI.gui_analysis_plot_utils import  CustomMatplotlibWidget, _analysis_plotting_methods
-from TraceAnalyser.GUI.gui_import_utils import _import_methods
-from TraceAnalyser.GUI.gui_export_utils import _export_methods
-from TraceAnalyser.GUI.gui_ebfret_utils import _ebFRET_methods
-from TraceAnalyser.GUI.gui_inceptiontime_utils import _inceptiontime_methods
-from TraceAnalyser.GUI.gui_HMM_utils import _HMM_methods
-from TraceAnalyser.GUI.gui_smoothing_utils import _smoothing_utils
-from TraceAnalyser.GUI.gui_bleach_utils import _bleach_utils
-from TraceAnalyser.GUI.gui_correction_utils import _correction_utils
-from TraceAnalyser.GUI.gui_group_utils import _group_utils
-from TraceAnalyser.GUI.gui_simulation_utils import _simulation_utils
-from TraceAnalyser.GUI.gui_measure_plot_utils import _measure_plotting_methods
-from TraceAnalyser.GUI.gui_trace_plot_overlays import _trace_plot_overlays
-from TraceAnalyser.GUI.gui_management_utils import _management_utils
-from TraceAnalyser.GUI.gui_detectcrop_utils import _detectcrop_utils
+from TraceAnalyser.funcs.gui_trace_plot_utils import CustomPyQTGraphWidget, _trace_plotting_methods
+from TraceAnalyser.funcs.gui_analysis_plot_utils import  CustomMatplotlibWidget, _analysis_plotting_methods
+from TraceAnalyser.funcs.gui_import_utils import _import_methods
+from TraceAnalyser.funcs.gui_export_utils import _export_methods
+from TraceAnalyser.funcs.gui_ebfret_utils import _ebFRET_methods
+from TraceAnalyser.funcs.gui_inceptiontime_utils import _inceptiontime_methods
+from TraceAnalyser.funcs.gui_HMM_utils import _HMM_methods
+from TraceAnalyser.funcs.gui_smoothing_utils import _smoothing_utils
+from TraceAnalyser.funcs.gui_bleach_utils import _bleach_utils
+from TraceAnalyser.funcs.gui_correction_utils import _correction_utils
+from TraceAnalyser.funcs.gui_group_utils import _group_utils
+from TraceAnalyser.funcs.gui_simulation_utils import _simulation_utils
+from TraceAnalyser.funcs.gui_measure_plot_utils import _measure_plotting_methods
+from TraceAnalyser.funcs.gui_trace_plot_overlays import _trace_plot_overlays
+from TraceAnalyser.funcs.gui_management_utils import _management_utils
+from TraceAnalyser.funcs.gui_detectcrop_utils import _detectcrop_utils
 
 class AnalysisGUI(QtWidgets.QMainWindow,
     Ui_MainWindow, _trace_plotting_methods,
@@ -65,7 +64,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.crop_window = CropWindow(self)
 
 
-        self.setWindowTitle("DeepGapSeq-Analysis")  # Set the window title
+        self.setWindowTitle("TraceAnalyser")  # Set the window title
 
         #create pyqt graph container
         self.graph_container = self.findChild(QWidget, "graph_container")

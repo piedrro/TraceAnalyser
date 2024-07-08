@@ -7,10 +7,8 @@ import numpy as np
 import pandas as pd
 import originpro as op
 from functools import partial
-import matplotlib.pyplot as plt
-from TraceAnalyser.GUI.gui_worker import Worker
+from TraceAnalyser.funcs.gui_worker import Worker
 import time
-import math
 import random
 import string
 

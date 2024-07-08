@@ -1,16 +1,14 @@
 import importlib
 import os.path
-import time
 from importlib import resources
 import traceback
 import glob
 import torch
-from tsai.all import InceptionTime
 from functools import partial
-from TraceAnalyser.GUI.gui_worker import Worker
+from TraceAnalyser.funcs.gui_worker import Worker
 import numpy as np
 import sklearn
-import matplotlib.pyplot as plt
+
 
 class _inceptiontime_methods:
 

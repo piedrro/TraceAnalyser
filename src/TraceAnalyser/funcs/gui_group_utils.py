@@ -1,9 +1,8 @@
 from functools import partial
 import traceback
-from scipy.ndimage import median_filter
 import numpy as np
 
-from TraceAnalyser.GUI.gui_worker import Worker
+from TraceAnalyser.funcs.gui_worker import Worker
 
 
 

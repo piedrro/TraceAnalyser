@@ -1,5 +1,5 @@
 import traceback
-from TraceAnalyser.GUI.gui_worker import Worker
+from TraceAnalyser.funcs.gui_worker import Worker
 import numpy as np
 import copy
 
@@ -215,7 +215,7 @@ class _ebFRET_methods:
         ebFRET_controller = None
 
         try:
-            from TraceAnalyser.GUI.ebfret_utils import ebFRET_controller
+            from TraceAnalyser.funcs.ebfret_utils import ebFRET_controller
 
             ebFRET_controller = ebFRET_controller()
             progress_callback.emit(10)

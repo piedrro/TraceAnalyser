@@ -5,17 +5,15 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/TraceAnalyser.svg?color=green)](https://python.org)
 [![tests](https://github.com/piedrro/TraceAnalyser/workflows/tests/badge.svg)](https://github.com/piedrro/TraceAnalyser/actions)
 [![codecov](https://codecov.io/gh/piedrro/TraceAnalyser/branch/main/graph/badge.svg)](https://codecov.io/gh/piedrro/TraceAnalyser)
-[![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/TraceAnalyser)](https://napari-hub.org/plugins/TraceAnalyser)
 
-A standalone application for analysing time series data, which includes features for processing/labelling/filtering traces and facilitates the detection of hidden states using **Hidden Markov Modelling** (HMM). It also includes embdedded pre-trained Deep Learning (InceptionTime, DeepLASI) models for classifying/labelling traces.
+A standalone application for analysing time series data, which includes features for processing/labelling/filtering traces and facilitates the detection of hidden states using **Hidden Markov Modelling** (HMM). 
+It also includes embdedded pre-trained Deep Learning (InceptionTime) models for classifying/labelling traces.
 
 This is still undergoing development, so some features may not work as expected.
 
 This was built by Dr Piers Turner from the Kapanidis Lab, University of Oxford.
 
 ----------------------------------
-
-This [napari] plugin was generated with [Cookiecutter] using [@napari]'s [cookiecutter-napari-plugin] template.
 
 <!--
 Don't miss the full getting started guide to set up your new package:
@@ -26,6 +24,13 @@ https://napari.org/stable/plugins/index.html
 -->
 
 ## Installation
+
+You can install `TraceAnalyser` via [PyPI]:
+
+    conda create –-name TraceAnalyser python==3.9
+    conda activate TraceAnalyser
+
+    pip install TraceAnalyser
 
 You can install `TraceAnalyser` via [GitHub]:
 
@@ -51,10 +56,6 @@ Then try again:
     pip install matlabengine==XXXX
 
 ## Terminal Commands
-
-To launch a Napari instance:
-
-    napari
 
 To launch the Trace Analyser App:
 
