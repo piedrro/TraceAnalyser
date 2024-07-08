@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'groupwindow_gui.ui'
+# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\TraceAnalyser\GUI\GUI_windows\groupwindow_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -50,17 +50,6 @@ class Ui_Form(object):
         self.group_user_group.addItem("")
         self.group_user_group.addItem("")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.group_user_group)
-        self.label_26 = QtWidgets.QLabel(Form)
-        self.label_26.setObjectName("label_26")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_26)
-        self.group_nucleotide_group = QtWidgets.QComboBox(Form)
-        self.group_nucleotide_group.setObjectName("group_nucleotide_group")
-        self.group_nucleotide_group.addItem("")
-        self.group_nucleotide_group.addItem("")
-        self.group_nucleotide_group.addItem("")
-        self.group_nucleotide_group.addItem("")
-        self.group_nucleotide_group.addItem("")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.group_nucleotide_group)
         self.verticalLayout.addLayout(self.formLayout)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
@@ -162,12 +151,6 @@ class Ui_Form(object):
         self.group_user_group.setItemText(8, _translate("Form", "7"))
         self.group_user_group.setItemText(9, _translate("Form", "8"))
         self.group_user_group.setItemText(10, _translate("Form", "9"))
-        self.label_26.setText(_translate("Form", "Nucleotide Label"))
-        self.group_nucleotide_group.setItemText(0, _translate("Form", "None"))
-        self.group_nucleotide_group.setItemText(1, _translate("Form", "A"))
-        self.group_nucleotide_group.setItemText(2, _translate("Form", "T"))
-        self.group_nucleotide_group.setItemText(3, _translate("Form", "C"))
-        self.group_nucleotide_group.setItemText(4, _translate("Form", "G"))
         self.label_2.setText(_translate("Form", "Group Detection Settings"))
         self.group_intensity.setText(_translate("Form", "Intensity: "))
         self.group_intensity_criterion.setItemText(0, _translate("Form", "Above"))

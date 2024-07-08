@@ -102,13 +102,12 @@ class _bleach_utils:
                 for localisation_number, localisation_data in enumerate(dataset_data):
 
                     user_label = localisation_data["user_label"]
-                    nucleotide_label = localisation_data["nucleotide_label"]
                     correction_factors = localisation_data["correction_factors"]
 
                     if "bleach_dict" not in localisation_data:
                         localisation_data["bleach_dict"] = {}
 
-                    if self.get_filter_status("bleach", user_label, nucleotide_label) == False:
+                    if self.get_filter_status("bleach", user_label) == False:
 
                         channel_list = list(localisation_data.keys())
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'mainwindow_gui.ui'
+# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\TraceAnalyser\GUI\GUI_windows\mainwindow_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -158,23 +158,6 @@ class Ui_MainWindow(object):
         self.analysis_user_group.addItem("")
         self.analysis_user_group.addItem("")
         self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.analysis_user_group)
-        self.label_26 = QtWidgets.QLabel(self.tab_2)
-        self.label_26.setObjectName("label_26")
-        self.formLayout_2.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_26)
-        self.analysis_nucleotide_group = QtWidgets.QComboBox(self.tab_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.analysis_nucleotide_group.sizePolicy().hasHeightForWidth())
-        self.analysis_nucleotide_group.setSizePolicy(sizePolicy)
-        self.analysis_nucleotide_group.setMinimumSize(QtCore.QSize(10, 0))
-        self.analysis_nucleotide_group.setObjectName("analysis_nucleotide_group")
-        self.analysis_nucleotide_group.addItem("")
-        self.analysis_nucleotide_group.addItem("")
-        self.analysis_nucleotide_group.addItem("")
-        self.analysis_nucleotide_group.addItem("")
-        self.analysis_nucleotide_group.addItem("")
-        self.formLayout_2.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.analysis_nucleotide_group)
         self.verticalLayout_3.addLayout(self.formLayout_2)
         self.analysis_crop_traces = QtWidgets.QCheckBox(self.tab_2)
         self.analysis_crop_traces.setObjectName("analysis_crop_traces")
@@ -595,12 +578,6 @@ class Ui_MainWindow(object):
         self.analysis_user_group.setItemText(8, _translate("MainWindow", "7"))
         self.analysis_user_group.setItemText(9, _translate("MainWindow", "8"))
         self.analysis_user_group.setItemText(10, _translate("MainWindow", "9"))
-        self.label_26.setText(_translate("MainWindow", "Nucleotide Label"))
-        self.analysis_nucleotide_group.setItemText(0, _translate("MainWindow", "None"))
-        self.analysis_nucleotide_group.setItemText(1, _translate("MainWindow", "A"))
-        self.analysis_nucleotide_group.setItemText(2, _translate("MainWindow", "T"))
-        self.analysis_nucleotide_group.setItemText(3, _translate("MainWindow", "C"))
-        self.analysis_nucleotide_group.setItemText(4, _translate("MainWindow", "G"))
         self.analysis_crop_traces.setText(_translate("MainWindow", "Crop Traces"))
         self.label_6.setText(_translate("MainWindow", "Histogram"))
         self.analysis_histogram.setItemText(0, _translate("MainWindow", "Raw Data"))

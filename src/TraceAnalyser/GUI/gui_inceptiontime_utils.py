@@ -180,11 +180,10 @@ class _inceptiontime_methods:
                 for localisation_index, localisation_data in enumerate(self.data_dict[dataset_name]):
 
                     user_label = localisation_data["user_label"]
-                    nucleotide_label = localisation_data["nucleotide_label"]
 
                     crop_range = localisation_data["crop_range"]
 
-                    if self.get_filter_status("inceptiontime", user_label, nucleotide_label) == False:
+                    if self.get_filter_status("inceptiontime", user_label) == False:
 
                         if detect_mode_index == 0:
                             if localisation_index not in predict_data[dataset_name].keys():
@@ -335,7 +334,6 @@ class _inceptiontime_methods:
 
                 target_label = self.detect_window.singletrace_label.currentText()
                 target_user_label = self.detect_window.singletrace_user_label.currentText()
-                target_nucleotide_label = self.detect_window.singletrace_nucleotide_label.currentText()
 
                 for dataset_name, dataset_data in self.data_dict.items():
                     for localisation_index, localisation_data in enumerate(dataset_data):
@@ -344,7 +342,6 @@ class _inceptiontime_methods:
 
                         if pred_label == target_label:
                             self.data_dict[dataset_name][localisation_index]["user_label"] = int(target_user_label)
-                            self.data_dict[dataset_name][localisation_index]["nucleotide_label"] = str(target_nucleotide_label)
 
                 self.plot_traces(update_plot=True)
                 self.print_notification("Labels updated")
@@ -362,7 +359,6 @@ class _inceptiontime_methods:
                 target_label = self.detect_window.multitrace_label.currentText()
                 min_number = self.detect_window.multitrace_min_traces.currentText()
                 target_user_label = self.detect_window.multitrace_user_label.currentText()
-                target_nucleotide_label = self.detect_window.multitrace_nucleotide_label.currentText()
 
                 prediction_memory = {}
 
@@ -383,7 +379,6 @@ class _inceptiontime_methods:
                     if len(dataset_list) >= int(min_number):
                         for dataset_name, dataset_data in self.data_dict.items():
                             self.data_dict[dataset_name][localisation_index]["user_label"] = int(target_user_label)
-                            self.data_dict[dataset_name][localisation_index]["nucleotide_label"] = str(target_nucleotide_label)
 
                 self.plot_traces(update_plot=True)
                 self.print_notification("Labels updated")

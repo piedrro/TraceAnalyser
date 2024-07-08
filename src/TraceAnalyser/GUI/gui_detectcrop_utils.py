@@ -146,9 +146,8 @@ class _detectcrop_utils:
                     for localisation_number, localisation_data in enumerate(dataset_data):
 
                         user_label = localisation_data["user_label"]
-                        nucleotide_label = localisation_data["nucleotide_label"]
 
-                        if self.get_filter_status("detect_crop", user_label, nucleotide_label) == False:
+                        if self.get_filter_status("detect_crop", user_label) == False:
 
                             index_list = []
 

@@ -45,6 +45,22 @@
        </item>
        <item>
         <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Mode</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="detect_mode">
+           <item>
+            <property name="text">
+             <string>Single Trace</string>
+            </property>
+           </item>
+          </widget>
+         </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_3">
            <property name="text">
@@ -131,58 +147,6 @@
            </item>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_26">
-           <property name="text">
-            <string>Nucleotide Label</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QComboBox" name="detect_nucleotide_group">
-           <item>
-            <property name="text">
-             <string>None</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>A</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>T</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>C</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>G</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>Mode</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="detect_mode">
-           <item>
-            <property name="text">
-             <string>Single Trace</string>
-            </property>
-           </item>
-          </widget>
-         </item>
         </layout>
        </item>
        <item>
@@ -265,6 +229,27 @@
            </item>
            <item>
             <layout class="QFormLayout" name="formLayout_2">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Detected Label</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QComboBox" name="singletrace_label">
+               <item>
+                <property name="text">
+                 <string>Dynamic</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Static</string>
+                </property>
+               </item>
+              </widget>
+             </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_18">
                <property name="text">
@@ -327,63 +312,6 @@
                <item>
                 <property name="text">
                  <string>9</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_27">
-               <property name="text">
-                <string>Nucleotide Label</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QComboBox" name="singletrace_nucleotide_label">
-               <item>
-                <property name="text">
-                 <string>None</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>A</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>T</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>C</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>G</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_2">
-               <property name="text">
-                <string>Detected Label</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QComboBox" name="singletrace_label">
-               <item>
-                <property name="text">
-                 <string>Dynamic</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Static</string>
                 </property>
                </item>
               </widget>

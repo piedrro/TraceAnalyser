@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'bleachwindow_gui.ui'
+# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\TraceAnalyser\GUI\GUI_windows\bleachwindow_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(403, 440)
+        Form.resize(403, 478)
         Form.setMaximumSize(QtCore.QSize(16777215, 500))
         self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -50,17 +50,6 @@ class Ui_Form(object):
         self.bleach_user_group.addItem("")
         self.bleach_user_group.addItem("")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.bleach_user_group)
-        self.label_26 = QtWidgets.QLabel(Form)
-        self.label_26.setObjectName("label_26")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_26)
-        self.bleach_nucleotide_group = QtWidgets.QComboBox(Form)
-        self.bleach_nucleotide_group.setObjectName("bleach_nucleotide_group")
-        self.bleach_nucleotide_group.addItem("")
-        self.bleach_nucleotide_group.addItem("")
-        self.bleach_nucleotide_group.addItem("")
-        self.bleach_nucleotide_group.addItem("")
-        self.bleach_nucleotide_group.addItem("")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.bleach_nucleotide_group)
         self.verticalLayout.addLayout(self.formLayout)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
@@ -139,12 +128,6 @@ class Ui_Form(object):
         self.bleach_user_group.setItemText(8, _translate("Form", "7"))
         self.bleach_user_group.setItemText(9, _translate("Form", "8"))
         self.bleach_user_group.setItemText(10, _translate("Form", "9"))
-        self.label_26.setText(_translate("Form", "Nucleotide Label"))
-        self.bleach_nucleotide_group.setItemText(0, _translate("Form", "None"))
-        self.bleach_nucleotide_group.setItemText(1, _translate("Form", "A"))
-        self.bleach_nucleotide_group.setItemText(2, _translate("Form", "T"))
-        self.bleach_nucleotide_group.setItemText(3, _translate("Form", "C"))
-        self.bleach_nucleotide_group.setItemText(4, _translate("Form", "G"))
         self.label_2.setText(_translate("Form", "Bleach Detection Settings"))
         self.label_4.setText(_translate("Form", "Acceptor Threshold"))
         self.label_7.setText(_translate("Form", "Donor Threshold"))

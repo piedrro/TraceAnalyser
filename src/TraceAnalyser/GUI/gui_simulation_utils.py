@@ -223,7 +223,6 @@ class _simulation_utils():
                     loc_data = data.to_dict(orient="list")
                     loc_data["state_means"] = {}
                     loc_data["user_label"] = 0
-                    loc_data["nucleotide_label"] = 0
                     loc_data["break_points"] = []
                     loc_data["gamma_ranges"] = []
                     loc_data["AD"] = np.array([])

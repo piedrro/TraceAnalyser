@@ -78,7 +78,6 @@ class _group_utils:
         try:
 
             grouped_user_group = self.group_window.grouped_user_group.currentText()
-            grouped_nucleotide_group = self.group_window.grouped_nucleotide_group.currentText()
             channel = self.group_window.group_intensity_channel.currentText()
             criterion = self.group_window.group_intensity_criterion.currentText()
             value = self.group_window.group_intensity_value.value()
@@ -95,7 +94,6 @@ class _group_utils:
 
                 if filter:
                     localisation_data["user_label"] = grouped_user_group
-                    localisation_data["nucleotide_label"] = grouped_nucleotide_group
 
         except:
             print(traceback.format_exc())
@@ -126,9 +124,8 @@ class _group_utils:
                 for localisation_number, localisation_data in enumerate(dataset_data):
 
                     user_label = localisation_data["user_label"]
-                    nucleotide_label = localisation_data["nucleotide_label"]
 
-                    if self.get_filter_status("group", user_label, nucleotide_label) == False:
+                    if self.get_filter_status("group", user_label) == False:
 
                         if filter_intensity:
                             self.group_by_intensity(localisation_data)

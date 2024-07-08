@@ -54,7 +54,6 @@ class _import_methods:
                                     "states": [],
                                     "state_means": {},
                                     "user_label": 0,
-                                    "nucleotide_label": 0,
                                     "break_points": [],
                                     "gamma_ranges": [],
                                     "bleach_dict ": {},
@@ -145,7 +144,6 @@ class _import_methods:
                                                              "filter": False,
                                                              "state_means": {},
                                                              "user_label" : 0,
-                                                             "nucleotide_label" : 0,
                                                              "break_points" : [],
                                                              "crop_range" : [],
                                                              "gamma_ranges" : [],
@@ -253,7 +251,7 @@ class _import_methods:
 
                             loc_data = {"FRET Efficiency": [], "ALEX Efficiency": [],
                                         "states": [],"state_means": {},
-                                        "user_label": 0, "nucleotide_label": 0,
+                                        "user_label": 0,
                                         "break_points": [], "gamma_ranges": [],
                                         "bleach_dict ": {}, "correction_factors": {},
                                         "crop_range" : [], "filter": False,
@@ -309,7 +307,7 @@ class _import_methods:
                              "DD": np.array([]), "DA": np.array([]),
                              "AA": np.array([]), "AD": np.array([]),
                              "filter": False, "state_means": {}, "states": np.array([]),
-                             "user_label": 0, "nucleotide_label": 0,
+                             "user_label": 0,
                              "break_points": [], "crop_range": [],
                              "gamma_ranges": [], "import_path": "",
                              "bleach_dict ": {}, "correction_factors": {},"measure_dict": {},
@@ -397,9 +395,9 @@ class _import_methods:
             desktop = os.path.expanduser("~/Desktop")
             paths, _ = QFileDialog.getOpenFileNames(self, "Open Files", desktop, "ML Data (*.txt)")
 
-            legacy_expected_keys = ["data", "label", "data_class", "data_nucleotide"]
+            legacy_expected_keys = ["data", "label", "data_class"]
             expected_keys = ["data","states","ml_label","dataset","channels",
-                             "user_label","nucleotide_label","import_path"]
+                             "user_label","import_path"]
 
             if len(paths) > 0:
 
@@ -475,7 +473,7 @@ class _import_methods:
 
                 loc_data = {"FRET Efficiency": [], "ALEX Efficiency": [],
                             "states": [], "state_means": {},
-                            "user_label": 0, "nucleotide_label": 0,
+                            "user_label": 0,
                             "break_points": [], "gamma_ranges": [],
                             "crop_range": [], "filter": False,
                             "import_path": path,
@@ -492,7 +490,6 @@ class _import_methods:
                     loc_data["bleach_dict"][channel_name] = bleach_range
 
                 loc_data["user_label"] = imported_data["user_label"][i]
-                loc_data["nucleotide_label"] = imported_data["nucleotide_label"][i]
                 loc_data["states"] = imported_data["states"][i]
                 loc_data["import_path"] = imported_data["states"][i]
 
@@ -516,7 +513,6 @@ class _import_methods:
 
             traces = imported_data["data"]
             user_labels = imported_data["data_class"]
-            nucleotide_labels = imported_data["data_nucleotide"]
 
             dataset_n_traces = len(traces)
 
@@ -525,11 +521,10 @@ class _import_methods:
             if dataset_name not in self.data_dict.keys():
                 self.data_dict[dataset_name] = []
 
-            for i, (trace, user_label, nucleotide_label) in enumerate(zip(traces, user_labels, nucleotide_labels)):
+            for i, (trace, user_label) in enumerate(zip(traces, user_labels)):
 
                 loc_data = {"Trace": trace,
                             "user_label": user_label,
-                            "nucleotide_label": nucleotide_label,
                             "FRET Efficiency": [], "ALEX Efficiency": [],
                             "states": [], "state_means": {},
                             "break_points": [], "gamma_ranges": [],

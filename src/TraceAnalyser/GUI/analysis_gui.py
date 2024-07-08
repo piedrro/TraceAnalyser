@@ -157,7 +157,6 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.plot_settings.plot_showy.stateChanged.connect(partial(self.plot_traces, update_plot=True))
 
         self.plot_settings.plot_user_group.currentIndexChanged.connect(self.initialise_plot)
-        self.plot_settings.plot_nucleotide_group.currentIndexChanged.connect(self.initialise_plot)
         self.plot_settings.plot_measurement_label.currentIndexChanged.connect(self.initialise_plot)
 
         self.plot_settings.plot_measurement_label.editTextChanged.connect(self.update_measurement_labels)
@@ -308,7 +307,6 @@ class AnalysisGUI(QtWidgets.QMainWindow,
             control_dict = {"dataset_selection": "export_dataset_selection",
                             "channel_selection": "export_channel_selection",
                             "user_group": "export_user_group",
-                            "nucleotide_group": "export_nucleotide_group",
                             "separator": "export_separator",
                             "split_datasets": "export_split_datasets",
                             "fitted_states": "export_fitted_states",
@@ -322,7 +320,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
             if export_mode == "JSON Dataset (.json)":
 
                 hidden_controls = ["dataset_selection","channel_selection",
-                                   "user_group", "nucleotide_group",
+                                   "user_group",
                                    "separator", "split_datasets",
                                    "fitted_states", "crop_data",
                                    "ml_class"]
@@ -483,9 +481,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
     def keyPressEvent(self, event):
         try:
 
-            if event.key() in [Qt.Key_A,Qt.Key_T,Qt.Key_C,Qt.Key_G]:
-                self.classify_traces(mode = "nucleotide", key = chr(event.key()))
-            elif event.key() in [Qt.Key_1,Qt.Key_2,Qt.Key_3,Qt.Key_4,Qt.Key_5,Qt.Key_6,Qt.Key_7,Qt.Key_8,Qt.Key_9]:
+            if event.key() in [Qt.Key_1,Qt.Key_2,Qt.Key_3,Qt.Key_4,Qt.Key_5,Qt.Key_6,Qt.Key_7,Qt.Key_8,Qt.Key_9]:
                 self.classify_traces(mode = "user", key = chr(event.key()))
             elif event.key() in [Qt.Key_Left,Qt.Key_Right]:
                 self.update_localisation_number(event.key())
@@ -528,7 +524,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
     def toggle_checkbox(self, checkbox):
         checkbox.setChecked(not checkbox.isChecked())
 
-    def classify_traces(self, mode = "nucleotide", key= ""):
+    def classify_traces(self, mode = "user", key= ""):
 
         if self.data_dict != {}:
 
@@ -536,11 +532,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
             localisation_number = self.localisation_numbers[slider_value]
 
             for dataset_name in self.data_dict.keys():
-
-                if mode == "user":
-                    self.data_dict[dataset_name][localisation_number]["user_label"] = key
-                else:
-                    self.data_dict[dataset_name][localisation_number]["nucleotide_label"] = key
+                self.data_dict[dataset_name][localisation_number]["user_label"] = key
 
             self.plot_traces(update_plot=False)
 

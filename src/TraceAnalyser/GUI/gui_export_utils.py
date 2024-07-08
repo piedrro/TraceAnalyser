@@ -392,13 +392,12 @@ class _export_methods:
                 for localisation_number, localisation_data in enumerate(dataset_data):
 
                     user_label = localisation_data["user_label"]
-                    nucleotide_label = localisation_data["nucleotide_label"]
                     crop_range = localisation_data["crop_range"]
                     file_path = localisation_data["import_path"]
                     file_name = os.path.basename(file_path)
                     state_data = localisation_data["states"].copy()
 
-                    if self.get_filter_status("summary", user_label, nucleotide_label) == False:
+                    if self.get_filter_status("summary", user_label) == False:
 
                         for data_name in self.export_selection_dict[export_channel]:
 
@@ -430,7 +429,6 @@ class _export_methods:
                                         "dataset": dataset_name,
                                         "localisation": localisation_number,
                                         "user_label": user_label,
-                                        "nucleotide_label": nucleotide_label,
                                         "state": state,
                                         "dwell_time": dwell_time,
                                         f"{data_name}_intensity": intensity,
@@ -584,13 +582,12 @@ class _export_methods:
 
                 for localisation_number, localisation_data in enumerate(dataset_data):
                     user_label = localisation_data["user_label"]
-                    nucleotide_label = localisation_data["nucleotide_label"]
                     crop_range = localisation_data["crop_range"]
                     file_path = localisation_data["import_path"]
                     file_name = os.path.basename(file_path)
                     states = localisation_data["states"]
 
-                    if self.get_filter_status("data", user_label, nucleotide_label) == False:
+                    if self.get_filter_status("data", user_label) == False:
 
                         n_traces += 1
                         session_values = []
@@ -670,13 +667,12 @@ class _export_methods:
                 for localisation_number, localisation_data in enumerate(dataset_data):
 
                     user_label = localisation_data["user_label"]
-                    nucleotide_label = localisation_data["nucleotide_label"]
                     crop_range = localisation_data["crop_range"]
                     file_path = localisation_data["import_path"]
                     file_name = os.path.basename(file_path)
                     states = localisation_data["states"]
 
-                    if self.get_filter_status("data", user_label, nucleotide_label) == False:
+                    if self.get_filter_status("data", user_label) == False:
 
                         smd_values = []
 
@@ -860,8 +856,7 @@ class _export_methods:
                     export_data.columns = [export_data_dict["index"],
                                            export_data_dict["dataset"],
                                            export_data_dict["data_name"],
-                                           export_data_dict["user_label"],
-                                           export_data_dict["nucleotide_label"]]
+                                           export_data_dict["user_label"],]
 
                     export_data.columns.names = ['Index', 'Dataset', 'Data', 'Class', 'Nucleotide']
 
@@ -886,8 +881,7 @@ class _export_methods:
                         export_data.columns = [export_data_dict["index"],
                                                export_data_dict["dataset"],
                                                export_data_dict["data_name"],
-                                               export_data_dict["user_label"],
-                                               export_data_dict["nucleotide_label"]]
+                                               export_data_dict["user_label"],]
 
                         export_data.columns.names = ['Index', 'Dataset', 'Data', 'Class', 'Nucleotide']
 
@@ -941,12 +935,10 @@ class _export_methods:
                          index = export_data_dict["index"][i]
                          dataset = export_data_dict["dataset"][i]
                          user_label = export_data_dict["user_label"][i]
-                         nucleotide_label = export_data_dict["nucleotide_label"][i]
 
                          wks.set_label(i, dataset, 'Dataset')
                          wks.set_label(i, index, 'Index')
                          wks.set_label(i, user_label, 'User Label')
-                         wks.set_label(i, nucleotide_label, 'Nucleotide Label')
 
                          if progress_callback is not None:
                              progress = int(((i + 1) / len(export_data_dict["data_name"]))*100)
@@ -994,12 +986,10 @@ class _export_methods:
                              index = export_data_dict["index"][i]
                              dataset = export_data_dict["dataset"][i]
                              user_label = export_data_dict["user_label"][i]
-                             nucleotide_label = export_data_dict["nucleotide_label"][i]
 
                              wks.set_label(i, dataset, 'Dataset')
                              wks.set_label(i, index, 'Index')
                              wks.set_label(i, user_label, 'User Label')
-                             wks.set_label(i, nucleotide_label, 'Nucleotide Label')
 
                              if progress_callback is not None:
                                  progress = int(((i + 1) / len(export_data_dict["data_name"]))*100)
@@ -1044,8 +1034,7 @@ class _export_methods:
                             export_dataset.columns = [export_data_dict["index"],
                                                       export_data_dict["dataset"],
                                                       export_data_dict["data_name"],
-                                                      export_data_dict["user_label"],
-                                                      export_data_dict["nucleotide_label"]]
+                                                      export_data_dict["user_label"],]
 
                             export_dataset.to_csv(export_path, sep=data_separator, index=False, header=True)
 
@@ -1071,8 +1060,7 @@ class _export_methods:
                                 export_dataset.columns = [export_data_dict["index"],
                                                           export_data_dict["dataset"],
                                                           export_data_dict["data_name"],
-                                                          export_data_dict["user_label"],
-                                                          export_data_dict["nucleotide_label"]]
+                                                          export_data_dict["user_label"],]
 
                                 export_dataset.to_csv(export_path, sep=data_separator, index=False, header=True)
 
@@ -1093,7 +1081,6 @@ class _export_methods:
                        "channels":[],
                        "bleach_range":[],
                        "user_label":[],
-                       "nucleotide_label":[],
                        "file_name": [],
                        "import_path": [],
                        "crop_data": crop_data
@@ -1113,7 +1100,6 @@ class _export_methods:
                 for localisation_number, localisation_data in enumerate(dataset_data):
 
                     user_label = localisation_data["user_label"]
-                    nucleotide_label = localisation_data["nucleotide_label"]
                     crop_range = localisation_data["crop_range"]
                     file_path = localisation_data["import_path"]
                     file_name = os.path.basename(file_path)
@@ -1123,8 +1109,7 @@ class _export_methods:
                     loc_bleach_ranges = []
                     loc_channels = []
 
-                    if self.get_filter_status("ML",
-                            user_label, nucleotide_label) == False:
+                    if self.get_filter_status("ML", user_label) == False:
 
                         for channel_name in channel_list:
 
@@ -1155,7 +1140,6 @@ class _export_methods:
                         ml_dict["file_name"].append(file_name)
                         ml_dict["import_path"].append(file_path)
                         ml_dict["user_label"].append(user_label)
-                        ml_dict["nucleotide_label"].append(nucleotide_label)
                         ml_dict["ml_label"].append(ml_label)
                         ml_dict["bleach_range"].append(loc_bleach_ranges)
 
@@ -1172,7 +1156,6 @@ class _export_methods:
         loc_index = []
         loc_dataset = []
         loc_user_label = []
-        loc_nucleotide_label = []
         loc_data = []
         loc_states = []
         loc_data_name = []
@@ -1189,8 +1172,7 @@ class _export_methods:
             dataset_data = self.data_dict[dataset_name]
             for localisation_number, localisation_data in enumerate(dataset_data):
                 user_label = localisation_data["user_label"]
-                nucleotide_label = localisation_data["nucleotide_label"]
-                if self.get_filter_status(export_mode, user_label, nucleotide_label) == False:
+                if self.get_filter_status(export_mode, user_label) == False:
                     n_traces += 1
 
         iter = 0
@@ -1202,13 +1184,12 @@ class _export_methods:
             for localisation_number, localisation_data in enumerate(dataset_data):
 
                 user_label = localisation_data["user_label"]
-                nucleotide_label = localisation_data["nucleotide_label"]
                 crop_range = localisation_data["crop_range"]
                 file_path = localisation_data["import_path"]
                 file_name = os.path.basename(file_path)
                 states = localisation_data["states"]
 
-                if self.get_filter_status(export_mode, user_label, nucleotide_label) == False:
+                if self.get_filter_status(export_mode, user_label) == False:
 
                     for data_name in self.export_selection_dict[export_channel_name]:
 
@@ -1242,7 +1223,6 @@ class _export_methods:
                         loc_index.append(int(localisation_number))
                         loc_dataset.append(str(dataset_name))
                         loc_user_label.append(str(user_label))
-                        loc_nucleotide_label.append(str(nucleotide_label))
                         loc_data.append(list(data))
                         loc_states.append(list(states))
                         loc_data_name.append(str(data_name))
@@ -1254,7 +1234,6 @@ class _export_methods:
                             loc_index.append(localisation_number)
                             loc_dataset.append(dataset_name)
                             loc_user_label.append(user_label)
-                            loc_nucleotide_label.append(nucleotide_label)
                             loc_data.append(states)
                             loc_data_name.append(data_name+"_states")
                             loc_file_name.append(file_name)
@@ -1265,7 +1244,6 @@ class _export_methods:
                             loc_index.append(localisation_number)
                             loc_dataset.append(dataset_name)
                             loc_user_label.append(user_label)
-                            loc_nucleotide_label.append(nucleotide_label)
                             loc_data.append(state_means_y)
                             loc_data_name.append(data_name+"_state_mean")
                             loc_file_name.append(file_name)
@@ -1280,7 +1258,6 @@ class _export_methods:
         export_data_dict = {"index": loc_index,
                             "dataset": loc_dataset,
                             "user_label": loc_user_label,
-                            "nucleotide_label": loc_nucleotide_label,
                             "data": loc_data,
                             "states": loc_states,
                             "data_name": loc_data_name,
@@ -1329,67 +1306,45 @@ class _export_methods:
         except:
             print(traceback.format_exc())
 
-    def get_filter_status(self, export_mode = "data", user_label = "", nucleotide_label= ""):
+    def get_filter_status(self, export_mode = "data", user_label = ""):
 
         if export_mode.lower() == "data":
             user_filter = self.export_settings.export_user_group.currentText()
-            nucleotide_filter = self.export_settings.export_nucleotide_group.currentText()
         elif export_mode.lower() == "excel":
             user_filter = self.export_settings.export_user_group.currentText()
-            nucleotide_filter = self.export_settings.export_nucleotide_group.currentText()
         elif export_mode.lower() == "origin":
             user_filter = self.export_settings.export_user_group.currentText()
-            nucleotide_filter = self.export_settings.export_nucleotide_group.currentText()
         elif export_mode.lower() == "ml":
             user_filter = self.export_settings.export_user_group.currentText()
-            nucleotide_filter = self.export_settings.export_nucleotide_group.currentText()
         elif export_mode.lower() == "summary":
             user_filter = self.export_settings.export_user_group.currentText()
-            nucleotide_filter = self.export_settings.export_nucleotide_group.currentText()
         elif export_mode.lower() == "smooth":
             user_filter = self.smoothing_window.smooth_user_group.currentText()
-            nucleotide_filter = self.smoothing_window.smooth_nucleotide_group.currentText()
         elif export_mode.lower() == "bleach":
             user_filter = self.bleach_window.bleach_user_group.currentText()
-            nucleotide_filter = self.bleach_window.bleach_nucleotide_group.currentText()
         elif export_mode.lower() == "correction":
             user_filter = self.correction_window.correction_user_group.currentText()
-            nucleotide_filter = self.correction_window.correction_nucleotide_group.currentText()
         elif export_mode.lower() == "detect_crop":
             user_filter = self.crop_window.crop_user_group.currentText()
-            nucleotide_filter = self.crop_window.crop_nucleotide_group.currentText()
         elif export_mode.lower() == "ebfret":
             user_filter = self.fitting_window.ebfret_user_group.currentText()
-            nucleotide_filter = self.fitting_window.ebfret_nucleotide_group.currentText()
         elif export_mode.lower() == "deeplasi":
             user_filter = self.fitting_window.deeplasi_user_group.currentText()
-            nucleotide_filter = self.fitting_window.deeplasi_nucleotide_group.currentText()
         elif export_mode.lower() == "analysis":
             user_filter = self.analysis_user_group.currentText()
-            nucleotide_filter = self.analysis_nucleotide_group.currentText()
         elif export_mode.lower() == "inceptiontime":
             user_filter = self.detect_window.detect_user_group.currentText()
-            nucleotide_filter = self.detect_window.detect_nucleotide_group.currentText()
         elif export_mode.lower() == "hmm":
             user_filter = self.fitting_window.hmm_user_group.currentText()
-            nucleotide_filter = self.fitting_window.hmm_nucleotide_group.currentText()
         elif export_mode.lower() == "group":
             user_filter = self.group_window.group_user_group.currentText()
-            nucleotide_filter = self.group_window.group_nucleotide_group.currentText()
         elif export_mode.lower() == "manage":
             user_filter = self.manage_window.delete_group_label.currentText()
-            nucleotide_filter = self.manage_window.delete_nucleotide_label.currentText()
 
         filter = False
 
-        if user_filter != "None" and nucleotide_filter == "None":
+        if user_filter != "None":
             if user_label != user_filter:
-                filter = True
-        elif user_filter == "None" and nucleotide_filter != "None":
-            if nucleotide_label != nucleotide_filter:
-                filter = True
-        elif user_filter != "None" and nucleotide_filter != "None":
-            if user_label != user_filter or nucleotide_label != nucleotide_filter:
                 filter = True
 
         return filter
@@ -1468,7 +1423,7 @@ class _export_methods:
                               'gap_label', 'sequence_label', 'picasso_loc',
                               ]
 
-            json_var_keys = ["user_label", "nucleotide_label", "import_path"]
+            json_var_keys = ["user_label", "import_path"]
             json_dict_keys = ["bleach_dict","measure_dict"]
 
             if len(dataset_names) == 0:

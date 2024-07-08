@@ -148,14 +148,13 @@ class _HMM_methods:
                     channel_keys = list(localisation_data.keys())
 
                     user_label = localisation_data["user_label"]
-                    nucleotide_label = localisation_data["nucleotide_label"]
 
                     if crop == True:
                         crop_range = localisation_data["crop_range"]
                     else:
                         crop_range = None
 
-                    if self.get_filter_status("hmm", user_label, nucleotide_label) == False:
+                    if self.get_filter_status("hmm", user_label) == False:
 
                         if channel_name != "FRET":
 

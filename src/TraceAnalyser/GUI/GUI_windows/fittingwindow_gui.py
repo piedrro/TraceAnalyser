@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'fittingwindow_gui.ui'
+# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\TraceAnalyser\GUI\GUI_windows\fittingwindow_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -65,17 +65,6 @@ class Ui_Form(object):
         self.hmm_user_group.addItem("")
         self.hmm_user_group.addItem("")
         self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.hmm_user_group)
-        self.label_28 = QtWidgets.QLabel(self.tab_3)
-        self.label_28.setObjectName("label_28")
-        self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_28)
-        self.hmm_nucleotide_group = QtWidgets.QComboBox(self.tab_3)
-        self.hmm_nucleotide_group.setObjectName("hmm_nucleotide_group")
-        self.hmm_nucleotide_group.addItem("")
-        self.hmm_nucleotide_group.addItem("")
-        self.hmm_nucleotide_group.addItem("")
-        self.hmm_nucleotide_group.addItem("")
-        self.hmm_nucleotide_group.addItem("")
-        self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.hmm_nucleotide_group)
         self.verticalLayout_4.addLayout(self.formLayout_3)
         self.hmm_crop_plots = QtWidgets.QCheckBox(self.tab_3)
         self.hmm_crop_plots.setObjectName("hmm_crop_plots")
@@ -423,12 +412,6 @@ class Ui_Form(object):
         self.hmm_user_group.setItemText(8, _translate("Form", "7"))
         self.hmm_user_group.setItemText(9, _translate("Form", "8"))
         self.hmm_user_group.setItemText(10, _translate("Form", "9"))
-        self.label_28.setText(_translate("Form", "Nucleotide Label"))
-        self.hmm_nucleotide_group.setItemText(0, _translate("Form", "None"))
-        self.hmm_nucleotide_group.setItemText(1, _translate("Form", "A"))
-        self.hmm_nucleotide_group.setItemText(2, _translate("Form", "T"))
-        self.hmm_nucleotide_group.setItemText(3, _translate("Form", "C"))
-        self.hmm_nucleotide_group.setItemText(4, _translate("Form", "G"))
         self.hmm_crop_plots.setText(_translate("Form", "Crop Plots"))
         self.label_12.setText(_translate("Form", "HMM Fit Settings"))
         self.label_14.setText(_translate("Form", "HMM Implementation"))

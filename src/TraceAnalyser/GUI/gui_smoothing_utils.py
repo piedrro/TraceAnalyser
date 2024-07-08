@@ -127,9 +127,8 @@ class _smoothing_utils:
             for localisation_number, localisation_data in enumerate(dataset_data):
 
                 user_label = localisation_data["user_label"]
-                nucleotide_label = localisation_data["nucleotide_label"]
 
-                if self.get_filter_status("smooth", user_label, nucleotide_label) == False:
+                if self.get_filter_status("smooth", user_label) == False:
 
                     for data_name in self.smooth_channel_dict[channel_name]:
 

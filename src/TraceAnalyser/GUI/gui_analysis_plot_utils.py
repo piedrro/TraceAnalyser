@@ -86,10 +86,9 @@ class _analysis_plotting_methods:
             for localisation_index, localisation_data in enumerate(self.data_dict[dataset]):
 
                 user_label = localisation_data["user_label"]
-                nucleotide_label = localisation_data["nucleotide_label"]
                 crop_range = localisation_data["crop_range"]
 
-                if self.get_filter_status("analysis", user_label, nucleotide_label) == False:
+                if self.get_filter_status("analysis", user_label) == False:
 
                     trace_data = localisation_data[mode]
                     state_data = localisation_data["states"]
@@ -333,9 +332,8 @@ class _analysis_plotting_methods:
             for localisation_index, localisation_data in enumerate(self.data_dict[dataset]):
 
                 user_label = localisation_data["user_label"]
-                nucleotide_label = localisation_data["nucleotide_label"]
 
-                if self.get_filter_status("analysis", user_label, nucleotide_label) == False:
+                if self.get_filter_status("analysis", user_label) == False:
 
                     state_data = localisation_data["states"]
 
@@ -425,7 +423,6 @@ class _analysis_plotting_methods:
             histogram_dataset = self.analysis_graph_dataset.currentText()
             histogram_channel = self.analysis_graph_channel.currentText()
             group_label = self.analysis_user_group.currentText()
-            nucleotide_label = self.analysis_nucleotide_group.currentText()
 
             trace_data_list, state_data_list = self.compile_analysis_histogram_data()
             histogram_data = self.compute_histograms(trace_data_list, state_data_list)
@@ -458,19 +455,15 @@ class _analysis_plotting_methods:
                             if "Raw Data" in histogram:
                                 dat = {"dataset": histogram_dataset,
                                        "group": group_label,
-                                       "nucleotide": nucleotide_label,
                                        metric: value,
                                        }
                             else:
                                 dat = {"dataset": histogram_dataset,
                                        "group": group_label,
-                                       "nucleotide": nucleotide_label,
                                        metric: value,
                                        "state": state,
                                        }
 
-                            if dat["nucleotide"] in ["None",None]:
-                                dat.pop("nucleotide")
                             if dat["group"] in ["None",None]:
                                 dat.pop("group")
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'cropwindow_gui.ui'
+# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\TraceAnalyser\GUI\GUI_windows\cropwindow_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -49,17 +49,6 @@ class Ui_Form(object):
         self.crop_user_group.addItem("")
         self.crop_user_group.addItem("")
         self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.crop_user_group)
-        self.label_27 = QtWidgets.QLabel(Form)
-        self.label_27.setObjectName("label_27")
-        self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_27)
-        self.crop_nucleotide_group = QtWidgets.QComboBox(Form)
-        self.crop_nucleotide_group.setObjectName("crop_nucleotide_group")
-        self.crop_nucleotide_group.addItem("")
-        self.crop_nucleotide_group.addItem("")
-        self.crop_nucleotide_group.addItem("")
-        self.crop_nucleotide_group.addItem("")
-        self.crop_nucleotide_group.addItem("")
-        self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.crop_nucleotide_group)
         self.verticalLayout.addLayout(self.formLayout_2)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
@@ -155,12 +144,6 @@ class Ui_Form(object):
         self.crop_user_group.setItemText(8, _translate("Form", "7"))
         self.crop_user_group.setItemText(9, _translate("Form", "8"))
         self.crop_user_group.setItemText(10, _translate("Form", "9"))
-        self.label_27.setText(_translate("Form", "Nucleotide Label"))
-        self.crop_nucleotide_group.setItemText(0, _translate("Form", "None"))
-        self.crop_nucleotide_group.setItemText(1, _translate("Form", "A"))
-        self.crop_nucleotide_group.setItemText(2, _translate("Form", "T"))
-        self.crop_nucleotide_group.setItemText(3, _translate("Form", "C"))
-        self.crop_nucleotide_group.setItemText(4, _translate("Form", "G"))
         self.label.setText(_translate("Form", "Crop Detection Settings"))
         self.threshold1.setText(_translate("Form", "Threshold 1"))
         self.threshold1_criterion.setItemText(0, _translate("Form", "Above"))

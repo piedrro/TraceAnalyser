@@ -155,9 +155,8 @@ class _management_utils:
                 for localisation_index, localisation_data in enumerate(self.data_dict[dataset_name]):
 
                     user_label = localisation_data["user_label"]
-                    nucleotide_label = localisation_data["nucleotide_label"]
 
-                    if self.get_filter_status("manage", user_label, nucleotide_label) == False:
+                    if self.get_filter_status("manage", user_label) == False:
 
                         delete_list.append(localisation_index)
 

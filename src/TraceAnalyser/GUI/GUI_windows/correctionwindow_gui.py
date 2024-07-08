@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'correctionwindow_gui.ui'
+# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\TraceAnalyser\GUI\GUI_windows\correctionwindow_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -146,17 +146,6 @@ class Ui_Form(object):
         self.correction_user_group.addItem("")
         self.correction_user_group.addItem("")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.correction_user_group)
-        self.label_26 = QtWidgets.QLabel(self.tab_2)
-        self.label_26.setObjectName("label_26")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_26)
-        self.correction_nucleotide_group = QtWidgets.QComboBox(self.tab_2)
-        self.correction_nucleotide_group.setObjectName("correction_nucleotide_group")
-        self.correction_nucleotide_group.addItem("")
-        self.correction_nucleotide_group.addItem("")
-        self.correction_nucleotide_group.addItem("")
-        self.correction_nucleotide_group.addItem("")
-        self.correction_nucleotide_group.addItem("")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.correction_nucleotide_group)
         self.verticalLayout_3.addLayout(self.formLayout)
         spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem3)
@@ -240,12 +229,6 @@ class Ui_Form(object):
         self.correction_user_group.setItemText(8, _translate("Form", "7"))
         self.correction_user_group.setItemText(9, _translate("Form", "8"))
         self.correction_user_group.setItemText(10, _translate("Form", "9"))
-        self.label_26.setText(_translate("Form", "Nucleotide Label"))
-        self.correction_nucleotide_group.setItemText(0, _translate("Form", "None"))
-        self.correction_nucleotide_group.setItemText(1, _translate("Form", "A"))
-        self.correction_nucleotide_group.setItemText(2, _translate("Form", "T"))
-        self.correction_nucleotide_group.setItemText(3, _translate("Form", "C"))
-        self.correction_nucleotide_group.setItemText(4, _translate("Form", "G"))
         self.label_6.setText(_translate("Form", "Detect Molecule Dependent Correction Factors"))
         self.label_8.setText(_translate("Form", "#Frame Buffer After Bleaching"))
         self.bleach_sensitivity_2.setText(_translate("Form", "Gamma Factor Default #Frames"))

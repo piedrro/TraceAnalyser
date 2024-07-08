@@ -161,6 +161,13 @@
      <item row="2" column="1">
       <widget class="QComboBox" name="export_channel_selection"/>
      </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="export_user_group_label">
+       <property name="text">
+        <string>Group Label</string>
+       </property>
+      </widget>
+     </item>
      <item row="3" column="1">
       <widget class="QComboBox" name="export_user_group">
        <item>
@@ -216,49 +223,6 @@
        <item>
         <property name="text">
          <string>9</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="export_user_group_label">
-       <property name="text">
-        <string>Group Label</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="export_nucleotide_group_label">
-       <property name="text">
-        <string>Nucleotide Label</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QComboBox" name="export_nucleotide_group">
-       <item>
-        <property name="text">
-         <string>None</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>A</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>T</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>C</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>G</string>
         </property>
        </item>
       </widget>

@@ -306,10 +306,9 @@ class _correction_utils:
             for localisation_number, localisation_data in enumerate(dataset_data):
 
                 user_label = localisation_data["user_label"]
-                nucleotide_label = localisation_data["nucleotide_label"]
                 correction_factors = localisation_data["correction_factors"]
 
-                if self.get_filter_status("correction", user_label, nucleotide_label) == False:
+                if self.get_filter_status("correction", user_label) == False:
 
                     channel_list = list(localisation_data.keys())
 

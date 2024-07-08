@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'simulatorwindow_gui.ui'
+# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\TraceAnalyser\GUI\GUI_windows\simulatorwindow_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -579,6 +579,11 @@ class Ui_Form(object):
         self.simulate_traces = QtWidgets.QPushButton(Form)
         self.simulate_traces.setObjectName("simulate_traces")
         self.verticalLayout.addWidget(self.simulate_traces)
+        self.simulate_progressbar = QtWidgets.QProgressBar(Form)
+        self.simulate_progressbar.setMaximumSize(QtCore.QSize(16777215, 10))
+        self.simulate_progressbar.setProperty("value", 0)
+        self.simulate_progressbar.setObjectName("simulate_progressbar")
+        self.verticalLayout.addWidget(self.simulate_progressbar)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)

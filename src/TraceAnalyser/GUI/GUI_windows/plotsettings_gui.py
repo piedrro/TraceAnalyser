@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'plotsettings_gui.ui'
+# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\TraceAnalyser\GUI\GUI_windows\plotsettings_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -189,20 +189,9 @@ class Ui_Form(object):
         self.plot_user_group.addItem("")
         self.plot_user_group.addItem("")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.plot_user_group)
-        self.label_26 = QtWidgets.QLabel(Form)
-        self.label_26.setObjectName("label_26")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_26)
-        self.plot_nucleotide_group = QtWidgets.QComboBox(Form)
-        self.plot_nucleotide_group.setObjectName("plot_nucleotide_group")
-        self.plot_nucleotide_group.addItem("")
-        self.plot_nucleotide_group.addItem("")
-        self.plot_nucleotide_group.addItem("")
-        self.plot_nucleotide_group.addItem("")
-        self.plot_nucleotide_group.addItem("")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.plot_nucleotide_group)
         self.label_2 = QtWidgets.QLabel(Form)
         self.label_2.setObjectName("label_2")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_2)
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_2)
         self.plot_measurement_label = QtWidgets.QComboBox(Form)
         self.plot_measurement_label.setEditable(False)
         self.plot_measurement_label.setInsertPolicy(QtWidgets.QComboBox.InsertAtTop)
@@ -210,7 +199,7 @@ class Ui_Form(object):
         self.plot_measurement_label.addItem("")
         self.plot_measurement_label.addItem("")
         self.plot_measurement_label.addItem("")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.plot_measurement_label)
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.plot_measurement_label)
         self.verticalLayout.addLayout(self.formLayout)
 
         self.retranslateUi(Form)
@@ -264,12 +253,6 @@ class Ui_Form(object):
         self.plot_user_group.setItemText(8, _translate("Form", "7"))
         self.plot_user_group.setItemText(9, _translate("Form", "8"))
         self.plot_user_group.setItemText(10, _translate("Form", "9"))
-        self.label_26.setText(_translate("Form", "Nucleotide Label"))
-        self.plot_nucleotide_group.setItemText(0, _translate("Form", "None"))
-        self.plot_nucleotide_group.setItemText(1, _translate("Form", "A"))
-        self.plot_nucleotide_group.setItemText(2, _translate("Form", "T"))
-        self.plot_nucleotide_group.setItemText(3, _translate("Form", "C"))
-        self.plot_nucleotide_group.setItemText(4, _translate("Form", "G"))
         self.label_2.setText(_translate("Form", "Measurement Label"))
         self.plot_measurement_label.setItemText(0, _translate("Form", "Label1"))
         self.plot_measurement_label.setItemText(1, _translate("Form", "Label2"))

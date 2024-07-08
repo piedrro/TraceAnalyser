@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'exportsettings_gui.ui'
+# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\TraceAnalyser\GUI\GUI_windows\exportsettings_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -74,6 +74,9 @@ class Ui_Form(object):
         self.export_channel_selection = QtWidgets.QComboBox(Form)
         self.export_channel_selection.setObjectName("export_channel_selection")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.export_channel_selection)
+        self.export_user_group_label = QtWidgets.QLabel(Form)
+        self.export_user_group_label.setObjectName("export_user_group_label")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.export_user_group_label)
         self.export_user_group = QtWidgets.QComboBox(Form)
         self.export_user_group.setObjectName("export_user_group")
         self.export_user_group.addItem("")
@@ -88,20 +91,6 @@ class Ui_Form(object):
         self.export_user_group.addItem("")
         self.export_user_group.addItem("")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.export_user_group)
-        self.export_user_group_label = QtWidgets.QLabel(Form)
-        self.export_user_group_label.setObjectName("export_user_group_label")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.export_user_group_label)
-        self.export_nucleotide_group_label = QtWidgets.QLabel(Form)
-        self.export_nucleotide_group_label.setObjectName("export_nucleotide_group_label")
-        self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.export_nucleotide_group_label)
-        self.export_nucleotide_group = QtWidgets.QComboBox(Form)
-        self.export_nucleotide_group.setObjectName("export_nucleotide_group")
-        self.export_nucleotide_group.addItem("")
-        self.export_nucleotide_group.addItem("")
-        self.export_nucleotide_group.addItem("")
-        self.export_nucleotide_group.addItem("")
-        self.export_nucleotide_group.addItem("")
-        self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.export_nucleotide_group)
         self.verticalLayout.addLayout(self.formLayout)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem1)
@@ -187,6 +176,7 @@ class Ui_Form(object):
         self.export_location.setItemText(1, _translate("Form", "Import Directory"))
         self.export_dataset_selection_label.setText(_translate("Form", "Export Dataset(s)"))
         self.export_channel_selection_label.setText(_translate("Form", "Export Channel(s)"))
+        self.export_user_group_label.setText(_translate("Form", "Group Label"))
         self.export_user_group.setItemText(0, _translate("Form", "None"))
         self.export_user_group.setItemText(1, _translate("Form", "0"))
         self.export_user_group.setItemText(2, _translate("Form", "1"))
@@ -198,13 +188,6 @@ class Ui_Form(object):
         self.export_user_group.setItemText(8, _translate("Form", "7"))
         self.export_user_group.setItemText(9, _translate("Form", "8"))
         self.export_user_group.setItemText(10, _translate("Form", "9"))
-        self.export_user_group_label.setText(_translate("Form", "Group Label"))
-        self.export_nucleotide_group_label.setText(_translate("Form", "Nucleotide Label"))
-        self.export_nucleotide_group.setItemText(0, _translate("Form", "None"))
-        self.export_nucleotide_group.setItemText(1, _translate("Form", "A"))
-        self.export_nucleotide_group.setItemText(2, _translate("Form", "T"))
-        self.export_nucleotide_group.setItemText(3, _translate("Form", "C"))
-        self.export_nucleotide_group.setItemText(4, _translate("Form", "G"))
         self.settings_label.setText(_translate("Form", "Export Settings"))
         self.export_separator_label.setText(_translate("Form", "Column Separator"))
         self.export_separator.setItemText(0, _translate("Form", "Tab"))

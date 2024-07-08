@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'managewindow_gui.ui'
+# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\TraceAnalyser\GUI\GUI_windows\managewindow_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -61,23 +61,6 @@ class Ui_Form(object):
         self.delete_group_label.addItem("")
         self.delete_group_label.addItem("")
         self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.delete_group_label)
-        self.label_26 = QtWidgets.QLabel(Form)
-        self.label_26.setObjectName("label_26")
-        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_26)
-        self.delete_nucleotide_label = QtWidgets.QComboBox(Form)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.delete_nucleotide_label.sizePolicy().hasHeightForWidth())
-        self.delete_nucleotide_label.setSizePolicy(sizePolicy)
-        self.delete_nucleotide_label.setMinimumSize(QtCore.QSize(10, 0))
-        self.delete_nucleotide_label.setObjectName("delete_nucleotide_label")
-        self.delete_nucleotide_label.addItem("")
-        self.delete_nucleotide_label.addItem("")
-        self.delete_nucleotide_label.addItem("")
-        self.delete_nucleotide_label.addItem("")
-        self.delete_nucleotide_label.addItem("")
-        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.delete_nucleotide_label)
         self.verticalLayout.addLayout(self.formLayout_2)
         self.manage_delete_traces = QtWidgets.QPushButton(Form)
         self.manage_delete_traces.setObjectName("manage_delete_traces")
@@ -198,12 +181,6 @@ class Ui_Form(object):
         self.delete_group_label.setItemText(8, _translate("Form", "7"))
         self.delete_group_label.setItemText(9, _translate("Form", "8"))
         self.delete_group_label.setItemText(10, _translate("Form", "9"))
-        self.label_26.setText(_translate("Form", "Nucleotide Label"))
-        self.delete_nucleotide_label.setItemText(0, _translate("Form", "None"))
-        self.delete_nucleotide_label.setItemText(1, _translate("Form", "A"))
-        self.delete_nucleotide_label.setItemText(2, _translate("Form", "T"))
-        self.delete_nucleotide_label.setItemText(3, _translate("Form", "C"))
-        self.delete_nucleotide_label.setItemText(4, _translate("Form", "G"))
         self.manage_delete_traces.setText(_translate("Form", "Delete Traces"))
         self.label_2.setText(_translate("Form", "Delete Dataset"))
         self.label_3.setText(_translate("Form", "Dataset"))

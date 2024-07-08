@@ -65,14 +65,13 @@ class _trace_plotting_methods:
     def filter_data_dict(self):
 
         user_filter = self.plot_settings.plot_user_group.currentText()
-        nucleotide_filter = self.plot_settings.plot_nucleotide_group.currentText()
 
         if user_filter != "None":
             user_filter = int(user_filter)
 
         localisation_numbers = []
 
-        if user_filter != "None" or nucleotide_filter != "None":
+        if user_filter != "None":
 
             for dataset_name, dataset_data in self.data_dict.items():
 
@@ -80,20 +79,12 @@ class _trace_plotting_methods:
 
                     for localisation_number in range(len(dataset_data)):
                         user_label = int(dataset_data[localisation_number]["user_label"])
-                        nucleotide_label = dataset_data[localisation_number]["nucleotide_label"]
 
                         filter = False
 
-                        if user_filter != "None" and nucleotide_filter == "None":
+                        if user_filter != "None":
                             if user_label != user_filter:
                                 filter = True
-                        elif user_filter == "None" and nucleotide_filter != "None":
-                            if nucleotide_label != nucleotide_filter:
-                                filter = True
-                        elif user_filter != "None" and nucleotide_filter != "None":
-                            if user_label != user_filter or nucleotide_label != nucleotide_filter:
-                                filter = True
-
 
                         if filter == True:
                             dataset_data[localisation_number]["filter"] = True
@@ -403,7 +394,6 @@ class _trace_plotting_methods:
                     localisation_number = self.plot_localisation_number.value()
 
                     user_label = self.data_dict[plot_dataset][localisation_number]["user_label"]
-                    nucleotide_label = self.data_dict[plot_dataset][localisation_number]["nucleotide_label"]
 
                     plot_lines = []
                     plot_lines_labels = []
@@ -428,7 +418,7 @@ class _trace_plotting_methods:
                             legend = plot.legend
                             legend.anchor(itemPos=(1, 0), parentPos=(1, 0), offset=(-10, 10))
 
-                            plot_details = f"{plot_dataset}   #:{localisation_number} G:{user_label}  N:{nucleotide_label}"
+                            plot_details = f"{plot_dataset}   #:{localisation_number} G:{user_label}"
 
                             plotmeta = plot.metadata
                             plotmeta[axes_index] = {"plot_dataset": plot_dataset, "line_label": line_label}
@@ -598,11 +588,10 @@ class _trace_plotting_methods:
 
                         localisation_dict = self.data_dict[plot_dataset][localisation_number]
                         user_label = localisation_dict["user_label"]
-                        nucleotide_label = localisation_dict["nucleotide_label"]
                         crop_range = copy.deepcopy(localisation_dict["crop_range"])
                         gamma_ranges = localisation_dict["gamma_ranges"]
 
-                        plot_details = f"{plot_dataset} [#:{localisation_number} G:{user_label}  N:{nucleotide_label}]"
+                        plot_details = f"{plot_dataset} [#:{localisation_number} G:{user_label}]"
 
                         plot_ranges = {"xRange": [0, 100], "yRange": [0, 100]}
 
