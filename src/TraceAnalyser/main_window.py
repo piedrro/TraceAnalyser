@@ -63,7 +63,6 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.manage_window = ManageWindow(self)
         self.crop_window = CropWindow(self)
 
-
         self.setWindowTitle("TraceAnalyser")  # Set the window title
 
         #create pyqt graph container
@@ -165,7 +164,6 @@ class AnalysisGUI(QtWidgets.QMainWindow,
 
         self.plot_settings.plot_show_correction_factors.stateChanged.connect(partial(self.plot_traces, update_plot=False))
         self.plot_settings.plot_show_ml_predictions.stateChanged.connect(partial(self.plot_traces, update_plot=False))
-        self.plot_settings.plot_show_gapseq.stateChanged.connect(partial(self.plot_traces, update_plot=False))
 
         self.plot_settings.plot_normalise.stateChanged.connect(partial(self.plot_traces, update_plot=False))
         self.plot_settings.show_detected_states.stateChanged.connect(partial(self.plot_traces, update_plot=False))
@@ -224,7 +222,8 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.manage_window.manage_delete_dataset.clicked.connect(self.delete_dataset)
         self.manage_window.manage_rename_dataset.clicked.connect(self.rename_dataset)
         self.manage_window.manage_rename_measurement_label.clicked.connect(self.rename_measurement_label)
-        self.manage_window.assign_gapseq_sequences.clicked.connect(self.assign_gapseq_sequences)
+
+        self.manage_window.assign_ml_labels.clicked.connect(self.assign_ml_labels)
 
         self.crop_window.detect_crop.clicked.connect(self.initialise_crop_detection)
 

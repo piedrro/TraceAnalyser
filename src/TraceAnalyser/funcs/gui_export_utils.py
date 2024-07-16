@@ -1416,10 +1416,9 @@ class _export_methods:
                               "DD", "AA", "DA", "AD",
                               "states",
                               "break_points", "crop_range", "gamma_ranges",
-                              'gap_label', 'sequence_label', 'picasso_loc',
-                              ]
+                              'gap_label', 'sequence_label', 'picasso_loc',]
 
-            json_var_keys = ["user_label", "import_path"]
+            json_var_keys = ["user_label", "import_path", "ml_label"]
             json_dict_keys = ["bleach_dict","measure_dict"]
 
             if len(dataset_names) == 0:

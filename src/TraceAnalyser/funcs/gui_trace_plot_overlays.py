@@ -328,7 +328,6 @@ class _trace_plot_overlays:
 
             show_correction_factors = self.plot_settings.plot_show_correction_factors.isChecked()
             show_ml_predictions = self.plot_settings.plot_show_ml_predictions.isChecked()
-            show_gapseq = self.plot_settings.plot_show_gapseq.isChecked()
 
             slider_value = self.plot_localisation_number.value()
             localisation_number = self.localisation_numbers[slider_value]
@@ -364,17 +363,11 @@ class _trace_plot_overlays:
                 if "pred_plot_label" in self.data_dict[dataset][localisation_number].keys():
                     pred = self.data_dict[dataset][localisation_number]["pred_plot_label"]
                     plot_text += (f" \nPred:{pred}")
+                if "ml_label" in self.data_dict[dataset][localisation_number].keys():
+                    ml_label = self.data_dict[dataset][localisation_number]["ml_label"]
+                    if isinstance(ml_label, int):
+                        plot_text += (f" \nML Label:{ml_label}")
 
-            if show_gapseq:
-                gap_sequence = ""
-                seal_sequence = ""
-                if "gap_sequence" in self.data_dict[dataset][localisation_number].keys():
-                    gap_sequence = self.data_dict[dataset][localisation_number]["gap_sequence"]
-                if "seal_sequence" in self.data_dict[dataset][localisation_number].keys():
-                    seal_sequence = self.data_dict[dataset][localisation_number]["seal_sequence"]
-                if gap_sequence != "" or seal_sequence != "":
-                    plot_text += (f" \nGap:{gap_sequence}"
-                                     f"\nSeal:{seal_sequence}")
         except:
             print(traceback.format_exc())
 

@@ -307,7 +307,7 @@ class _import_methods:
                              "DD": np.array([]), "DA": np.array([]),
                              "AA": np.array([]), "AD": np.array([]),
                              "filter": False, "state_means": {}, "states": np.array([]),
-                             "user_label": 0,
+                             "user_label": 0, "ml_label": None,
                              "break_points": [], "crop_range": [],
                              "gamma_ranges": [], "import_path": "",
                              "bleach_dict ": {}, "correction_factors": {},"measure_dict": {},

@@ -395,7 +395,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Assign GAPSEQ Labels</string>
+      <string>Assign ML Label</string>
      </property>
     </widget>
    </item>
@@ -409,7 +409,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="sequence_dataset_combo">
+      <widget class="QComboBox" name="ml_dataset">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -425,54 +425,39 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_13">
+      <widget class="QLabel" name="label_14">
        <property name="text">
-        <string>GAP Sequence</string>
+        <string>ML Label</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="gap_sequence">
-       <property name="text">
-        <string>ATAG</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_14">
-       <property name="text">
-        <string>SEAL Sequence</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="seal_sequence">
-       <property name="text">
-        <string>TCTA</string>
-       </property>
+      <widget class="QComboBox" name="ml_label">
+       <item>
+        <property name="text">
+         <string>0 [static]</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>1 [dyamic - short]</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2 [dynamic - long]</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QPushButton" name="assign_gapseq_sequences">
+    <widget class="QPushButton" name="assign_ml_labels">
      <property name="text">
-      <string>Assign Sequence(s) to Dataset</string>
+      <string>Assign ML Label</string>
      </property>
     </widget>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

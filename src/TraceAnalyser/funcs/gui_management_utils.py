@@ -10,7 +10,7 @@ class _management_utils:
 
             delete_combo = self.manage_window.delete_dataset_combo
             rename_combo = self.manage_window.rename_dataset_combo
-            sequence_combo = self.manage_window.sequence_dataset_combo
+            ml_dataset_combo = self.manage_window.ml_dataset
 
             delete_combo.clear()
             delete_combo.addItems(dataset_names)
@@ -18,8 +18,8 @@ class _management_utils:
             rename_combo.clear()
             rename_combo.addItems(dataset_names)
 
-            sequence_combo.clear()
-            sequence_combo.addItems(dataset_names)
+            ml_dataset_combo.clear()
+            ml_dataset_combo.addItems(dataset_names)
 
         except:
             print(traceback.format_exc())
@@ -124,28 +124,20 @@ class _management_utils:
             pass
 
 
-    def assign_gapseq_sequences(self):
+    def assign_ml_labels(self):
 
         try:
 
-            dataset = self.manage_window.sequence_dataset_combo.currentText()
-            gap_sequence = self.manage_window.gap_sequence.text()
-            seal_sequence = self.manage_window.seal_sequence.text()
+            dataset = self.manage_window.ml_dataset.currentText()
+            ml_label = self.manage_window.ml_label.currentText()
 
-            if len(gap_sequence) == 0 or len(seal_sequence) == 0:
-                self.print_notification("Please enter gap and seal sequences.")
-                return
-
-            if len(gap_sequence) != len(seal_sequence):
-                self.print_notification("Gap and seal sequences must be the same length.")
-                return
+            ml_label = int(ml_label.split(" ")[0])
 
             if dataset in self.data_dict.keys():
                 for localisation_dict in self.data_dict[dataset]:
-                    localisation_dict["gap_sequence"] = gap_sequence
-                    localisation_dict["seal_sequence"] = seal_sequence
+                    localisation_dict["ml_label"] = int(ml_label)
 
-            self.print_notification(f"Assigned sequences to {dataset}")
+            self.print_notification(f"Assigned ML label {ml_label} to {dataset}")
             self.plot_traces(update_plot=False)
 
         except:
