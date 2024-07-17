@@ -6,28 +6,6 @@ import numpy as np
 
 class _smoothing_utils:
 
-
-    def populate_smooth_combos(self):
-
-        try:
-            self.update_dataset_selection("smoothing_window",
-                "smooth_dataset")
-
-            self.update_channel_selection("smoothing_window",
-                "smooth_dataset", "smooth_channel",
-                "smooth_channel_dict")
-
-            update_func = partial(self.update_channel_selection,
-                "smoothing_window",
-                "smooth_dataset", "smooth_channel",
-                "smooth_channel_dict")
-
-            self.smoothing_window.smooth_dataset.currentIndexChanged.connect(update_func)
-
-        except:
-            print(traceback.format_exc())
-            pass
-
     def update_smooth_options(self):
 
         try:

@@ -1,16 +1,15 @@
-from TraceAnalyser.GUI.plotsettings_gui import Ui_Form as plotsettings_gui
-from TraceAnalyser.GUI.importwindow_gui import Ui_Form as importwindow_gui
-from TraceAnalyser.GUI.exportsettings_gui import Ui_Form as exportwindow_gui
-from TraceAnalyser.GUI.fittingwindow_gui import Ui_Form as fittingwindow_gui
-from TraceAnalyser.GUI.detectwindow_gui import Ui_Form as detectwindow_gui
-from TraceAnalyser.GUI.smoothingwindow_gui import Ui_Form as smoothingwindow_gui
-from TraceAnalyser.GUI.bleachwindow_gui import Ui_Form as bleachwindow_gui
-from TraceAnalyser.GUI.correctionwindow_gui import Ui_Form as correctionwindow_gui
-from TraceAnalyser.GUI.groupwindow_gui import Ui_Form as groupwindow_gui
-from TraceAnalyser.GUI.simulatorwindow_gui import Ui_Form as simulatorwindow_gui
-from TraceAnalyser.GUI.managewindow_gui import Ui_Form as managewindow_gui
-from TraceAnalyser.GUI.cropwindow_gui import Ui_Form as cropwindow_gui
-
+from GUI.plotsettings_gui import Ui_Form as plotsettings_gui
+from GUI.importwindow_gui import Ui_Form as importwindow_gui
+from GUI.exportsettings_gui import Ui_Form as exportwindow_gui
+from GUI.fittingwindow_gui import Ui_Form as fittingwindow_gui
+from GUI.detectwindow_gui import Ui_Form as detectwindow_gui
+from GUI.smoothingwindow_gui import Ui_Form as smoothingwindow_gui
+from GUI.bleachwindow_gui import Ui_Form as bleachwindow_gui
+from GUI.correctionwindow_gui import Ui_Form as correctionwindow_gui
+from GUI.groupwindow_gui import Ui_Form as groupwindow_gui
+from GUI.simulatorwindow_gui import Ui_Form as simulatorwindow_gui
+from GUI.managewindow_gui import Ui_Form as managewindow_gui
+from GUI.cropwindow_gui import Ui_Form as cropwindow_gui
 
 
 from qtpy.QtWidgets import QDialog
@@ -276,8 +275,7 @@ class _window_utils:
                     self.current_dialog.hide()
                     self.current_dialog.close()
 
-            self.populate_ebFRET_options()
-            self.populate_HMM_options()
+            self.update_hmm_fit_algo()
 
             self.fitting_window.show()
             self.fitting_window.raise_()

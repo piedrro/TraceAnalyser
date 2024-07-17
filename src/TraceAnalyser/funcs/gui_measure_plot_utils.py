@@ -63,7 +63,7 @@ class _measure_plotting_methods:
 
             self.measure_graph_canvas.axes.clear()
 
-            dataset = self.measure_graph_data.currentText()
+            dataset = self.measure_graph_dataset.currentText()
             channel = self.measure_graph_channel.currentText()
             measurement_label = self.measure_label.currentText()
 
@@ -146,7 +146,7 @@ class _measure_plotting_methods:
 
         try:
 
-            histogram_dataset = self.measure_graph_data.currentText()
+            histogram_dataset = self.measure_graph_dataset.currentText()
             histogram_channel = self.measure_graph_channel.currentText()
             measure_label = self.measure_label.currentText()
 
@@ -217,7 +217,7 @@ class _measure_plotting_methods:
             histogram_data = self.compute_measurement_histogram(trace_data, trace_index_data, measure_index_data)
 
             histogram = self.measure_histogram_dataset.currentText()
-            histogram_dataset = self.measure_graph_data.currentText()
+            histogram_dataset = self.measure_graph_dataset.currentText()
             histogram_channel = self.measure_graph_channel.currentText()
             measure_label = self.measure_label.currentText()
 

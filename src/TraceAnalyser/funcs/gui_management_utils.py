@@ -2,30 +2,6 @@ import traceback
 
 class _management_utils:
 
-    def populate_management_combos(self):
-
-        try:
-
-            dataset_names = list(self.data_dict.keys())
-
-            delete_combo = self.manage_window.delete_dataset_combo
-            rename_combo = self.manage_window.rename_dataset_combo
-            ml_dataset_combo = self.manage_window.ml_dataset
-
-            delete_combo.clear()
-            delete_combo.addItems(dataset_names)
-
-            rename_combo.clear()
-            rename_combo.addItems(dataset_names)
-
-            ml_dataset_combo.clear()
-            ml_dataset_combo.addItems(dataset_names)
-
-        except:
-            print(traceback.format_exc())
-            pass
-
-
     def get_current_measurement_labels(self, default_n_labels=5):
 
         try:
@@ -203,7 +179,6 @@ class _management_utils:
 
             del self.data_dict[dataset]
 
-            self.populate_management_combos()
             self.populate_combos()
             self.initialise_plot()
 
@@ -233,7 +208,6 @@ class _management_utils:
 
                     self.data_dict[new_dataset_name] = self.data_dict.pop(old_dataset_name)
 
-                    self.populate_management_combos()
                     self.populate_combos()
                     self.initialise_plot()
 

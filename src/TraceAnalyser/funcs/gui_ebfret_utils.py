@@ -11,48 +11,6 @@ class _ebFRET_methods:
             items.append(combo_box.itemText(index))
         return items
 
-    def populate_ebFRET_options(self):
-
-        try:
-            if self.data_dict != {}:
-
-                dataset_names = list(self.data_dict.keys())
-
-                data_names = np.unique([list(value[0].keys()) for key,value in self.data_dict.items()])
-
-                self.fitting_window.ebfret_fit_data.clear()
-
-                # get plot_mode combo box items
-                plot_mode_items = self.get_combo_box_items(self.plot_mode)
-
-                if "Trace" in plot_mode_items:
-                    self.fitting_window.ebfret_fit_data.addItem("Trace")
-                if "Data" in plot_mode_items:
-                    self.fitting_window.ebfret_fit_data.addItem("Data")
-                if "Donor" in plot_mode_items:
-                    self.fitting_window.ebfret_fit_data.addItem("Donor")
-                if "Acceptor" in plot_mode_items:
-                    self.fitting_window.ebfret_fit_data.addItem("Acceptor")
-                if "FRET Efficiency" in plot_mode_items:
-                    self.fitting_window.ebfret_fit_data.addItem("FRET Efficiency")
-                if "DA" in plot_mode_items:
-                    self.fitting_window.ebfret_fit_data.addItem("DA")
-                if "AA" in plot_mode_items:
-                    self.fitting_window.ebfret_fit_data.addItem("AA")
-                if "DD" in plot_mode_items:
-                    self.fitting_window.ebfret_fit_data.addItem("DD")
-                if "AD" in plot_mode_items:
-                    self.fitting_window.ebfret_fit_data.addItem("AD")
-                if "ALEX Efficiency" in plot_mode_items:
-                    self.fitting_window.ebfret_fit_data.addItem("ALEX Efficiency")
-
-                self.fitting_window.ebfret_fit_dataset.clear()
-                self.fitting_window.ebfret_fit_dataset.addItems(dataset_names)
-
-        except:
-            self.print_notification(traceback.format_exc())
-            pass
-
     def gapseq_visualise_ebfret(self):
 
         try:
@@ -172,7 +130,7 @@ class _ebFRET_methods:
 
                 dataset_name = self.fitting_window.ebfret_fit_dataset.currentText()
 
-                data_name = self.fitting_window.ebfret_fit_data.currentText()
+                data_name = self.fitting_window.ebfret_fit_channel.currentText()
                 crop_plots = self.fitting_window.ebfret_crop_plots.isChecked()
 
                 for localisation_index, localisation_data in enumerate(self.data_dict[dataset_name]):

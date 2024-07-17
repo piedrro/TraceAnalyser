@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\TraceAnalyser\GUI\importwindow_gui.ui'
+# Form implementation generated from reading ui file 'C:\Users\turnerp\PycharmProjects\TraceAnalyser\src\GUI\importwindow_gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -47,11 +47,11 @@ class Ui_Form(object):
         self.import_data_file_format.addItem("")
         self.import_data_file_format.addItem("")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.import_data_file_format)
-        self.import_data_dataset_mode = QtWidgets.QComboBox(self.tab)
-        self.import_data_dataset_mode.setObjectName("import_data_dataset_mode")
-        self.import_data_dataset_mode.addItem("")
-        self.import_data_dataset_mode.addItem("")
-        self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.import_data_dataset_mode)
+        self.import_data_mode = QtWidgets.QComboBox(self.tab)
+        self.import_data_mode.setObjectName("import_data_mode")
+        self.import_data_mode.addItem("")
+        self.import_data_mode.addItem("")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.import_data_mode)
         self.label_7 = QtWidgets.QLabel(self.tab)
         self.label_7.setObjectName("label_7")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_7)
@@ -223,8 +223,8 @@ class Ui_Form(object):
         self.import_data_file_format.setItemText(1, _translate("Form", ".dat"))
         self.import_data_file_format.setItemText(2, _translate("Form", ".csv"))
         self.import_data_file_format.setItemText(3, _translate("Form", ".xlsx"))
-        self.import_data_dataset_mode.setItemText(0, _translate("Form", "Single Dataset"))
-        self.import_data_dataset_mode.setItemText(1, _translate("Form", "Multiple Datasets (One per File)"))
+        self.import_data_mode.setItemText(0, _translate("Form", "Single Dataset"))
+        self.import_data_mode.setItemText(1, _translate("Form", "Multiple Datasets (One per File)"))
         self.label_7.setText(_translate("Form", "Dataset Mode"))
         self.import_data_traces_per_file.setItemText(0, _translate("Form", "One"))
         self.import_data_traces_per_file.setItemText(1, _translate("Form", "Multiple"))

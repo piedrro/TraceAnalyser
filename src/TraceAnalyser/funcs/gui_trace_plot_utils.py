@@ -101,19 +101,21 @@ class _trace_plotting_methods:
         return self.localisation_numbers, self.n_traces
 
     def sort_plot_labels(self, plot_labels):
-
         try:
-
-            reference_list = ["Data","Trace","Donor", "Acceptor", "FRET Efficiency",
-                              "DD", "DA", "AD", "AA","ALEX Efficiency",]
+            reference_list = ["Data", "Trace",
+                              "Donor", "Acceptor",
+                              "FRET Efficiency",
+                              "DD", "DA", "AD", "AA",
+                              "ALEX Efficiency"]
 
             order = {key: i for i, key in enumerate(reference_list)}
 
-            # Sort the actual list based on the order defined in the reference list
-            sorted_list = sorted(plot_labels, key=lambda x: order.get(x, float('inf')))
+            # Sort the list and place items not in reference_list at the end in original order
+            sorted_list = sorted(plot_labels, key=lambda x: (order.get(x, float('inf')), plot_labels.index(x)))
 
-        except:
-            pass
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return plot_labels
 
         return sorted_list
 
@@ -123,8 +125,8 @@ class _trace_plotting_methods:
 
             if self.data_dict != {}:
 
-                plot_data = self.plot_data.currentText()
-                plot_mode = self.plot_mode.currentText()
+                plot_data = self.plot_dataset.currentText()
+                plot_mode = self.plot_channel.currentText()
 
                 if plot_mode != "" and plot_data != "":
 
@@ -140,47 +142,32 @@ class _trace_plotting_methods:
                     plot_label_dict = {}
 
                     for dataset_name in self.plot_datasets:
-                        plot_labels = list(self.data_dict[dataset_name][0].keys())
-                        plot_labels = [label for label in plot_labels if label in ["Data","Trace","Donor", "Acceptor", "FRET Efficiency",
-                                                                                   "DD", "AA", "DA", "AD","ALEX Efficiency",]]
+
+                        plot_labels = list(self.data_dict[dataset_name][0]["trace_dict"].keys())
 
                         if dataset_name not in plot_label_dict.keys():
                             plot_label_dict[dataset_name] = []
 
                         if plot_mode == "All Channels":
                             plot_label_dict[dataset_name].extend(plot_labels)
-                        elif plot_mode == "FRET Correction Data" and set(["Donor", "Acceptor"]).issubset(plot_labels):
-                            plot_label_dict[dataset_name].extend(["Donor", "Acceptor"])
-                        elif plot_mode == "ALEX Correction Data" and set(["DD","DA"]).issubset(plot_labels):
-                            plot_label_dict[dataset_name].extend(["DD","DA"])
-                        elif plot_mode == "Donor" and set(["Donor"]).issubset(plot_labels):
-                            plot_label_dict[dataset_name].append("Donor")
-                        elif plot_mode == "Acceptor" and set(["Acceptor"]).issubset(plot_labels):
-                            plot_label_dict[dataset_name].append("Acceptor")
+                        elif plot_mode in plot_labels:
+                            plot_label_dict[dataset_name].append(plot_mode)
                         elif plot_mode == "FRET Data" and set(["Donor", "Acceptor"]).issubset(plot_labels):
                             plot_label_dict[dataset_name].extend(["Donor", "Acceptor"])
                         elif plot_mode == "FRET Efficiency" and set(["FRET Efficiency"]).issubset(plot_labels):
                             plot_label_dict[dataset_name].append("FRET Efficiency")
                         elif plot_mode == "FRET Data + FRET Efficiency" and set(["Donor", "Acceptor", "FRET Efficiency"]).issubset(plot_labels):
                             plot_label_dict[dataset_name].extend(["Donor", "Acceptor", "FRET Efficiency"])
-                        elif plot_mode == "Trace" and "Trace" in plot_labels:
-                            plot_label_dict[dataset_name].append("Trace")
-                        elif plot_mode == "Data" and "Data" in plot_labels:
-                            plot_label_dict[dataset_name].append("Data")
-                        elif plot_mode == "DA" and "DA" in plot_labels:
-                            plot_label_dict[dataset_name].append("DA")
-                        elif plot_mode == "DD" and "DD" in plot_labels:
-                            plot_label_dict[dataset_name].append("DD")
-                        elif plot_mode == "AA" and "AA" in plot_labels:
-                            plot_label_dict[dataset_name].append("AA")
-                        elif plot_mode == "AD" and "AD" in plot_labels:
-                            plot_label_dict[dataset_name].append("AD")
+                        elif plot_mode == "FRET Correction Data" and set(["Donor", "Acceptor"]).issubset(plot_labels):
+                            plot_label_dict[dataset_name].extend(["Donor", "Acceptor"])
                         elif plot_mode == "ALEX Data" and set(["DD", "AA", "DA", "AD"]).issubset(plot_labels):
                             plot_label_dict[dataset_name].extend(["DD", "AA", "DA", "AD"])
                         elif plot_mode == "ALEX Efficiency" and set(["ALEX Efficiency"]).issubset(plot_labels):
                             plot_label_dict[dataset_name].append("ALEX Efficiency")
                         elif plot_mode == "ALEX Data + ALEX Efficiency" and set(["DD", "AA", "DA", "AD", "ALEX Efficiency"]).issubset(plot_labels):
                             plot_label_dict[dataset_name].extend(["DD", "AA", "DA", "AD", "ALEX Efficiency"])
+                        elif plot_mode == "ALEX Correction Data" and set(["DD","DA"]).issubset(plot_labels):
+                            plot_label_dict[dataset_name].extend(["DD","DA"])
 
                     self.plot_info = {}
 
@@ -189,7 +176,7 @@ class _trace_plotting_methods:
                         if dataset_name not in self.plot_info.keys():
                             self.plot_info[dataset_name] = []
 
-                        plot_labels = [label for label in plot_labels if len(self.data_dict[dataset_name][0][label]) > 0]
+                        plot_labels = [label for label in plot_labels if len(self.data_dict[dataset_name][0]["trace_dict"][label]) > 0]
 
                         plot_labels = self.sort_plot_labels(plot_labels)
 
@@ -244,7 +231,7 @@ class _trace_plotting_methods:
             self.acceptor_bleach_refs = {}
 
             self.graph_canvas.clear()
-            plot_mode = self.plot_mode.currentText()
+            plot_mode = self.plot_channel.currentText()
             split = self.plot_settings.plot_split_lines.isChecked()
 
             efficiency_plot = False
@@ -514,7 +501,6 @@ class _trace_plotting_methods:
                     checkbox.deleteLater()
                     checkbox.hide()
 
-
             if len(line_list) > 1:
                 for col_index, line_label in enumerate(line_list):
                     check_box_name = f"plot_show_{line_label}"
@@ -587,6 +573,7 @@ class _trace_plotting_methods:
                         plot_lines_labels = grid["plot_lines_labels"]
 
                         localisation_dict = self.data_dict[plot_dataset][localisation_number]
+                        trace_dict = localisation_dict["trace_dict"]
                         user_label = localisation_dict["user_label"]
                         crop_range = copy.deepcopy(localisation_dict["crop_range"])
                         gamma_ranges = localisation_dict["gamma_ranges"]
@@ -600,7 +587,6 @@ class _trace_plotting_methods:
                         self.plot_gamma_correction_ranges(localisation_dict, sub_axes,
                             plot_lines_labels, gamma_refs, gamma_ranges)
 
-
                         for line_index, (plot, crop_region, line,  plot_label) in enumerate(zip(sub_axes,crop_regions,
                                 plot_lines, plot_lines_labels)):
 
@@ -609,7 +595,7 @@ class _trace_plotting_methods:
 
                             legend = plot.legend
 
-                            data = localisation_dict[plot_label]
+                            data = trace_dict[plot_label]
                             data_x = np.arange(len(data))
 
                             break_points = localisation_dict["break_points"]

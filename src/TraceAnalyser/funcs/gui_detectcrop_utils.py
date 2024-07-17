@@ -39,8 +39,6 @@ class _detectcrop_utils:
             dataset = "crop_dataset"
             channel_dict = "crop_channel_dict"
 
-            # clear exisitng events
-
             self.update_dataset_selection(window, dataset)
 
             for i in range(1, n_checkbox+1):

@@ -90,12 +90,12 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>Plot Data</string>
+             <string>Plot Dataset</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QComboBox" name="plot_data">
+           <widget class="QComboBox" name="plot_dataset">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -110,7 +110,7 @@
            </widget>
           </item>
           <item row="0" column="3">
-           <widget class="QComboBox" name="plot_mode">
+           <widget class="QComboBox" name="plot_channel">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -189,7 +189,7 @@
             <item row="0" column="0">
              <widget class="QLabel" name="label_5">
               <property name="text">
-               <string>Plot Data</string>
+               <string>Plot Dataset</string>
               </property>
              </widget>
             </item>
@@ -212,7 +212,7 @@
             <item row="1" column="0">
              <widget class="QLabel" name="label_63">
               <property name="text">
-               <string>Plot Channels</string>
+               <string>Plot Channel</string>
               </property>
              </widget>
             </item>
@@ -708,12 +708,12 @@
             <item row="0" column="0">
              <widget class="QLabel" name="label_8">
               <property name="text">
-               <string>Plot Data</string>
+               <string>Plot Dataset</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QComboBox" name="measure_graph_data">
+             <widget class="QComboBox" name="measure_graph_dataset">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
                 <horstretch>0</horstretch>
@@ -1099,7 +1099,7 @@
      <x>0</x>
      <y>0</y>
      <width>868</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">

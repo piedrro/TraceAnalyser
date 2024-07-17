@@ -6,16 +6,6 @@ import math
 
 class _correction_utils:
 
-    def populate_correction_combos(self):
-
-            try:
-                self.update_dataset_selection("correction_window",
-                    "correction_dataset")
-            except:
-                print(traceback.format_exc())
-                pass
-
-
     def correction_factor_detection_finished(self):
 
         try:

@@ -6,6 +6,8 @@ import traceback
 import pandas as pd
 import json
 import copy
+import os
+from PyQt5.QtWidgets import QComboBox
 
 class _import_methods:
 
@@ -186,7 +188,7 @@ class _import_methods:
             column_format = self.import_settings.import_data_column_format.currentText()
             skiprows = int(self.import_settings.import_data_skip_rows.currentText())
             skipcolumns = int(self.import_settings.import_data_skip_columns.currentText())
-            dataset_mode = int(self.import_settings.import_data_dataset_mode.currentIndex())
+            dataset_mode = int(self.import_settings.import_data_mode.currentIndex())
 
             if sep.lower() == "space":
                 sep = " "
@@ -299,19 +301,15 @@ class _import_methods:
     def import_gapseq_json(self):
 
         try:
-            expected_data = {"Trace": np.array([]),"Data": np.array([]),
-                             "Donor": np.array([]), "Acceptor": np.array([]),
-                             "FRET Efficiency": np.array([]), "ALEX Efficiency": np.array([]),
-                             "gap_label": np.array([]), "sequence_label": np.array([]),
-                             "picasso_loc": np.array([]),
-                             "DD": np.array([]), "DA": np.array([]),
-                             "AA": np.array([]), "AD": np.array([]),
-                             "filter": False, "state_means": {}, "states": np.array([]),
-                             "user_label": 0, "ml_label": None,
-                             "break_points": [], "crop_range": [],
-                             "gamma_ranges": [], "import_path": "",
-                             "bleach_dict ": {}, "correction_factors": {},"measure_dict": {},
-                             }
+            expected_data = {
+                "trace_dict": {}, "bleach_dict ": {},
+                "correction_factors": {}, "measure_dict": {},
+                "picasso_loc": np.array([]),
+                "filter": False, "state_means": {}, "states": np.array([]),
+                "user_label": 0, "ml_label": None,
+                "break_points": [], "crop_range": [],
+                "gamma_ranges": [], "import_path": "",
+            }
 
             if "bleach_dict" not in expected_data.keys():
                 expected_data["bleach_dict"] = {}
@@ -343,7 +341,7 @@ class _import_methods:
 
                         for localisation_index, localisation_data in enumerate(dataset_data):
 
-                            localisation_dict = {}
+                            localisation_dict = {"trace_dict":{}}
 
                             if len(localisation_data.keys()) > 0:
 
@@ -356,6 +354,9 @@ class _import_methods:
                                             value = np.array(value)
 
                                         localisation_dict[key] = value
+
+                                    if key in self.plot_channels.keys():
+                                        localisation_dict["trace_dict"][key] = value
 
                                 for key, value in expected_data.items():
                                     if key not in localisation_dict.keys():
@@ -567,58 +568,52 @@ class _import_methods:
 
         for dataset_name in dataset_names:
             for i in range(len(self.data_dict[dataset_name])):
-                trace_data = self.data_dict[dataset_name][i]
-                crop_range = copy.deepcopy(trace_data["crop_range"])
+                localisation_dict = self.data_dict[dataset_name][i]
+                trace_dict = localisation_dict["trace_dict"]
+                plot_labels = list(trace_dict.keys())
+                crop_range = copy.deepcopy(localisation_dict["crop_range"])
 
-                labels = np.array(trace_data["states"])
+                labels = np.array(localisation_dict["states"])
 
-                if "state_means" not in trace_data:
-                    trace_data["state_means"] = {}
+                if "state_means" not in localisation_dict:
+                    localisation_dict["state_means"] = {}
 
-                for plot in ["Data","Trace","Donor", "Acceptor",
-                             "FRET Efficiency", "ALEX Efficiency",
-                             "DD", "AA", "DA", "AD"]:
+                for plot_label in trace_dict.keys():
 
-                    if plot in trace_data.keys():
-                        plot_data = np.array(trace_data[plot]).copy()
+                    plot_data = np.array(trace_dict[plot_label]).copy()
 
-                        try:
+                    try:
 
-                            if len(plot_data) > 0 and len(labels) > 0:
+                        if len(plot_data) > 0 and len(labels) > 0:
 
-                                if len(plot_data) == len(labels):
+                            if len(plot_data) == len(labels):
 
-                                    if plot == "Donor" and i == 17:
-                                        print_data = True
-                                    else:
-                                        print_data = False
+                                state_means_y = _compute_state_means(plot_data, labels)
+                                state_means_x = np.arange(len(state_means_y))
 
-                                    state_means_y = _compute_state_means(plot_data, labels, print_data=print_data)
-                                    state_means_x = np.arange(len(state_means_y))
+                                state_means_x = list(state_means_x)
+                                state_means_y = list(state_means_y)
 
-                                    state_means_x = list(state_means_x)
-                                    state_means_y = list(state_means_y)
-
-                                    trace_data["state_means"][plot] = [state_means_x, state_means_y]
-
-                                else:
-
-                                    plot_data = plot_data[int(crop_range[0]):int(crop_range[1])]
-                                    state_means_y = _compute_state_means(plot_data, labels)
-                                    state_means_x = np.arange(int(crop_range[0]),int(crop_range[1]))
-
-                                    state_means_x = list(state_means_x)
-                                    state_means_y = list(state_means_y)
-
-                                    trace_data["state_means"][plot] = [state_means_x, state_means_y]
+                                localisation_dict["state_means"][plot_label] = [state_means_x, state_means_y]
 
                             else:
-                                trace_data["state_means"][plot] = [[], []]
 
-                        except:
-                            trace_data["state_means"][plot] = [[], []]
+                                plot_data = plot_data[int(crop_range[0]):int(crop_range[1])]
+                                state_means_y = _compute_state_means(plot_data, labels)
+                                state_means_x = np.arange(int(crop_range[0]),int(crop_range[1]))
 
-                self.data_dict[dataset_name][i] = copy.deepcopy(trace_data)
+                                state_means_x = list(state_means_x)
+                                state_means_y = list(state_means_y)
+
+                                localisation_dict["state_means"][plot_label] = [state_means_x, state_means_y]
+
+                        else:
+                            localisation_dict["state_means"][plot_label] = [[], []]
+
+                    except:
+                        localisation_dict["state_means"][plot_label] = [[], []]
+
+                self.data_dict[dataset_name][i] = copy.deepcopy(localisation_dict)
 
     def get_alex_data(self, donor, acceptor):
 
@@ -650,217 +645,76 @@ class _import_methods:
 
         return alex_dict
 
-    def populate_trace_graph_combos(self):
+    def get_plot_channels(self, plot_dataset = None, channel_dict = {}, single_channel=False):
 
-        self.plot_mode.clear()
-
-        plot_names = []
+        plot_datasets = []
         plot_channels = []
 
-        for dataset_name in self.data_dict.keys():
-            for plot_name, plot_value in self.data_dict[dataset_name][0].items():
-                if plot_name in ["Data","Trace","Donor", "Acceptor", "FRET Efficiency", "ALEX Efficiency", "DD", "AA", "DA", "AD"]:
-                    if len(plot_value) > 0:
-                        plot_names.append(plot_name)
-
-        if "Trace" in plot_names:
-            plot_channels.append("Trace")
-        if "Data" in plot_names:
-            plot_channels.append("Data")
-        if "Donor" in plot_names:
-            plot_channels.append("Donor")
-        if "Acceptor" in plot_names:
-            plot_channels.append("Acceptor")
-        if set(["Donor", "Acceptor"]).issubset(plot_names):
-            plot_channels.append("FRET Data")
-        if set(["Donor", "Acceptor", "FRET Efficiency"]).issubset(plot_names):
-            plot_channels.append("FRET Efficiency")
-            plot_channels.append("FRET Data + FRET Efficiency")
-        if set(["DD", "AA", "DA", "AD"]).issubset(plot_names):
-            plot_channels.append("DD")
-            plot_channels.append("AA")
-            plot_channels.append("DA")
-            plot_channels.append("AD")
-            plot_channels.append("ALEX Data")
-        if set(["DD", "AA", "DA", "AD", "ALEX Efficiency"]).issubset(plot_names):
-            plot_channels.append("ALEX Efficiency")
-            plot_channels.append("ALEX Data + ALEX Efficiency")
-        if set(["Donor", "Acceptor"]).issubset(plot_names):
-            plot_channels.append("Correction Data")
-        if set(["DD","DA"]).issubset(plot_names):
-            plot_channels.append("Correction Data")
-
-        plot_channels = list(set(plot_channels))
-        plot_channels = self.sort_channel_list(plot_channels)
-
-        self.plot_mode.addItems(plot_channels)
-
-        self.plot_data.clear()
-        if len(self.data_dict.keys()) == 1:
-            self.plot_data.addItems(list(self.data_dict.keys()))
-        else:
-            self.plot_data.addItem("All Datasets")
-            self.plot_data.addItems(list(self.data_dict.keys()))
-
-    def update_plot_data_combo(self):
-
         try:
 
-            plot_datasets = list(self.data_dict.keys())
-            plot_datasets = list(set(plot_datasets))
-
-            if len(plot_datasets) > 1:
-                plot_datasets.insert(0, "All Datasets")
-
-            self.plot_data.clear()
-            self.plot_data.addItems(plot_datasets)
-
-        except:
-            print(traceback.format_exc())
-            pass
-
-    def update_plot_mode_combo(self):
-
-        try:
-
-            current_plot_mode = self.plot_mode.currentText()
-
-            self.plot_mode.clear()
-
-            plot_channels = []
-
-            if self.plot_data.currentText() == "All Datasets":
+            if plot_dataset == None:
                 plot_datasets = list(self.data_dict.keys())
             else:
-                plot_datasets = [self.plot_data.currentText()]
+                if plot_dataset == "All Datasets":
+                    plot_datasets = list(self.data_dict.keys())
+                else:
+                    plot_datasets = [plot_dataset]
 
             for dataset_name in plot_datasets:
                 if dataset_name in self.data_dict.keys():
-                    for plot_name, plot_value in self.data_dict[dataset_name][0].items():
-                        if plot_name in ["Data","Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency", "DD", "AA", "DA", "AD"]:
+                    localisation_dict = self.data_dict[dataset_name][0]
+
+                    if "trace_dict" in localisation_dict.keys():
+                        for plot_name, plot_value in localisation_dict["trace_dict"].items():
                             if len(plot_value) > 0:
                                 plot_channels.append(plot_name)
 
-            if set(["Donor", "Acceptor"]).issubset(plot_channels):
-                plot_channels.insert(0, "FRET Data")
-            if set(["Donor", "Acceptor", "FRET Efficiency"]).issubset(plot_channels):
-                plot_channels.insert(0, "FRET Efficiency")
-                plot_channels.insert(0, "FRET Data + FRET Efficiency")
-            if set(["DD", "AA", "DA", "AD"]).issubset(plot_channels):
-                plot_channels.insert(0, "ALEX Data")
-            if set(["DD", "AA", "DA", "AD", "ALEX Efficiency"]).issubset(plot_channels):
-                plot_channels.insert(0, "ALEX Efficiency")
-                plot_channels.insert(0, "ALEX Data + ALEX Efficiency")
-            if set(["Donor", "Acceptor"]).issubset(plot_channels):
-                plot_channels.insert(0, "FRET Correction Data")
-            if set(["DD","DA","AA"]).issubset(plot_channels):
-                plot_channels.insert(0, "ALEX Correction Data")
+            if len(plot_channels) > 0:
 
-            plot_channels = list(set(plot_channels))
-            plot_channels = self.sort_channel_list(plot_channels)
+                plot_channels = list(set(plot_channels))
+                plot_channels = self.sort_channel_list(plot_channels)
 
-            if len(plot_channels) > 1:
-                plot_channels.insert(0, "All Channels")
+                if single_channel == False:
 
-            self.plot_mode.blockSignals(True)
+                    for channel_name in plot_channels:
+                        channel_dict[channel_name] = [channel_name]
 
-            self.plot_mode.addItems(plot_channels)
+                    if set(["Donor", "Acceptor"]).issubset(plot_channels):
+                        plot_channels.insert(0, "FRET Data")
+                        channel_dict["FRET Data"] = ["Donor", "Acceptor"]
+                    if set(["Donor", "Acceptor", "FRET Efficiency"]).issubset(plot_channels):
+                        plot_channels.insert(0, "FRET Data + FRET Efficiency")
+                        channel_dict["FRET Data + FRET Efficiency"] = ["Donor", "Acceptor", "FRET Efficiency"]
+                    if set(["DD", "AA", "DA", "AD"]).issubset(plot_channels):
+                        plot_channels.insert(0, "ALEX Data")
+                        channel_dict["ALEX Data"] = ["DD", "AA", "DA", "AD"]
+                    if set(["DD", "AA", "DA", "AD", "ALEX Efficiency"]).issubset(plot_channels):
+                        plot_channels.insert(0, "ALEX Data + ALEX Efficiency")
+                        channel_dict["ALEX Data + ALEX Efficiency"] = ["DD", "AA", "DA", "AD", "ALEX Efficiency"]
+                    if set(["Donor", "Acceptor"]).issubset(plot_channels):
+                        plot_channels.insert(0, "FRET Correction Data")
+                        channel_dict["FRET Correction Data"] = ["Donor", "Acceptor"]
+                    if set(["DD","DA","AA"]).issubset(plot_channels):
+                        plot_channels.insert(0, "ALEX Correction Data")
+                        channel_dict["ALEX Correction Data"] = ["DD","DA","AA"]
 
-            if current_plot_mode in plot_channels:
-                self.plot_mode.setCurrentIndex(self.plot_mode.findText(current_plot_mode))
-
-            self.plot_mode.blockSignals(False)
+                    if len(plot_channels) > 1:
+                        plot_channels.insert(0, "All Channels")
 
         except:
-            print(traceback.format_exc())
             pass
 
-    def populate_analysis_graph_combos(self):
-
-        self.analysis_graph_channel.clear()
-
-        plot_names = []
-
-        for dataset_name in self.data_dict.keys():
-            for plot_name, plot_value in self.data_dict[dataset_name][0].items():
-                if plot_name in ["Data","Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency", "DD", "AA", "DA", "AD"]:
-                    if len(plot_value) > 0:
-                        plot_names.append(plot_name)
-        if "Trace" in plot_names:
-            self.analysis_graph_channel.addItem("Trace")
-        if "Data" in plot_names:
-            self.analysis_graph_channel.addItem("Data")
-        if "Donor" in plot_names:
-            self.analysis_graph_channel.addItem("Donor")
-        if "Acceptor" in plot_names:
-            self.analysis_graph_channel.addItem("Acceptor")
-        if set(["Donor", "Acceptor", "FRET Efficiency"]).issubset(plot_names):
-            self.analysis_graph_channel.addItem("FRET Efficiency")
-        if set(["DD", "AA", "DA", "AD"]).issubset(plot_names):
-            self.analysis_graph_channel.addItem("DD")
-            self.analysis_graph_channel.addItem("AA")
-            self.analysis_graph_channel.addItem("DA")
-            self.analysis_graph_channel.addItem("AD")
-        if set(["DD", "AA", "DA", "AD", "ALEX Efficiency"]).issubset(plot_names):
-            self.analysis_graph_channel.addItem("ALEX Efficiency")
-
-        self.analysis_graph_dataset.clear()
-        self.analysis_graph_dataset.addItems(list(self.data_dict.keys()))
-
-    def populate_measure_graph_combos(self):
-
-        self.measure_graph_channel.clear()
-
-        plot_names = []
-
-        for dataset_name in self.data_dict.keys():
-            for plot_name, plot_value in self.data_dict[dataset_name][0].items():
-                if plot_name in ["Data", "Trace","Donor", "Acceptor", "FRET Efficiency","ALEX Efficiency", "DD", "AA", "DA", "AD"]:
-                    if len(plot_value) > 0:
-                        plot_names.append(plot_name)
-        if "Trace" in plot_names:
-            self.measure_graph_channel.addItem("Trace")
-        if "Data" in plot_names:
-            self.measure_graph_channel.addItem("Data")
-        if "Donor" in plot_names:
-            self.measure_graph_channel.addItem("Donor")
-        if "Acceptor" in plot_names:
-            self.measure_graph_channel.addItem("Acceptor")
-        if set(["Donor", "Acceptor", "FRET Efficiency"]).issubset(plot_names):
-            self.measure_graph_channel.addItem("FRET Efficiency")
-        if set(["DD", "AA", "DA", "AD"]).issubset(plot_names):
-            self.measure_graph_channel.addItem("DD")
-            self.measure_graph_channel.addItem("AA")
-            self.measure_graph_channel.addItem("DA")
-            self.measure_graph_channel.addItem("AD")
-        if set(["DD", "AA", "DA", "AD", "ALEX Efficiency"]).issubset(plot_names):
-            self.measure_graph_channel.addItem("ALEX Efficiency")
-
-        self.measure_graph_data.clear()
-        self.measure_graph_data.addItems(list(self.data_dict.keys()))
-
-
+        return plot_channels
 
     def populate_combos(self):
 
         self.updating_combos = True
 
-        self.update_plot_data_combo()
-        self.update_plot_mode_combo()
-
-        self.populate_export_combos()
-        self.populate_detect_combos()
         self.populate_measurement_combos()
 
-        self.populate_analysis_graph_combos()
-        self.populate_measure_graph_combos()
+        # self.populate_detectcrop_combos()
 
-        self.populate_smooth_combos()
-        self.populate_bleach_combos()
-        self.populate_correction_combos()
-        self.populate_group_combos()
-        self.populate_management_combos()
-        self.populate_detectcrop_combos()
+        self.update_dataset_combos()
 
         self.updating_combos = False
 
@@ -935,12 +789,14 @@ class _import_methods:
                     dataset_dict = self.data_dict[dataset_name]
 
                     for localisation_index, localisation_dict in enumerate(dataset_dict):
-                        localisation_dict_keys = list(localisation_dict.keys())
 
-                        if set(["Donor", "Acceptor"]).issubset(localisation_dict_keys):
+                        trace_dict = localisation_dict["trace_dict"]
+                        trace_dict_keys = list(trace_dict.keys())
 
-                            donor = np.array(localisation_dict["Donor"])
-                            acceptor = np.array(localisation_dict["Acceptor"])
+                        if set(["Donor", "Acceptor"]).issubset(trace_dict_keys):
+
+                            donor = np.array(trace_dict["Donor"])
+                            acceptor = np.array(trace_dict["Acceptor"])
 
                             if len(donor) == len(acceptor):
 
@@ -948,14 +804,14 @@ class _import_methods:
 
                                 fret_efficiency, corrected = self.compute_fret_efficiency(donor, acceptor, correction_factors)
 
-                                localisation_dict["FRET Efficiency"] = fret_efficiency
+                                trace_dict["FRET Efficiency"] = fret_efficiency
                                 localisation_dict["FRET Efficiency Corrected"] = corrected
 
-                        if set(["DD", "DA","AA"]).issubset(localisation_dict_keys):
+                        if set(["DD", "DA","AA"]).issubset(trace_dict_keys):
 
-                            DD = np.array(localisation_dict["DD"])
-                            DA = np.array(localisation_dict["DA"])
-                            AA = np.array(localisation_dict["AA"])
+                            DD = np.array(trace_dict["DD"])
+                            DA = np.array(trace_dict["DA"])
+                            AA = np.array(trace_dict["AA"])
 
                             if len(DD) == len(DA) == len(AA):
 
@@ -963,9 +819,9 @@ class _import_methods:
 
                                 alex_efficiency, stoichiometry, corrected = self.compute_alex_efficiency(DD, DA, AA, correction_factors)
 
-                                localisation_dict["ALEX Efficiency"] = alex_efficiency
+                                trace_dict["ALEX Efficiency"] = alex_efficiency
+                                trace_dict["ALEX Stoichiometry"] = stoichiometry
                                 localisation_dict["ALEX Efficiency Corrected"] = corrected
-                                localisation_dict["ALEX Stoichiometry"] = stoichiometry
 
         except:
             print(traceback.format_exc())
@@ -1069,3 +925,93 @@ class _import_methods:
             processed_data = data
 
         return np.array(processed_data)
+
+
+    def update_dataset_combos(self):
+
+        try:
+
+            dataset_combos = {}
+
+            datasets = list(self.data_dict.keys())
+
+            if len(datasets) == 0:
+                return
+
+            multi_dataset_combos = ["plot_dataset","group_dataset",
+                                    "smooth_dataset","crop_dataset",
+                                    "bleach_dataset","detect_dataset",
+                                    "export_dataset_selection"]
+
+            multi_channel_combos = ["plot_channel"]
+
+            channel_dicts = {"export_channel_selection": "export_channel_dict",
+                             "smooth_channel": "smooth_channel_dict",}
+
+            for window in self.gui_windows:
+                for dataset_combo in window.findChildren(QComboBox):
+                    dataset_combo_name = dataset_combo.objectName()
+                    if "dataset" in dataset_combo_name:
+                        dataset_combos[dataset_combo_name] = dataset_combo
+
+                        combo_datasets = copy.deepcopy(datasets)
+
+                        if dataset_combo_name in multi_dataset_combos:
+                            if len(combo_datasets) > 1:
+                                combo_datasets.insert(0, "All Datasets")
+
+                        dataset_combo.blockSignals(True)
+                        dataset_combo.clear()
+                        dataset_combo.addItems(combo_datasets)
+                        dataset_combo.blockSignals(False)
+
+                        channel_combo_name = dataset_combo_name.replace("dataset", "channel")
+
+                        if window.findChild(QComboBox, channel_combo_name) != None:
+
+                            channel_combo = window.findChild(QComboBox, channel_combo_name)
+
+                            if channel_combo_name in multi_channel_combos:
+                                single_channel = False
+                            else:
+                                single_channel = True
+
+                            if channel_combo_name in channel_dicts.keys():
+                                channel_dict_name = channel_dicts[channel_combo_name]
+                            else:
+                                channel_dict_name = "channel_dict"
+
+                            self.update_channel_combos(dataset_combo, channel_combo,
+                                channel_dict_name=channel_dict_name, single_channel=single_channel)
+
+                            dataset_combo.currentIndexChanged.connect(
+                                lambda: self.update_channel_combos(dataset_combo, channel_combo,
+                                    channel_dict_name=channel_dict_name, single_channel=single_channel))
+
+        except:
+            print(traceback.format_exc())
+            pass
+
+    def update_channel_combos(self, dataset_combo, channel_combo,
+            channel_dict_name = "channel_dict", single_channel=False):
+
+        try:
+
+            dataset_name = dataset_combo.currentText()
+
+            if hasattr(self, channel_dict_name) == False:
+                setattr(self, channel_dict_name, {})
+
+            channel_dict = getattr(self, channel_dict_name)
+
+            channels = self.get_plot_channels(dataset_name,
+                channel_dict, single_channel=single_channel)
+
+            channel_combo.blockSignals(True)
+            channel_combo.clear()
+            channel_combo.addItems(channels)
+            channel_combo.blockSignals(False)
+
+        except:
+            print(traceback.format_exc())
+            pass

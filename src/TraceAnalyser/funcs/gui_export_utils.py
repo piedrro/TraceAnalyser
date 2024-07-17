@@ -50,25 +50,6 @@ class _export_methods:
             print(traceback.format_exc())
             pass
 
-    def populate_export_combos(self):
-
-            try:
-
-                self.update_export_dataset_selection("export_dataset_selection")
-                self.update_export_channel_selection("export_dataset_selection", "export_channel_selection")
-
-                for dataset_combo_name in ["export_dataset_selection"]:
-                    try:
-                        dataset_combo = getattr(self.export_settings, dataset_combo_name)
-                        dataset_name = dataset_combo_name
-                        channel_name = dataset_combo_name.replace("dataset", "channel")
-                        dataset_combo_func = partial(self.update_export_channel_selection, dataset_combo_name, channel_name)
-                        dataset_combo.currentIndexChanged.connect(dataset_combo_func)
-                    except:
-                        print(traceback.format_exc())
-
-            except:
-                print(traceback.format_exc())
 
     def update_export_dataset_selection(self, dataset_combo ="export_dataset_selection"):
 

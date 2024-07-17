@@ -9,16 +9,6 @@ from TraceAnalyser.funcs.gui_worker import Worker
 
 class _bleach_utils:
 
-    def populate_bleach_combos(self):
-
-        try:
-            self.update_dataset_selection("bleach_window",
-                "bleach_dataset")
-
-        except:
-            print(traceback.format_exc())
-            pass
-
     def bleach_detection_finished(self):
 
         try:

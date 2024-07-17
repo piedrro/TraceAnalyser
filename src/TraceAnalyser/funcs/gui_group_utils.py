@@ -38,28 +38,6 @@ class _group_utils:
             print(traceback.format_exc())
             pass
 
-    def populate_group_combos(self):
-
-        try:
-            self.update_dataset_selection("group_window",
-                "group_dataset")
-
-            self.update_channel_selection("group_window",
-                "group_dataset", "group_intensity_channel",
-                "group_channel_dict")
-
-            update_func = partial(self.update_channel_selection,
-                "group_window",
-                "group_dataset", "group_intensity_channel",
-                "group_channel_dict")
-
-            self.group_window.group_dataset.currentIndexChanged.connect(update_func)
-
-        except:
-            print(traceback.format_exc())
-            pass
-
-
     def trace_grouping_finished(self):
 
         try:

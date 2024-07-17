@@ -7,7 +7,7 @@ from functools import partial
 import queue
 import traceback
 
-from TraceAnalyser.GUI.mainwindow_gui import Ui_MainWindow
+from GUI.mainwindow_gui import Ui_MainWindow
 
 from TraceAnalyser.funcs.gui_windows import (_window_utils,
     PlotSettingsWindow, ImportSettingsWindow,
@@ -62,6 +62,15 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.simulator_window = SimulatorWindow(self)
         self.manage_window = ManageWindow(self)
         self.crop_window = CropWindow(self)
+
+        self.gui_windows = [self,
+                            self.plot_settings, self.import_settings,
+                            self.export_settings, self.fitting_window,
+                            self.detect_window, self.smoothing_window,
+                            self.bleach_window, self.correction_window,
+                            self.group_window, self.simulator_window,
+                            self.manage_window, self.crop_window
+                            ]
 
         self.setWindowTitle("TraceAnalyser")  # Set the window title
         self.statusBar().setStyleSheet("QStatusBar{color: red;}") # Set the status bar style
@@ -182,8 +191,8 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.plot_localisation_number.valueChanged.connect(lambda: self.update_slider_label("plot_localisation_number"))
         self.plot_localisation_number.valueChanged.connect(partial(self.plot_traces, update_plot=False))
 
-        self.plot_mode.currentIndexChanged.connect(self.initialise_plot)
-        self.plot_data.currentIndexChanged.connect(self.initialise_plot)
+        self.plot_channel.currentIndexChanged.connect(self.initialise_plot)
+        self.plot_dataset.currentIndexChanged.connect(self.initialise_plot)
 
         self.plot_settings.plot_split_lines.stateChanged.connect(partial(self.plot_traces, update_plot=True))
         self.plot_settings.plot_showx.stateChanged.connect(partial(self.plot_traces, update_plot=True))
@@ -216,8 +225,6 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.group_window.group_traces.clicked.connect(self.init_trace_grouping)
 
         self.bleach_window.detect_bleach.clicked.connect(self.initialise_bleach_detection)
-
-        self.plot_data.currentIndexChanged.connect(self.update_plot_mode_combo)
 
         self.import_settings.import_data.clicked.connect(self.import_data_files)
         self.import_settings.import_json.clicked.connect(self.import_gapseq_json)
@@ -553,7 +560,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         if self.data_dict != {}:
 
             localisation_number = self.plot_localisation_number.value()
-            dataset_name = self.plot_data.currentText()
+            dataset_name = self.plot_dataset.currentText()
 
             if key == Qt.Key_Left:
                 new_localisation_number = localisation_number - 1
