@@ -35,58 +35,6 @@ class _HMM_methods:
             print(traceback.format_exc())
             pass
 
-
-    def populate_HMM_options(self):
-
-        try:
-            if self.data_dict != {}:
-
-                dataset_names = list(self.data_dict.keys())
-
-                self.fitting_window.hmm_fit_data.clear()
-
-                # get plot_mode combo box items
-                plot_mode_items = self.get_combo_box_items(self.plot_mode)
-
-                hmm_channels = []
-
-                if "Trace" in plot_mode_items:
-                    hmm_channels.append("Trace")
-                if "Data" in plot_mode_items:
-                    hmm_channels.append("Data")
-                if "Donor" in plot_mode_items:
-                    hmm_channels.append("Donor")
-                if "Acceptor" in plot_mode_items:
-                    hmm_channels.append("Acceptor")
-                if set(["Donor", "Acceptor"]).issubset(set(plot_mode_items)):
-                    hmm_channels.append("FRET")
-                if "FRET Efficiency" in plot_mode_items:
-                    hmm_channels.append("FRET Efficiency")
-                if "DA" in plot_mode_items:
-                    hmm_channels.append("DA")
-                if "AA" in plot_mode_items:
-                    hmm_channels.append("AA")
-                if "DD" in plot_mode_items:
-                    hmm_channels.append("DD")
-                if "AD" in plot_mode_items:
-                    hmm_channels.append("AD")
-                if "ALEX Efficiency" in plot_mode_items:
-                    hmm_channels.append("ALEX Efficiency")
-
-                hmm_channels = list(set(hmm_channels))
-                hmm_channels = self.sort_channel_list(hmm_channels)
-
-                self.fitting_window.hmm_fit_data.addItems(hmm_channels)
-
-                self.fitting_window.hmm_fit_dataset.clear()
-                self.fitting_window.hmm_fit_dataset.addItems(dataset_names)
-
-                self.update_hmm_fit_algo()
-
-        except:
-            print(traceback.format_exc())
-            pass
-
     def format_hmm_fit_data(self, fit_data, hmm_package, crop_range=None):
 
         try:
@@ -127,7 +75,7 @@ class _HMM_methods:
             if dataset_name is None:
                 dataset_name = self.fitting_window.hmm_fit_dataset.currentText()
             if channel_name is None:
-                channel_name = self.fitting_window.hmm_fit_data.currentText()
+                channel_name = self.fitting_window.hmm_fit_channel.currentText()
             if hmm_package is None:
                 hmm_package = self.fitting_window.hmm_package.currentText()
             if crop is None:
@@ -140,7 +88,8 @@ class _HMM_methods:
 
                 for localisation_index, localisation_data in enumerate(self.data_dict[dataset_name]):
 
-                    channel_keys = list(localisation_data.keys())
+                    trace_dict = localisation_data["trace_dict"]
+                    channel_keys = list(trace_dict.keys())
 
                     user_label = localisation_data["user_label"]
 
@@ -158,7 +107,7 @@ class _HMM_methods:
                                 if localisation_index not in fit_dataset.keys():
                                     fit_dataset[localisation_index] = {}
 
-                                fit_data = localisation_data[channel_name]
+                                fit_data = trace_dict[channel_name]
 
                                 # if "efficiency" in channel_name.lower():
                                 #     fit_data = fit_data[fit_data > 0]
@@ -174,8 +123,8 @@ class _HMM_methods:
                                 if localisation_index not in fit_dataset.keys():
                                     fit_dataset[localisation_index] = {}
 
-                                donor_trace = localisation_data["Donor"]
-                                acceptor_trace = localisation_data["Acceptor"]
+                                donor_trace = trace_dict["Donor"]
+                                acceptor_trace = trace_dict["Acceptor"]
 
                                 fit_data = np.stack((donor_trace, acceptor_trace), axis=1)
 
