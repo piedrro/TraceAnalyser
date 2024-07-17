@@ -41,8 +41,8 @@ class _group_utils:
                 if "channel" in combo_name:
                     channel_combo = combo
 
-                    update_func = partial(self.update_channel_combos, dataset_combo, channel_combo,
-                        channel_dict_name="channel_dict", single_channel=True)
+                    update_func = partial(self.update_channel_combos, dataset_combo,
+                        channel_combo, single_channel=True)
 
                     update_func()
 

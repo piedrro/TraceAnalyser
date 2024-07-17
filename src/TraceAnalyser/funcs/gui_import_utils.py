@@ -52,6 +52,8 @@ class _import_methods:
                         AA = data["A-Aexc-rw"].values
                         AD = np.zeros_like(DD)
 
+                        trace_dict = {"DD": DD, "DA": DA, "AA": AA, "AD": AD}
+
                         loc_data = {"FRET Efficiency": [],
                                     "ALEX Efficiency": [],
                                     "states": [],
@@ -64,10 +66,7 @@ class _import_methods:
                                     "crop_range": [],
                                     "filter": False,
                                     "import_path": path,
-                                    "DD": DD,
-                                    "DA": DA,
-                                    "AA": AA,
-                                    "AD": AD,
+                                    "trace_dict": trace_dict,
                                     }
 
                         self.data_dict[dataset_name].append(loc_data)
@@ -140,9 +139,9 @@ class _import_methods:
 
                         labels = trace_labels[i]
 
-                        self.data_dict[dataset_name].append({"Donor": donor_data,
-                                                             "Acceptor": acceptor_data,
-                                                             # "FRET Efficiency": efficiency_data,
+                        trace_dict = {"Donor": donor_data, "Acceptor": acceptor_data}
+
+                        self.data_dict[dataset_name].append({"trace_dict": trace_dict,
                                                              "states": labels,
                                                              "filter": False,
                                                              "state_means": {},
@@ -252,14 +251,15 @@ class _import_methods:
 
                         for i in import_range:
 
-                            loc_data = {"FRET Efficiency": [], "ALEX Efficiency": [],
-                                        "states": [],"state_means": {},
-                                        "user_label": 0,
-                                        "break_points": [], "gamma_ranges": [],
-                                        "bleach_dict ": {}, "correction_factors": {},
-                                        "crop_range" : [], "filter": False,
-                                        "import_path" : path,
-                                        }
+                            loc_data = {
+                                    "states": [],"state_means": {},
+                                    "user_label": 0,
+                                    "break_points": [], "gamma_ranges": [],
+                                    "bleach_dict ": {}, "correction_factors": {},
+                                    "crop_range" : [], "filter": False,
+                                    "import_path" : path,
+                                    "trace_dict": {},
+                                    }
 
                             # Select the current group of four columns
                             group = data.iloc[:, i:i + len(column_names)]
@@ -271,10 +271,10 @@ class _import_methods:
                                 alex_dict = self.get_alex_data(group_dict["Donor"], group_dict["Acceptor"])
 
                                 for key, value in alex_dict.items():
-                                    loc_data[key] = np.array(value)
+                                    loc_data["trace_dict"][key] = np.array(value)
                             else:
                                 for key, value in group_dict.items():
-                                    loc_data[key] = np.array(value)
+                                    loc_data["trace_dict"][key] = np.array(value)
 
                             self.data_dict[dataset_name].append(loc_data)
                             n_traces += 1
@@ -342,7 +342,12 @@ class _import_methods:
 
                         for localisation_index, localisation_data in enumerate(dataset_data):
 
-                            localisation_dict = {"trace_dict":{}}
+                            localisation_dict = {}
+
+                            if "trace_dict" not in localisation_dict.keys():
+                                localisation_dict["trace_dict"] = {}
+                            else:
+                                localisation_dict["trace_dict"] = localisation_data["trace_dict"]
 
                             if len(localisation_data.keys()) > 0:
 
@@ -473,7 +478,7 @@ class _import_methods:
                 if dataset not in self.data_dict.keys():
                     self.data_dict[dataset] = []
 
-                loc_data = {"FRET Efficiency": [], "ALEX Efficiency": [],
+                loc_data = {"trace_dict": {},
                             "states": [], "state_means": {},
                             "user_label": 0,
                             "break_points": [], "gamma_ranges": [],
@@ -484,7 +489,7 @@ class _import_methods:
 
                 for channel_data, channel_name, bleach_range in zip(data, channels, bleach_ranges):
 
-                    loc_data[channel_name] = channel_data
+                    loc_data["trace_dict"][channel_name] = channel_data
 
                     if bleach_range is None:
                         bleach_range = [len(channel_data), len(channel_data)]
@@ -525,7 +530,7 @@ class _import_methods:
 
             for i, (trace, user_label) in enumerate(zip(traces, user_labels)):
 
-                loc_data = {"Trace": trace,
+                loc_data = {"trace_dict": {"Trace": trace},
                             "user_label": user_label,
                             "FRET Efficiency": [], "ALEX Efficiency": [],
                             "states": [], "state_means": {},
@@ -651,7 +656,7 @@ class _import_methods:
 
         return alex_dict
 
-    def assign_plot_channels(self, plot_dataset = None, channel_dict = {}, single_channel=False):
+    def assign_plot_channels(self, plot_dataset = None, single_channel=False):
 
         plot_datasets = []
         plot_channels = []
@@ -682,27 +687,18 @@ class _import_methods:
 
                 if single_channel == False:
 
-                    for channel_name in plot_channels:
-                        channel_dict[channel_name] = [channel_name]
-
                     if set(["Donor", "Acceptor"]).issubset(plot_channels):
                         plot_channels.insert(0, "FRET Data")
-                        channel_dict["FRET Data"] = ["Donor", "Acceptor"]
                     if set(["Donor", "Acceptor", "FRET Efficiency"]).issubset(plot_channels):
                         plot_channels.insert(0, "FRET Data + FRET Efficiency")
-                        channel_dict["FRET Data + FRET Efficiency"] = ["Donor", "Acceptor", "FRET Efficiency"]
                     if set(["DD", "AA", "DA", "AD"]).issubset(plot_channels):
                         plot_channels.insert(0, "ALEX Data")
-                        channel_dict["ALEX Data"] = ["DD", "AA", "DA", "AD"]
                     if set(["DD", "AA", "DA", "AD", "ALEX Efficiency"]).issubset(plot_channels):
                         plot_channels.insert(0, "ALEX Data + ALEX Efficiency")
-                        channel_dict["ALEX Data + ALEX Efficiency"] = ["DD", "AA", "DA", "AD", "ALEX Efficiency"]
                     if set(["Donor", "Acceptor"]).issubset(plot_channels):
                         plot_channels.insert(0, "FRET Correction Data")
-                        channel_dict["FRET Correction Data"] = ["Donor", "Acceptor"]
                     if set(["DD","DA","AA"]).issubset(plot_channels):
                         plot_channels.insert(0, "ALEX Correction Data")
-                        channel_dict["ALEX Correction Data"] = ["DD","DA","AA"]
 
                     if len(plot_channels) > 1:
                         plot_channels.insert(0, "All Channels")
@@ -718,6 +714,8 @@ class _import_methods:
 
         try:
 
+            if channel_name == "All Channels":
+                plot_channels = list(trace_dict.keys())
             if channel_name in trace_dict.keys():
                 plot_channels.append(channel_name)
             if channel_name == "FRET Data":
@@ -983,10 +981,7 @@ class _import_methods:
                                     "bleach_dataset","detect_dataset",
                                     "export_dataset_selection"]
 
-            multi_channel_combos = ["plot_channel"]
-
-            channel_dicts = {"export_channel_selection": "export_channel_dict",
-                             "smooth_channel": "smooth_channel_dict",}
+            multi_channel_combos = ["plot_channel","export_channel_selection"]
 
             for window in self.gui_windows:
                 window_name = window.__class__.__name__
@@ -1019,15 +1014,8 @@ class _import_methods:
                             else:
                                 single_channel = True
 
-                            if channel_combo_name in channel_dicts.keys():
-                                channel_dict_name = channel_dicts[channel_combo_name]
-                            else:
-                                channel_dict_name = "channel_dict"
-
-                            update_func = partial(self.update_channel_combos,
-                                dataset_combo, channel_combo,
-                                channel_dict_name=channel_dict_name,
-                                single_channel=single_channel)
+                            update_func = partial(self.update_channel_combos,dataset_combo,
+                                channel_combo, single_channel=single_channel)
 
                             update_func()
 
@@ -1037,20 +1025,15 @@ class _import_methods:
             print(traceback.format_exc())
             pass
 
-    def update_channel_combos(self, dataset_combo, channel_combo,
-            channel_dict_name = "channel_dict", single_channel=False):
+    def update_channel_combos(self, dataset_combo,
+            channel_combo,single_channel=False):
 
         try:
 
             dataset_name = dataset_combo.currentText()
 
-            if hasattr(self, channel_dict_name) == False:
-                setattr(self, channel_dict_name, {})
-
-            channel_dict = getattr(self, channel_dict_name)
-
             channels = self.assign_plot_channels(dataset_name,
-                channel_dict, single_channel=single_channel)
+                single_channel=single_channel)
 
             channel_combo.blockSignals(True)
             channel_combo.clear()

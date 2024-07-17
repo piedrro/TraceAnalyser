@@ -407,8 +407,6 @@ class AnalysisGUI(QtWidgets.QMainWindow,
                 else:
                     self.export_settings.settings_label.hide()
 
-            self.update_export_channel_selection()
-
         except:
             print(traceback.format_exc())
             pass

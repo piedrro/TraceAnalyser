@@ -71,104 +71,6 @@ class _export_methods:
         except:
             print(traceback.format_exc())
 
-    def update_export_channel_selection(self, dataset_combo_name ="export_dataset_selection",
-                  channel_combo_name = "export_channel_selection"):
-
-        try:
-
-            export_mode = self.export_settings.export_mode.currentText()
-
-            if export_mode == "Nero (.dat)":
-                allowed_channels = ["Data","Trace", "Donor", "Acceptor", "FRET Efficiency",
-                                    "ALEX Efficiency", "DD", "AA", "DA", "AD"]
-            elif export_mode == "ebFRET SMD (.mat)":
-                allowed_channels = ["FRET Data", "Data","Trace", "Donor", "Acceptor", "FRET Efficiency",
-                                    "ALEX Efficiency", "DD", "AA", "DA", "AD"]
-            else:
-                allowed_channels = []
-
-
-            if len(self.data_dict.keys()) > 0:
-
-                channel_combo = getattr(self.export_settings, channel_combo_name)
-                dataset_combo = getattr(self.export_settings, dataset_combo_name)
-
-                export_dataset = dataset_combo.currentText()
-
-                if export_dataset == "All Datasets":
-                    dataset_list = list(self.data_dict.keys())
-                else:
-                    dataset_list = [export_dataset]
-
-                all_export_names = []
-                combo_options = []
-                self.export_selection_dict = {}
-
-                for dataset_name in dataset_list:
-                    for channel_name in self.data_dict[dataset_name][0].keys():
-                        if channel_name in ["Data", "Trace","Donor", "Acceptor",
-                                            "FRET Efficiency","ALEX Efficiency","DD", "AA", "DA", "AD"]:
-                            data_length = len(self.data_dict[dataset_name][0][channel_name])
-                            if data_length > 1:
-                                if channel_name not in all_export_names:
-                                    all_export_names.append(channel_name)
-
-                if set(["Donor", "Acceptor"]).issubset(all_export_names):
-                    combo_options.append("FRET Data")
-                    self.export_selection_dict["FRET Data"] = ["Donor", "Acceptor"]
-                if "FRET Efficiency" in all_export_names:
-                    combo_options.append("FRET Efficiency")
-                    self.export_selection_dict["FRET Efficiency"] = ["FRET Efficiency"]
-                if set(["Donor", "Acceptor", "FRET Efficiency"]).issubset(all_export_names):
-                    combo_options.append("FRET Data + FRET Efficiency")
-                    self.export_selection_dict["FRET Data + FRET Efficiency"] = ["Donor", "Acceptor", "FRET Efficiency"]
-                if "ALEX Efficiency" in all_export_names:
-                    combo_options.append("ALEX Efficiency")
-                    self.export_selection_dict["ALEX Efficiency"] = ["ALEX Efficiency"]
-                if set(["DD","DA","AD","AA"]).issubset(all_export_names):
-                    combo_options.append("ALEX Data")
-                    self.export_selection_dict["ALEX Data"] = ["DD","DA","AD","AA"]
-                if set(["DD","DA","AD","AA","ALEX Efficiency"]).issubset(all_export_names):
-                    combo_options.append("ALEX Data + ALEX Efficiency")
-                    self.export_selection_dict["ALEX Data + ALEX Efficiency"] = ["DD","DA","AD","AA","ALEX Efficiency"]
-                if "Trace" in all_export_names:
-                    combo_options.append("Trace")
-                    self.export_selection_dict["Trace"] = ["Trace"]
-                if "Data" in all_export_names:
-                    combo_options.append("Data")
-                    self.export_selection_dict["Data"] = ["Data"]
-                if "Donor" in all_export_names:
-                    combo_options.append("Donor")
-                    self.export_selection_dict["Donor"] = ["Donor"]
-                if "Acceptor" in all_export_names:
-                    combo_options.append("Acceptor")
-                    self.export_selection_dict["Acceptor"] = ["Acceptor"]
-                if "DD" in all_export_names:
-                    combo_options.append("DD")
-                    self.export_selection_dict["DD"] = ["DD"]
-                if "AA" in all_export_names:
-                    combo_options.append("AA")
-                    self.export_selection_dict["AA"] = ["AA"]
-                if "DA" in all_export_names:
-                    combo_options.append("DA")
-                    self.export_selection_dict["DA"] = ["DA"]
-                if "AD" in all_export_names:
-                    combo_options.append("AD")
-                    self.export_selection_dict["AD"] = ["AD"]
-
-                combo_options = self.sort_channel_list(combo_options)
-
-                if allowed_channels != []:
-                    combo_options = [channel for channel in combo_options if channel in allowed_channels]
-
-                channel_combo.blockSignals(True)
-                channel_combo.clear()
-                channel_combo.addItems(combo_options)
-                channel_combo.blockSignals(False)
-
-        except:
-            print(traceback.format_exc())
-
     def initialise_excel_export(self):
 
         if self.data_dict != {}:
@@ -370,6 +272,7 @@ class _export_methods:
 
                 for localisation_number, localisation_data in enumerate(dataset_data):
 
+                    trace_dict = localisation_data["trace_dict"]
                     user_label = localisation_data["user_label"]
                     crop_range = localisation_data["crop_range"]
                     file_path = localisation_data["import_path"]
@@ -378,9 +281,9 @@ class _export_methods:
 
                     if self.get_filter_status("summary", user_label) == False:
 
-                        for data_name in self.export_selection_dict[export_channel]:
+                        for data_name in self.get_plot_channel_list(trace_dict, export_channel):
 
-                            trace_data = localisation_data[data_name].copy()
+                            trace_data = trace_dict[data_name].copy()
 
                             if len(state_data) == len(trace_data):
 
@@ -560,6 +463,8 @@ class _export_methods:
                 dataset_data = self.data_dict[dataset_name]
 
                 for localisation_number, localisation_data in enumerate(dataset_data):
+
+                    trace_dict = localisation_data["trace_dict"]
                     user_label = localisation_data["user_label"]
                     crop_range = localisation_data["crop_range"]
                     file_path = localisation_data["import_path"]
@@ -571,8 +476,9 @@ class _export_methods:
                         n_traces += 1
                         session_values = []
 
-                        for data_name in self.export_selection_dict[export_channel_name]:
-                            data = localisation_data[data_name]
+                        for data_name in self.get_plot_channel_list(trace_dict, export_channel_name):
+
+                            data = trace_dict[data_name]
 
                             if crop_data == True and len(crop_range) == 2:
                                 crop_range = [int(crop_range[0]), int(crop_range[1])]
@@ -645,6 +551,7 @@ class _export_methods:
 
                 for localisation_number, localisation_data in enumerate(dataset_data):
 
+                    trace_dict = localisation_data["trace_dict"]
                     user_label = localisation_data["user_label"]
                     crop_range = localisation_data["crop_range"]
                     file_path = localisation_data["import_path"]
@@ -655,9 +562,9 @@ class _export_methods:
 
                         smd_values = []
 
-                        for data_name in self.export_selection_dict[export_channel_name]:
+                        for data_name in self.get_plot_channel_list(trace_dict, export_channel_name):
 
-                            data = localisation_data[data_name]
+                            data = trace_dict[data_name]
 
                             if crop_data == True and len(crop_range) == 2:
                                 crop_range = [int(crop_range[0]), int(crop_range[1])]
@@ -837,7 +744,7 @@ class _export_methods:
                                            export_data_dict["data_name"],
                                            export_data_dict["user_label"],]
 
-                    export_data.columns.names = ['Index', 'Dataset', 'Data', 'Class', 'Nucleotide']
+                    export_data.columns.names = ['Index', 'Dataset', 'Data', 'Class']
 
                     with pd.ExcelWriter(export_path) as writer:
                         export_data.to_excel(writer, sheet_name='Trace Data', index=True, startrow=1, startcol=1)
@@ -1070,14 +977,13 @@ class _export_methods:
             else:
                 dataset_list = [export_dataset_name]
 
-            channel_list = self.export_selection_dict[export_channel_name]
-
             for dataset_name in dataset_list:
 
                 dataset_data = self.data_dict[dataset_name]
 
                 for localisation_number, localisation_data in enumerate(dataset_data):
 
+                    trace_dict = localisation_data["trace_dict"]
                     user_label = localisation_data["user_label"]
                     crop_range = localisation_data["crop_range"]
                     file_path = localisation_data["import_path"]
@@ -1090,9 +996,9 @@ class _export_methods:
 
                     if self.get_filter_status("ML", user_label) == False:
 
-                        for channel_name in channel_list:
+                        for channel_name in self.get_plot_channel_list(trace_dict, export_channel_name):
 
-                            data = localisation_data[channel_name]
+                            data = trace_dict[channel_name]
 
                             if "bleach_dict" in localisation_data.keys():
                                 bleach_dict = localisation_data["bleach_dict"]
@@ -1162,6 +1068,7 @@ class _export_methods:
 
             for localisation_number, localisation_data in enumerate(dataset_data):
 
+                trace_dict = localisation_data["trace_dict"]
                 user_label = localisation_data["user_label"]
                 crop_range = localisation_data["crop_range"]
                 file_path = localisation_data["import_path"]
@@ -1170,9 +1077,10 @@ class _export_methods:
 
                 if self.get_filter_status(export_mode, user_label) == False:
 
-                    for data_name in self.export_selection_dict[export_channel_name]:
+                    for data_name in self.get_plot_channel_list(trace_dict, export_channel_name):
 
-                        data = localisation_data[data_name]
+                        data = trace_dict[data_name]
+
                         state_means_x, state_means_y = localisation_data["state_means"][data_name]
                         states = localisation_data["states"]
 
@@ -1392,15 +1300,12 @@ class _export_methods:
 
             json_dataset_dict = {"metadata":{}, "data":{}}
 
-            json_list_keys = ["Data", "Trace", "Donor", "Acceptor",
-                              "FRET Efficiency", "ALEX Efficiency",
-                              "DD", "AA", "DA", "AD",
-                              "states",
+            json_list_keys = ["states",
                               "break_points", "crop_range", "gamma_ranges",
                               'gap_label', 'sequence_label', 'picasso_loc',]
 
             json_var_keys = ["user_label", "import_path", "ml_label"]
-            json_dict_keys = ["bleach_dict","measure_dict"]
+            json_dict_keys = ["trace_dict","bleach_dict","measure_dict"]
 
             if len(dataset_names) == 0:
                 dataset_names = self.data_dict.keys()
@@ -1416,6 +1321,11 @@ class _export_methods:
 
                     json_localisation_dict = {}
 
+                    trace_dict = localisation_data["trace_dict"]
+
+                    for key, value in trace_dict.items():
+                        trace_dict[key] = list(value)
+
                     for key, value in localisation_data.items():
 
                         if key in json_list_keys:
@@ -1430,7 +1340,7 @@ class _export_methods:
                             json_localisation_dict[key] = value
 
                         if key in json_dict_keys:
-                            json_localisation_dict[key] = value
+                            json_localisation_dict[key] = localisation_data[key]
 
                     json_dataset_dict["data"][dataset_name].append(json_localisation_dict)
 

@@ -43,7 +43,7 @@ class _detectcrop_utils:
                 channel_combo = getattr(self.crop_window, f"threshold{i}_channel")
 
                 update_func = partial(self.update_channel_combos, dataset_combo,
-                    channel_combo, channel_dict_name="channel_dict", single_channel=True)
+                    channel_combo, single_channel=True)
 
                 update_func()
 
