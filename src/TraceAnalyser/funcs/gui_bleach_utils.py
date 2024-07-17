@@ -91,6 +91,7 @@ class _bleach_utils:
 
                 for localisation_number, localisation_data in enumerate(dataset_data):
 
+                    trace_dict = localisation_data["trace_dict"]
                     user_label = localisation_data["user_label"]
                     correction_factors = localisation_data["correction_factors"]
 
@@ -99,11 +100,11 @@ class _bleach_utils:
 
                     if self.get_filter_status("bleach", user_label) == False:
 
-                        channel_list = list(localisation_data.keys())
+                        channel_list = list(trace_dict.keys())
 
                         if "Donor" in channel_list:
 
-                            data = np.array(localisation_data["Donor"])
+                            data = np.array(trace_dict["Donor"])
 
                             if len(data) > 0:
 
@@ -114,7 +115,7 @@ class _bleach_utils:
 
                         if "Acceptor" in channel_list:
 
-                            data = np.array(localisation_data["Acceptor"])
+                            data = np.array(trace_dict["Acceptor"])
 
                             if len(data) > 0:
 
@@ -125,12 +126,12 @@ class _bleach_utils:
 
                         if "DD" in channel_list:
 
-                            data = np.array(localisation_data["DD"]).copy()
+                            data = np.array(trace_dict["DD"]).copy()
 
                             if len(data) > 0:
 
                                 if "DA" in channel_list:
-                                    data += np.array(localisation_data["DA"]).copy()
+                                    data += np.array(trace_dict["DA"]).copy()
 
                                 donor_bleach_index = self.detect_bleach_index(data,
                                     acceptor_threshold, event_size, n_events_ignored)
@@ -139,7 +140,7 @@ class _bleach_utils:
 
                         if "DA" in channel_list:
 
-                            data = np.array(localisation_data["DA"]).copy()
+                            data = np.array(trace_dict["DA"]).copy()
 
                             if len(data) > 0:
 
