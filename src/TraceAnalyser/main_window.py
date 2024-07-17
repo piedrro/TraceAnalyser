@@ -444,7 +444,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
 
         print("Dev function")
         # self.update_histogram_options()
-        self.update_dataset_combos()
+        self.populate_group_channels()
 
     def enterEvent(self, event):
         self.setFocus()

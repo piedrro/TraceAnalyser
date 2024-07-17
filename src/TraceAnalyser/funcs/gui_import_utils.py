@@ -716,11 +716,12 @@ class _import_methods:
 
         self.updating_combos = True
 
+        self.update_dataset_combos()
+
         self.populate_measurement_combos()
+        self.populate_group_channels()
 
         # self.populate_detectcrop_combos()
-
-        self.update_dataset_combos()
 
         self.updating_combos = False
 

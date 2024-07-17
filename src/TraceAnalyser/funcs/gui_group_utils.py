@@ -1,6 +1,7 @@
 from functools import partial
 import traceback
 import numpy as np
+from PyQt5.QtWidgets import QComboBox
 
 from TraceAnalyser.funcs.gui_worker import Worker
 
@@ -8,6 +9,47 @@ from TraceAnalyser.funcs.gui_worker import Worker
 
 class _group_utils:
 
+    # def populate_group_combos(self):
+    #
+    #     try:
+    #         self.update_dataset_selection("group_window",
+    #             "group_dataset")
+    #
+    #         self.update_channel_selection("group_window",
+    #             "group_dataset", "group_intensity_channel",
+    #             "group_channel_dict")
+    #
+    #         update_func = partial(self.update_channel_selection,
+    #             "group_window",
+    #             "group_dataset", "group_intensity_channel",
+    #             "group_channel_dict")
+    #
+    #         self.group_window.group_dataset.currentIndexChanged.connect(update_func)
+    #
+    #     except:
+    #         print(traceback.format_exc())
+    #         pass
+
+    def populate_group_channels(self):
+
+        try:
+
+            dataset_combo = self.group_window.group_dataset
+
+            for combo in self.group_window.findChildren(QComboBox):
+                combo_name = combo.objectName()
+                if "channel" in combo_name:
+                    channel_combo = combo
+
+                    update_func = partial(self.update_channel_combos, dataset_combo, channel_combo,
+                        channel_dict_name="channel_dict", single_channel=True)
+
+                    update_func()
+
+                    dataset_combo.currentIndexChanged.connect(update_func)
+        except:
+            print(traceback.format_exc())
+            pass
 
     def update_group_options(self):
 
@@ -55,12 +97,14 @@ class _group_utils:
         try:
 
             grouped_user_group = self.group_window.grouped_user_group.currentText()
-            channel = self.group_window.group_channel.currentText()
+            channel = self.group_window.group_intensity_channel.currentText()
             criterion = self.group_window.group_intensity_criterion.currentText()
             value = self.group_window.group_intensity_value.value()
 
-            if channel in localisation_data.keys():
-                data = np.array(localisation_data[channel]).copy()
+            trace_dict = localisation_data["trace_dict"]
+
+            if channel in trace_dict.keys():
+                data = np.array(trace_dict[channel]).copy()
 
                 if criterion.lower() == "above" and data.max() > value:
                     filter = True
