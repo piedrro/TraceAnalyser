@@ -68,13 +68,16 @@ class _measure_plotting_methods:
             measurement_label = self.measure_label.currentText()
 
             for localisation_index, localisation_data in enumerate(self.data_dict[dataset]):
+
+                trace_dict = localisation_data["trace_dict"]
+
                 if "measure_dict" in localisation_data.keys():
                     if measurement_label in localisation_data["measure_dict"].keys():
                         measure_ranges = localisation_data["measure_dict"][measurement_label]
 
                         for range_index, range in enumerate(measure_ranges):
                             if range != []:
-                                data = localisation_data[channel][range[0]:range[1]]
+                                data = trace_dict[channel][range[0]:range[1]]
 
                                 if len(data) > 0:
                                     trace_data.append(data)
@@ -103,7 +106,7 @@ class _measure_plotting_methods:
 
             histogram_data = {"metric":"", "values": [],"trace_index": [],"measure_index": []}
 
-            histogram_selection = self.measure_histogram_dataset.currentText()
+            histogram_selection = self.measure_histogram_type.currentText()
 
             if len(trace_data) != {}:
 
@@ -123,6 +126,8 @@ class _measure_plotting_methods:
                             value = len(data) * exposure_time * 1e-3
                         elif histogram_selection == "Dwell Times (Frames)":
                             value = len(data)
+                        else:
+                            print("Invalid histogram selection")
 
                         histogram_data["values"].append(value)
                         histogram_data["trace_index"].append(trace_index[0])
@@ -152,7 +157,7 @@ class _measure_plotting_methods:
 
             exposure_time = self.measure_exposure_time.value()
 
-            histogram_selection = self.measure_histogram_dataset.currentText()
+            histogram_selection = self.measure_histogram_type.currentText()
             histogram_mode = self.measure_histogram_mode.currentText()
             xaxis = self.measure_histogram_xaxis.currentText()
             bin_size = self.measure_histogram_bin_size.currentText()
@@ -216,7 +221,7 @@ class _measure_plotting_methods:
             trace_data, trace_index_data, measure_index_data = self.compile_meassure_histogram_data()
             histogram_data = self.compute_measurement_histogram(trace_data, trace_index_data, measure_index_data)
 
-            histogram = self.measure_histogram_dataset.currentText()
+            histogram = self.measure_histogram_type.currentText()
             histogram_dataset = self.measure_graph_dataset.currentText()
             histogram_channel = self.measure_graph_channel.currentText()
             measure_label = self.measure_label.currentText()

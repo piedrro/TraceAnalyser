@@ -81,12 +81,13 @@ class _analysis_plotting_methods:
 
             for localisation_index, localisation_data in enumerate(self.data_dict[dataset]):
 
+                trace_dict = localisation_data["trace_dict"]
                 user_label = localisation_data["user_label"]
                 crop_range = localisation_data["crop_range"]
 
                 if self.get_filter_status("analysis", user_label) == False:
 
-                    trace_data = localisation_data[mode]
+                    trace_data = trace_dict[mode]
                     state_data = localisation_data["states"]
 
                     if len(trace_data) > 0:
