@@ -91,8 +91,6 @@ class _smoothing_utils:
         else:
             dataset_list = [dataset_name]
 
-        channel_dict = getattr(self, "smooth_channel_dict")
-
         total_traces = 0
         for dataset_name in dataset_list:
             total_traces += len(self.data_dict[dataset_name])
@@ -104,17 +102,18 @@ class _smoothing_utils:
 
             for localisation_number, localisation_data in enumerate(dataset_data):
 
+                trace_dict = localisation_data["trace_dict"]
                 user_label = localisation_data["user_label"]
 
                 if self.get_filter_status("smooth", user_label) == False:
 
-                    print(self.smooth_channel_dict)
+                    plot_channels = self.get_plot_channel_list(trace_dict, channel_name)
 
-                    for data_name in self.smooth_channel_dict[channel_name]:
+                    for channel in plot_channels:
 
-                        if "efficiency" not in data_name.lower():
+                        if "efficiency" not in channel.lower():
 
-                            trace_data = localisation_data[data_name].copy()
+                            trace_data = trace_dict[channel].copy()
 
                             if smooth_type == "Moving Average":
 
@@ -126,7 +125,7 @@ class _smoothing_utils:
 
                             trace_data = np.array(trace_data)
 
-                            self.data_dict[dataset_name][localisation_number][data_name] = trace_data
+                            self.data_dict[dataset_name][localisation_number]["trace_dict"][channel] = trace_data
 
                 n_traces += 1
 

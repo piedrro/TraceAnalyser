@@ -651,7 +651,7 @@ class _import_methods:
 
         return alex_dict
 
-    def get_plot_channels(self, plot_dataset = None, channel_dict = {}, single_channel=False):
+    def assign_plot_channels(self, plot_dataset = None, channel_dict = {}, single_channel=False):
 
         plot_datasets = []
         plot_channels = []
@@ -711,6 +711,39 @@ class _import_methods:
             pass
 
         return plot_channels
+
+    def get_plot_channel_list(self, trace_dict, channel_name):
+
+        plot_channels = []
+
+        try:
+
+            if channel_name in trace_dict.keys():
+                plot_channels.append(channel_name)
+            if channel_name == "FRET Data":
+                if set(["Donor", "Acceptor"]).issubset(trace_dict.keys()):
+                    plot_channels = ["Donor", "Acceptor"]
+            if channel_name == "FRET Data + FRET Efficiency":
+                if set(["Donor", "Acceptor", "FRET Efficiency"]).issubset(trace_dict.keys()):
+                    plot_channels = ["Donor", "Acceptor", "FRET Efficiency"]
+            if channel_name == "ALEX Data":
+                if set(["DD", "AA", "DA", "AD"]).issubset(trace_dict.keys()):
+                    plot_channels = ["DD", "AA", "DA", "AD"]
+            if channel_name == "ALEX Data + ALEX Efficiency":
+                if set(["DD", "AA", "DA", "AD", "ALEX Efficiency"]).issubset(trace_dict.keys()):
+                    plot_channels = ["DD", "AA", "DA", "AD", "ALEX Efficiency"]
+            if channel_name == "FRET Correction Data":
+                if set(["Donor", "Acceptor"]).issubset(trace_dict.keys()):
+                    plot_channels = ["Donor", "Acceptor"]
+            if channel_name == "ALEX Correction Data":
+                if set(["DD","DA","AA"]).issubset(trace_dict.keys()):
+                    plot_channels = ["DD","DA","AA"]
+        except:
+            print(traceback.format_exc())
+
+        return plot_channels
+
+
 
     def populate_combos(self):
 
@@ -1017,7 +1050,7 @@ class _import_methods:
 
             channel_dict = getattr(self, channel_dict_name)
 
-            channels = self.get_plot_channels(dataset_name,
+            channels = self.assign_plot_channels(dataset_name,
                 channel_dict, single_channel=single_channel)
 
             channel_combo.blockSignals(True)
@@ -1028,3 +1061,5 @@ class _import_methods:
         except:
             print(traceback.format_exc())
             pass
+
+
