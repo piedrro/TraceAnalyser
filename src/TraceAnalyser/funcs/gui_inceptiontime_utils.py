@@ -84,8 +84,8 @@ class _inceptiontime_methods:
 
                 for localisation_index, localisation_data in enumerate(self.data_dict[dataset_name]):
 
+                    trace_dict = localisation_data["trace_dict"]
                     user_label = localisation_data["user_label"]
-
                     crop_range = localisation_data["crop_range"]
 
                     if self.get_filter_status("inceptiontime", user_label) == False:
@@ -97,7 +97,7 @@ class _inceptiontime_methods:
                             if localisation_index not in predict_data["All Datasets"].keys():
                                 predict_data["All Datasets"][localisation_index] = []
 
-                        data = localisation_data[channel_name].copy()
+                        data = trace_dict[channel_name].copy()
 
                         if crop_data == True and len(crop_range) == 2:
                             crop_range = sorted(crop_range)
