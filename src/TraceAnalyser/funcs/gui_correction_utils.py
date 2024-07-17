@@ -32,8 +32,10 @@ class _correction_utils:
             min_frames = self.correction_window.correction_min_frames.value()
             default_frames = self.correction_window.gamma_default_frames.value()
 
-            donor = np.array(localisation_data["Donor"]).copy()
-            acceptor = np.array(localisation_data["Acceptor"]).copy()
+            trace_dict = localisation_data["trace_dict"]
+
+            donor = np.array(trace_dict["Donor"]).copy()
+            acceptor = np.array(trace_dict["Acceptor"]).copy()
 
             correction_factors = localisation_data["correction_factors"]
 
@@ -247,9 +249,11 @@ class _correction_utils:
             min_frames = self.correction_window.correction_min_frames.value()
             default_frames = self.correction_window.gamma_default_frames.value()
 
-            DD = np.array(localisation_data["DD"]).copy()
-            DA = np.array(localisation_data["DA"]).copy()
-            AA = np.array(localisation_data["AA"]).copy()
+            trace_dict = localisation_data["trace_dict"]
+
+            DD = np.array(trace_dict["DD"]).copy()
+            DA = np.array(trace_dict["DA"]).copy()
+            AA = np.array(trace_dict["AA"]).copy()
 
             correction_factors = localisation_data["correction_factors"]
 
@@ -294,12 +298,13 @@ class _correction_utils:
 
             for localisation_number, localisation_data in enumerate(dataset_data):
 
+                trace_dict = localisation_data["trace_dict"]
                 user_label = localisation_data["user_label"]
                 correction_factors = localisation_data["correction_factors"]
 
                 if self.get_filter_status("correction", user_label) == False:
 
-                    channel_list = list(localisation_data.keys())
+                    channel_list = list(trace_dict.keys())
 
                     if set(["Donor","Acceptor"]).issubset(channel_list):
 
