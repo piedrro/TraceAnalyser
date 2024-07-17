@@ -1,4 +1,5 @@
 import traceback
+import copy
 
 class _management_utils:
 
@@ -160,12 +161,13 @@ class _management_utils:
 
                         delete_list.append(localisation_index)
 
+                delete_list = list(set(delete_list))
+
                 for dataset_name in self.data_dict.keys():
-                    for index in delete_list:
-                            del self.data_dict[dataset_name][index]
+                    for index in sorted(delete_list, reverse=True):
+                        del self.data_dict[dataset_name][index]
 
                 self.initialise_plot()
-
                 self.print_notification(f"Deleting {len(delete_list)} traces from {dataset_name}...")
         except:
             print(traceback.format_exc())
