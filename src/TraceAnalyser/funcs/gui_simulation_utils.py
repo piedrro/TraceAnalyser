@@ -220,7 +220,7 @@ class _simulation_utils():
                     for key,value in data.items():
                         data[key] = np.array(value.tolist())
 
-                    loc_data = data.to_dict(orient="list")
+                    loc_data = {}
                     loc_data["state_means"] = {}
                     loc_data["user_label"] = 0
                     loc_data["break_points"] = []
@@ -233,9 +233,11 @@ class _simulation_utils():
                     loc_data["filter"] = False
                     loc_data["import_path"] = "DeepFRET-simulated"
 
-                    simulated_traces.append(loc_data)
+                    E_true = data["E_true"].copy()
+                    trace_data = data[["DD", "DA", "AA"]].copy()
+                    loc_data["trace_dict"] = trace_data.to_dict(orient="list")
 
-                    E_true = loc_data["E_true"]
+                    simulated_traces.append(loc_data)
 
                     unique_states.extend(np.unique(E_true).tolist())
 

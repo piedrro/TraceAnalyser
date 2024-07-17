@@ -569,7 +569,12 @@ class _import_methods:
         for dataset_name in dataset_names:
             for i in range(len(self.data_dict[dataset_name])):
                 localisation_dict = self.data_dict[dataset_name][i]
+
+                if "trace_dict" not in localisation_dict.keys():
+                    localisation_dict["trace_dict"] = {}
+
                 trace_dict = localisation_dict["trace_dict"]
+
                 plot_labels = list(trace_dict.keys())
                 crop_range = copy.deepcopy(localisation_dict["crop_range"])
 
@@ -789,6 +794,9 @@ class _import_methods:
                     dataset_dict = self.data_dict[dataset_name]
 
                     for localisation_index, localisation_dict in enumerate(dataset_dict):
+
+                        if "trace_dict" not in localisation_dict.keys():
+                            localisation_dict["trace_dict"] = {}
 
                         trace_dict = localisation_dict["trace_dict"]
                         trace_dict_keys = list(trace_dict.keys())
