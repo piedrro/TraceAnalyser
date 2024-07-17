@@ -753,8 +753,7 @@ class _import_methods:
 
         self.populate_measurement_combos()
         self.populate_group_channels()
-
-        # self.populate_detectcrop_combos()
+        self.populate_detectcrop_channels()
 
         self.updating_combos = False
 

@@ -31,34 +31,23 @@ class _detectcrop_utils:
             print(traceback.format_exc())
             pass
 
-    def populate_detectcrop_combos(self, n_checkbox=3):
+
+    def populate_detectcrop_channels(self, n_checkbox=3):
 
         try:
 
-            window = "crop_window"
-            dataset = "crop_dataset"
-            channel_dict = "crop_channel_dict"
-
-            self.update_dataset_selection(window, dataset)
+            dataset_combo = self.crop_window.crop_dataset
 
             for i in range(1, n_checkbox+1):
 
-                checkbox = getattr(self.crop_window, f"threshold{i}")
+                channel_combo = getattr(self.crop_window, f"threshold{i}_channel")
 
-                self.update_channel_selection(window,
-                    dataset, f"threshold{i}_channel",
-                    channel_dict,True)
+                update_func = partial(self.update_channel_combos, dataset_combo,
+                    channel_combo, channel_dict_name="channel_dict", single_channel=True)
 
-                update_func = partial(
-                    self.update_channel_selection,
-                    window, dataset,
-                    f"threshold{i}_channel",
-                    channel_dict
-                )
+                update_func()
 
-                self.crop_window.crop_dataset.currentIndexChanged.connect(update_func)
-
-                # checkbox.stateChanged.connect(self.update_detectcrop_options)
+                dataset_combo.currentIndexChanged.connect(update_func)
 
         except:
             print(traceback.format_exc())
@@ -143,6 +132,7 @@ class _detectcrop_utils:
 
                     for localisation_number, localisation_data in enumerate(dataset_data):
 
+                        trace_dict = localisation_data["trace_dict"]
                         user_label = localisation_data["user_label"]
 
                         if self.get_filter_status("detect_crop", user_label) == False:
@@ -151,7 +141,7 @@ class _detectcrop_utils:
 
                             for args in check_box_dict.values():
 
-                                data = localisation_data[args["channel"]]
+                                data = trace_dict[args["channel"]]
                                 criterion = args["criterion"]
                                 value = args["value"]
 

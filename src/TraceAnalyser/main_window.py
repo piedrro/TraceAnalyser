@@ -271,6 +271,9 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.manage_window.assign_ml_labels.clicked.connect(self.assign_ml_labels)
 
         self.crop_window.detect_crop.clicked.connect(self.initialise_crop_detection)
+        self.crop_window.threshold1.stateChanged.connect(self.update_detectcrop_options)
+        self.crop_window.threshold2.stateChanged.connect(self.update_detectcrop_options)
+        self.crop_window.threshold3.stateChanged.connect(self.update_detectcrop_options)
 
         self.analysis_histogram.currentIndexChanged.connect(self.update_histogram_options)
 
