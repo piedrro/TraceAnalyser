@@ -135,12 +135,13 @@ class _ebFRET_methods:
 
                 for localisation_index, localisation_data in enumerate(self.data_dict[dataset_name]):
 
+                    trace_dict = localisation_data["trace_dict"]
                     user_label = localisation_data["user_label"]
                     crop_range = localisation_data["crop_range"]
 
                     if self.get_filter_status("ebfret", user_label) == False:
 
-                        data = np.array(localisation_data[data_name]).copy()
+                        data = np.array(trace_dict[data_name]).copy()
 
                         if crop_plots == True and len(crop_range) == 2:
                             crop_range = sorted(crop_range)
