@@ -108,6 +108,8 @@ class _smoothing_utils:
 
                 if self.get_filter_status("smooth", user_label) == False:
 
+                    print(self.smooth_channel_dict)
+
                     for data_name in self.smooth_channel_dict[channel_name]:
 
                         if "efficiency" not in data_name.lower():

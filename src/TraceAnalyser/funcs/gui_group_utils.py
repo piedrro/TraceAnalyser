@@ -55,7 +55,7 @@ class _group_utils:
         try:
 
             grouped_user_group = self.group_window.grouped_user_group.currentText()
-            channel = self.group_window.group_intensity_channel.currentText()
+            channel = self.group_window.group_channel.currentText()
             criterion = self.group_window.group_intensity_criterion.currentText()
             value = self.group_window.group_intensity_value.value()
 

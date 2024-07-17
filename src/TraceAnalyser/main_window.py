@@ -443,7 +443,8 @@ class AnalysisGUI(QtWidgets.QMainWindow,
     def dev_function(self):
 
         print("Dev function")
-        self.update_histogram_options()
+        # self.update_histogram_options()
+        self.update_dataset_combos()
 
     def enterEvent(self, event):
         self.setFocus()

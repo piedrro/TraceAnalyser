@@ -8,6 +8,7 @@ import json
 import copy
 import os
 from PyQt5.QtWidgets import QComboBox
+from functools import partial
 
 class _import_methods:
 
@@ -939,8 +940,6 @@ class _import_methods:
 
         try:
 
-            dataset_combos = {}
-
             datasets = list(self.data_dict.keys())
 
             if len(datasets) == 0:
@@ -957,11 +956,14 @@ class _import_methods:
                              "smooth_channel": "smooth_channel_dict",}
 
             for window in self.gui_windows:
-                for dataset_combo in window.findChildren(QComboBox):
-                    dataset_combo_name = dataset_combo.objectName()
-                    if "dataset" in dataset_combo_name:
-                        dataset_combos[dataset_combo_name] = dataset_combo
+                window_name = window.__class__.__name__
+                for combo in window.findChildren(QComboBox):
+                    combo_name = combo.objectName()
 
+                    if "dataset" in combo_name:
+
+                        dataset_combo = getattr(window, combo_name)
+                        dataset_combo_name = combo_name
                         combo_datasets = copy.deepcopy(datasets)
 
                         if dataset_combo_name in multi_dataset_combos:
@@ -977,7 +979,7 @@ class _import_methods:
 
                         if window.findChild(QComboBox, channel_combo_name) != None:
 
-                            channel_combo = window.findChild(QComboBox, channel_combo_name)
+                            channel_combo = getattr(window, channel_combo_name)
 
                             if channel_combo_name in multi_channel_combos:
                                 single_channel = False
@@ -989,12 +991,14 @@ class _import_methods:
                             else:
                                 channel_dict_name = "channel_dict"
 
-                            self.update_channel_combos(dataset_combo, channel_combo,
-                                channel_dict_name=channel_dict_name, single_channel=single_channel)
+                            update_func = partial(self.update_channel_combos,
+                                dataset_combo, channel_combo,
+                                channel_dict_name=channel_dict_name,
+                                single_channel=single_channel)
 
-                            dataset_combo.currentIndexChanged.connect(
-                                lambda: self.update_channel_combos(dataset_combo, channel_combo,
-                                    channel_dict_name=channel_dict_name, single_channel=single_channel))
+                            update_func()
+
+                            dataset_combo.currentIndexChanged.connect(update_func)
 
         except:
             print(traceback.format_exc())

@@ -58,7 +58,7 @@ class _detectcrop_utils:
 
                 self.crop_window.crop_dataset.currentIndexChanged.connect(update_func)
 
-                checkbox.stateChanged.connect(self.update_detectcrop_options)
+                # checkbox.stateChanged.connect(self.update_detectcrop_options)
 
         except:
             print(traceback.format_exc())
