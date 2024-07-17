@@ -419,6 +419,7 @@ class _trace_plot_overlays:
             try:
 
                 localisation_dict = self.data_dict[dataset][localisation_number]
+                trace_dict = localisation_dict["trace_dict"]
 
                 if "measure_dict" not in localisation_dict.keys():
                     localisation_dict["measure_dict"] = {}
@@ -430,7 +431,7 @@ class _trace_plot_overlays:
 
                 measure_ranges = measure_dict[measurement_index]
 
-                data_length = len(localisation_dict[plot_labels[0]])
+                data_length = len(trace_dict[plot_labels[0]])
 
                 if xpos > 0 and xpos < data_length:
 
@@ -528,8 +529,11 @@ class _trace_plot_overlays:
 
             for dataset_name in self.data_dict.keys():
 
-                crop_range = self.data_dict[dataset_name][localisation_number]["crop_range"].copy()
-                data_length = self.data_dict[dataset_name][localisation_number][plot_channel].shape[0]
+                localisation_dict = self.data_dict[dataset_name][localisation_number]
+                trace_dict = localisation_dict["trace_dict"]
+
+                crop_range = localisation_dict["crop_range"].copy()
+                data_length = np.array(trace_dict[plot_channel]).shape[0]
 
                 if event < 0:
                     event = 0
@@ -543,7 +547,7 @@ class _trace_plot_overlays:
                 if len(crop_range) > 2:
                     crop_range.pop(0)
 
-                self.data_dict[dataset_name][localisation_number]["crop_range"] = crop_range
+                localisation_dict["crop_range"] = crop_range
 
                 self.plot_traces(update_plot=False)
 
@@ -667,6 +671,7 @@ class _trace_plot_overlays:
         try:
 
             show_bleach = self.plot_settings.show_bleach_range.isChecked()
+            trace_dict = localisation_dict["trace_dict"]
 
             if show_bleach == True:
 
@@ -678,7 +683,7 @@ class _trace_plot_overlays:
                 for plot, plot_label in zip(sub_axes, plot_labels):
 
                     if plot_label in ["Donor","DD"] and donor_bleach_index != None:
-                        len_data = len(localisation_dict[plot_label])
+                        len_data = len(trace_dict[plot_label])
                         bleach_range = np.array([donor_bleach_index, len_data-1])
 
                         for bleach_ref in donor_bleach_refs:
@@ -693,7 +698,7 @@ class _trace_plot_overlays:
 
                     elif plot_label in ["Acceptor","DA"] and acceptor_bleach_index != None:
 
-                        len_data = len(localisation_dict[plot_label])
+                        len_data = len(trace_dict[plot_label])
                         bleach_range = np.array([acceptor_bleach_index, len_data-1])
 
                         for bleach_ref in acceptor_bleach_refs:
