@@ -64,6 +64,44 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.crop_window = CropWindow(self)
 
         self.setWindowTitle("TraceAnalyser")  # Set the window title
+        self.statusBar().setStyleSheet("QStatusBar{color: red;}") # Set the status bar style
+
+        self.data_dict = {}
+
+        self.plot_channels = {
+            "Donor": "donor",
+            "Acceptor": "acceptor",
+            "FRET": "fret",
+            "ALEX": "alex",
+            "DD": "dd",
+            "DA": "da",
+            "AA": "aa",
+            "AD": "ad",
+            "Data": "data",
+            "Trace": "trace",
+        }
+
+        self.format_export_settings()
+        self.update_hmm_fit_algo()
+        self.update_smooth_options()
+        self.update_group_options()
+        self.update_simulation_options()
+        self.update_export_options()
+        self.update_detectcrop_options()
+        self.update_histogram_options()
+
+        self.current_dialog = None
+        self.updating_combos = False
+
+        self.plot_queue = queue.Queue()
+
+        self.initialise_pyqtgraph_canvas()
+        self.initialise_ui_events()
+
+        self.threadpool = QThreadPool()
+
+
+    def initialise_pyqtgraph_canvas(self):
 
         #create pyqt graph container
         self.graph_container = self.findChild(QWidget, "graph_container")
@@ -92,6 +130,9 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.measure_graph_container.layout().addWidget(self.measure_graph_canvas)
         self.measure_graph_canvas.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
+
+
+    def initialise_ui_events(self):
 
         self.plotsettings_button = self.findChild(QtWidgets.QPushButton, "plotsettings_button")
         self.plotsettings_button.clicked.connect(self.toggle_plot_settings)
@@ -137,9 +178,6 @@ class AnalysisGUI(QtWidgets.QMainWindow,
             mode = "gamma", loc_mode ="active"))
         self.plot_settings.gamma_reset_all.clicked.connect(partial(self.reset_graphics_overlays,
             mode = "gamma", loc_mode ="all"))
-
-
-        self.data_dict = {}
 
         self.plot_localisation_number.valueChanged.connect(lambda: self.update_slider_label("plot_localisation_number"))
         self.plot_localisation_number.valueChanged.connect(partial(self.plot_traces, update_plot=False))
@@ -229,26 +267,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
 
         self.analysis_histogram.currentIndexChanged.connect(self.update_histogram_options)
 
-        # Set the color of the status bar text
-        self.statusBar().setStyleSheet("QStatusBar{color: red;}")
-
-        self.threadpool = QThreadPool()
-
         self.export_settings.export_mode.currentIndexChanged.connect(self.format_export_settings)
-
-        self.format_export_settings()
-        self.update_hmm_fit_algo()
-        self.update_smooth_options()
-        self.update_group_options()
-        self.update_simulation_options()
-        self.update_export_options()
-        self.update_detectcrop_options()
-        self.update_histogram_options()
-
-        self.current_dialog = None
-        self.updating_combos = False
-
-        self.plot_queue = queue.Queue()
 
 
     def update_histogram_options(self):
@@ -292,8 +311,6 @@ class AnalysisGUI(QtWidgets.QMainWindow,
 
         except:
             print(traceback.format_exc())
-
-
 
     def update_export_options(self):
 
@@ -393,23 +410,23 @@ class AnalysisGUI(QtWidgets.QMainWindow,
 
             pass
 
-            # index = self.plot_settings.plot_measurement_label.currentIndex()
-            # label = self.plot_settings.plot_measurement_label.currentText()
-            #
-            # combo = self.measure_label
-            # combo.setItemText(index, label)
-            #
-            # slider_value = self.plot_localisation_number.value()
-            # localisation_number = self.localisation_numbers[slider_value]
-            #
-            # for dataset in self.data_dict:
-            #     localisation_dict = self.data_dict[dataset][localisation_number]
-            #
-            #     if "measure_dict" in localisation_dict.keys():
-            #         dict_keys = list(localisation_dict["measure_dict"].keys())
-            #         updated_key = dict_keys[index]
-            #
-            #         localisation_dict["measure_dict"][label] = localisation_dict["measure_dict"].pop(updated_key)
+            index = self.plot_settings.plot_measurement_label.currentIndex()
+            label = self.plot_settings.plot_measurement_label.currentText()
+
+            combo = self.measure_label
+            combo.setItemText(index, label)
+
+            slider_value = self.plot_localisation_number.value()
+            localisation_number = self.localisation_numbers[slider_value]
+
+            for dataset in self.data_dict:
+                localisation_dict = self.data_dict[dataset][localisation_number]
+
+                if "measure_dict" in localisation_dict.keys():
+                    dict_keys = list(localisation_dict["measure_dict"].keys())
+                    updated_key = dict_keys[index]
+
+                    localisation_dict["measure_dict"][label] = localisation_dict["measure_dict"].pop(updated_key)
 
         except:
             print(traceback.format_exc())
