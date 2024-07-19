@@ -76,8 +76,7 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.statusBar().setStyleSheet("QStatusBar{color: red;}") # Set the status bar style
 
         #create plot selector
-        self.scroll_area.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.scroll_area.setVisible(False)
+        self.plot_settings.scroll_area.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.data_dict = {}
 

@@ -168,61 +168,6 @@
              </item>
             </layout>
            </item>
-           <item>
-            <layout class="QGridLayout" name="plot_checkbox_qgrid"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QWidget" name="selector_container" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>10</width>
-            <height>0</height>
-           </size>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_9">
-           <item>
-            <widget class="QScrollArea" name="scroll_area">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>50</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>69</width>
-                <height>593</height>
-               </rect>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_11">
-               <item>
-                <layout class="QVBoxLayout" name="selector_layout"/>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
           </layout>
          </widget>
         </item>

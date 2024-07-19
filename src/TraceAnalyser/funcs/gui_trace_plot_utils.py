@@ -491,18 +491,18 @@ class _trace_plotting_methods:
                 if label not in line_list:
                     line_list.append(label)
 
-        if len(line_list) > 1:
-            self.populate_plot_selector(line_list)
-            self.scroll_area.setVisible(True)
-        else:
-            self.scroll_area.setVisible(False)
+        self.populate_plot_selector(line_list)
+
 
     def populate_plot_selector(self, line_list):
 
         try:
 
-            for i in range(self.selector_layout.count()):
-                item = self.selector_layout.itemAt(i)
+            layout = self.plot_settings.selector_layout
+            scroll_area = self.plot_settings.scroll_area
+
+            for i in range(layout.count()):
+                item = layout.itemAt(i)
                 widget = item.widget()
                 if isinstance(widget, QCheckBox):
                     widget.deleteLater()
@@ -527,11 +527,11 @@ class _trace_plotting_methods:
                     check_box.blockSignals(False)
 
                     check_box.stateChanged.connect(self.plot_checkbox_event)
-                    self.selector_layout.addWidget(check_box)
+                    layout.addWidget(check_box)
 
-            min_width = max(checkbox.sizeHint().width() for checkbox in checkboxes)
-            min_width + self.scroll_area.verticalScrollBar().sizeHint().width()
-            self.scroll_area.setMinimumWidth(min_width+20)
+            # min_width = max(checkbox.sizeHint().width() for checkbox in checkboxes)
+            # min_width + self.scroll_area.verticalScrollBar().sizeHint().width()
+            # scroll_area.setMinimumWidth(min_width+20)
 
         except Exception as e:
             print(traceback.format_exc())
@@ -540,8 +540,10 @@ class _trace_plotting_methods:
 
         try:
 
-            for i in range(self.selector_layout.count()):
-                item = self.selector_layout.itemAt(i)
+            layout = self.plot_settings.selector_layout
+
+            for i in range(layout.count()):
+                item = layout.itemAt(i)
                 widget = item.widget()
                 if isinstance(widget, QCheckBox):
                     label = widget.text()
