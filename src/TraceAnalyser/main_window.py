@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 from qtpy.QtCore import QThreadPool
-from qtpy.QtWidgets import (QWidget, QVBoxLayout, QSizePolicy,QSlider, QLabel)
+from qtpy.QtWidgets import (QWidget, QVBoxLayout, QSizePolicy,QSlider, QLabel, QScrollArea)
 from functools import partial
 import queue
 import traceback
@@ -74,6 +74,10 @@ class AnalysisGUI(QtWidgets.QMainWindow,
 
         self.setWindowTitle("TraceAnalyser")  # Set the window title
         self.statusBar().setStyleSheet("QStatusBar{color: red;}") # Set the status bar style
+
+        #create plot selector
+        self.scroll_area.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.scroll_area.setVisible(False)
 
         self.data_dict = {}
 

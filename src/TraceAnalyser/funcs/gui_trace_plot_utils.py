@@ -1,6 +1,6 @@
 from PyQt5.QtGui import QCursor
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QVBoxLayout, QWidget, QCheckBox
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QCheckBox, QScrollArea, QSizePolicy
 import numpy as np
 import pyqtgraph as pg
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -203,7 +203,8 @@ class _trace_plotting_methods:
                                 for label in plot_labels:
                                     self.plot_show_dict[label] = True
 
-                            self.create_plot_checkboxes()
+                            # self.create_plot_checkboxes()
+                            self.toggle_plot_selector()
                             self.plot_traces(update_plot=True)
 
                         else:
@@ -481,54 +482,66 @@ class _trace_plotting_methods:
         return pen
 
 
-    def create_plot_checkboxes(self):
+
+    def toggle_plot_selector(self):
+
+        line_list = []
+        for plot_labels in self.plot_info.values():
+            for label in plot_labels:
+                if label not in line_list:
+                    line_list.append(label)
+
+        if len(line_list) > 1:
+            self.populate_plot_selector(line_list)
+            self.scroll_area.setVisible(True)
+        else:
+            self.scroll_area.setVisible(False)
+
+    def populate_plot_selector(self, line_list):
 
         try:
 
-            checkbox_qgrid = self.plot_checkbox_qgrid
+            for i in range(self.selector_layout.count()):
+                item = self.selector_layout.itemAt(i)
+                widget = item.widget()
+                if isinstance(widget, QCheckBox):
+                    widget.deleteLater()
+                    widget.hide()
 
-            line_list = []
-
-            for plot_labels in self.plot_info.values():
-                for label in plot_labels:
-                    if label not in line_list:
-                        line_list.append(label)
-
-            for i in range(checkbox_qgrid.count()):
-                item = checkbox_qgrid.itemAt(i)
-                checkbox = item.widget()
-                if isinstance(checkbox, QCheckBox):
-                    checkbox.deleteLater()
-                    checkbox.hide()
+            checkboxes = []
+            line_list = set(line_list)
 
             if len(line_list) > 1:
                 for col_index, line_label in enumerate(line_list):
+
                     check_box_name = f"plot_show_{line_label}"
                     check_box_label = f"Show: {line_label}"
 
                     setattr(self, check_box_name, QCheckBox(check_box_label))
                     check_box = getattr(self, check_box_name)
 
+                    checkboxes.append(check_box)
+
                     check_box.blockSignals(True)
                     check_box.setChecked(True)
                     check_box.blockSignals(False)
 
                     check_box.stateChanged.connect(self.plot_checkbox_event)
+                    self.selector_layout.addWidget(check_box)
 
-                    checkbox_qgrid.addWidget(check_box, 0, col_index)
+            min_width = max(checkbox.sizeHint().width() for checkbox in checkboxes)
+            min_width + self.scroll_area.verticalScrollBar().sizeHint().width()
+            self.scroll_area.setMinimumWidth(min_width+20)
 
-        except:
+        except Exception as e:
             print(traceback.format_exc())
-            pass
 
     def plot_checkbox_event(self, state):
 
         try:
 
-            grid_layout = self.plot_checkbox_qgrid
-
-            for i in range(grid_layout.count()):
-                item = grid_layout.itemAt(i)
+            for i in range(self.selector_layout.count()):
+                item = self.selector_layout.itemAt(i)
                 widget = item.widget()
                 if isinstance(widget, QCheckBox):
                     label = widget.text()
