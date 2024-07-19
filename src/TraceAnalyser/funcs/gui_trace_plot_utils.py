@@ -218,6 +218,45 @@ class _trace_plotting_methods:
         pattern = r"FRET Data \+ FRET Efficiency|ALEX Data \+ ALEX Efficiency"
         return re.search(pattern, input_string) is not None
 
+
+    def assign_plot_list(self, plot_line_labels, join_fret = False):
+
+        try:
+
+            plot_list = []
+            plot_line_labels = list(set(plot_line_labels))
+            efficiency_labels = [label for label in plot_line_labels if "Efficiency" in label]
+
+            if efficiency_labels != []:
+                plot_line_labels = [label for label in plot_line_labels if label not in efficiency_labels]
+
+            if join_fret == True:
+                fret_labels = ["Donor", "Acceptor", "DD", "DA", "AD", "AA"]
+                fret_labels = [label for label in plot_line_labels if label in fret_labels]
+                non_fret_labels = [label for label in plot_line_labels if label not in fret_labels]
+
+                if len(fret_labels) > 0:
+                    plot_list.append(fret_labels)
+                if len(non_fret_labels) > 0:
+                    plot_list.append(non_fret_labels)
+            else:
+                plot_list = [[line] for line in plot_line_labels]
+
+            if len(efficiency_labels) > 0:
+                plot_list.append(efficiency_labels)
+
+            print(plot_list)
+
+        except:
+            print(traceback.format_exc())
+            pass
+
+        return plot_list
+
+
+
+
+
     def update_plot_layout(self):
 
         try:
@@ -232,25 +271,19 @@ class _trace_plotting_methods:
             self.acceptor_bleach_refs = {}
 
             self.graph_canvas.clear()
-            plot_mode = self.plot_channel.currentText()
             split = self.plot_settings.plot_split_lines.isChecked()
-
-            efficiency_plot = False
 
             for plot_index, plot_dataset in enumerate(self.plot_datasets):
 
                 sub_plots = []
+                sub_axes = []
                 sub_plot_gamma_refs = []
                 donor_bleach_refs = []
                 acceptor_bleach_refs = []
                 sub_plot_crop_regions = []
-                sub_plot_text_labels = []
 
                 plot_line_labels = self.plot_info[plot_dataset]
-
                 plot_line_labels = [label for label in plot_line_labels if self.plot_show_dict[label] == True]
-
-                efficiency_label = [label for label in plot_line_labels if "Efficiency" in label]
 
                 self.donor_bleach_refs[plot_dataset] = []
                 self.acceptor_bleach_refs[plot_dataset] = []
@@ -281,156 +314,76 @@ class _trace_plotting_methods:
                     donor_bleach_refs.append(donor_bleach_ref)
                     acceptor_bleach_refs.append(acceptor_bleach_ref)
 
-                if len(efficiency_label) > 0:
-                    efficiency_label = efficiency_label[0]
-                    efficiency_plot = True
-                else:
-                    efficiency_label = None
-                    efficiency_plot = False
-
                 n_plot_lines = len(plot_line_labels)
 
-                if n_plot_lines > 0:
+                sub_plot_list = self.assign_plot_list(plot_line_labels, split)
 
-                    if efficiency_plot and split == False and self.plot_show_dict[efficiency_label] == True and n_plot_lines > 1:
+                if len(sub_plot_list) > 0:
 
-                        layout = pg.GraphicsLayout()
-                        self.graph_canvas.addItem(layout, row=plot_index, col=0)
+                    plot_line_list = []
+                    plot_line_label_list = []
 
-                        for line_index in range(2):
-                            p = CustomPlot()
+                    layout = pg.GraphicsLayout()
+                    self.graph_canvas.addItem(layout, row=plot_index, col=0)
 
-                            layout.addItem(p, row=line_index, col=0)
+                    for sub_plot_index, plot_lines in enumerate(sub_plot_list):
 
-                            if self.plot_settings.plot_showy.isChecked() == False:
-                                p.hideAxis('left')
+                        plot = CustomPlot()
+                        plot.enableAutoRange()
+                        plot.autoRange()
+                        legend = plot.legend
+                        legend.anchor(itemPos=(1, 0), parentPos=(1, 0), offset=(-10, 10))
 
-                            if self.plot_settings.plot_showx.isChecked() == False:
-                                p.hideAxis('bottom')
-                            elif line_index != 1:
-                                p.hideAxis('bottom')
+                        layout.addItem(plot, row=sub_plot_index, col=0)
+                        sub_axes.append(plot)
 
-                            if line_index == 0:
-                                self.initialise_text_overlay(p, dataset =plot_dataset)
-
-                            sub_plots.append(p)
-
-                            crop_region = self.initialise_crop_region()
-                            sub_plot_crop_regions.append(crop_region)
-
-                        for j in range(1, len(sub_plots)):
-                            sub_plots[j].setXLink(sub_plots[0])
-
-                        sub_plots = [sub_plots[0] for i in range(n_plot_lines - 1)] + [sub_plots[1]]
-                        sub_plot_crop_regions = [sub_plot_crop_regions[0] for i in range(n_plot_lines - 1)] + [sub_plot_crop_regions[1]]
-                        sub_plot_gamma_refs = [sub_plot_gamma_refs[0] for i in range(n_plot_lines - 1)] + [sub_plot_gamma_refs[1]]
-
-                        efficiency_plot = True
-
-                    elif split == True and n_plot_lines > 1:
-
-                        layout = pg.GraphicsLayout()
-                        self.graph_canvas.addItem(layout, row=plot_index, col=0)
-
-                        for line_index in range(n_plot_lines):
-                            p = CustomPlot()
-
-                            layout.addItem(p, row=line_index, col=0)
-
-                            if self.plot_settings.plot_showy.isChecked() == False:
-                                p.hideAxis('left')
-
-                            if self.plot_settings.plot_showx.isChecked() == False:
-                                p.hideAxis('bottom')
-                            if line_index != n_plot_lines - 1:
-                                p.hideAxis('bottom')
-
-                            if line_index == 0:
-                                self.initialise_text_overlay(p, dataset =plot_dataset)
-
-                            sub_plots.append(p)
-
-                            crop_region = self.initialise_crop_region()
-                            sub_plot_crop_regions.append(crop_region)
-
-                        for j in range(1, len(sub_plots)):
-                            sub_plots[j].setXLink(sub_plots[0])
-
-                    else:
-                        layout = self.graph_canvas
-
-                        p = CustomPlot()
-
-                        p.hideAxis('top')
-                        p.hideAxis('right')
-
-                        if self.plot_settings.plot_showy.isChecked() == False:
-                            p.hideAxis('left')
-                        if self.plot_settings.plot_showx.isChecked() == False:
-                            p.hideAxis('bottom')
-
-                        self.initialise_text_overlay(p, dataset =plot_dataset)
-
-                        layout.addItem(p, row=plot_index, col=0)
-
-                        for line_index in range(n_plot_lines):
-                            sub_plots.append(p)
-
-                            crop_region = self.initialise_crop_region()
-                            sub_plot_crop_regions.append(crop_region)
-
-                    localisation_number = self.plot_localisation_number.value()
-
-                    user_label = self.data_dict[plot_dataset][localisation_number]["user_label"]
-
-                    plot_lines = []
-                    plot_lines_labels = []
-
-                    unique_sub_axes = []
-                    for plot in sub_plots:
-                        if plot not in unique_sub_axes:
-                            unique_sub_axes.append(plot)
-
-                    for axes_index, plot in enumerate(sub_plots):
-
-                        line_label = plot_line_labels[axes_index]
-
-                        if self.plot_show_dict[line_label] == True:
+                        for line_index, line_label in enumerate(plot_lines):
 
                             pen = self.get_line_format(line_label, width=2)
                             plot_line = plot.plot(np.zeros(10), pen=pen, name=line_label)
 
-                            plot.enableAutoRange()
-                            plot.autoRange()
+                            plot_line_list.append(plot_line)
+                            plot_line_label_list.append(line_label)
 
-                            legend = plot.legend
-                            legend.anchor(itemPos=(1, 0), parentPos=(1, 0), offset=(-10, 10))
+                            if self.plot_settings.plot_showy.isChecked() == False:
+                                plot.hideAxis('left')
 
-                            plot_details = f"{plot_dataset}   #:{localisation_number} G:{user_label}"
+                            if self.plot_settings.plot_showx.isChecked() == False:
+                                plot.hideAxis('bottom')
+
+                            if sub_plot_index != len(sub_plot_list) - 1:
+                                plot.hideAxis('bottom')
+
+                            if sub_plot_index == 0:
+                                self.initialise_text_overlay(plot, dataset=plot_dataset)
+
+                            sub_plots.append(plot)
+
+                            crop_region = self.initialise_crop_region()
+                            sub_plot_crop_regions.append(crop_region)
 
                             plotmeta = plot.metadata
-                            plotmeta[axes_index] = {"plot_dataset": plot_dataset, "line_label": line_label}
+                            plotmeta[line_index] = {"plot_dataset": plot_dataset, "line_label": line_label}
 
-                            plot_lines.append(plot_line)
+                    localisation_number = self.plot_localisation_number.value()
+                    user_label = self.data_dict[plot_dataset][localisation_number]["user_label"]
+                    plot_details = f"{plot_dataset}   #:{localisation_number} G:{user_label}"
 
-                            plot_lines_labels.append(line_label)
-
-                            self.plot_grid[plot_index] = {
-                                "sub_axes": sub_plots,
-                                "unique_sub_axes": unique_sub_axes,
-                                "sub_plot_crop_regions": sub_plot_crop_regions,
-                                "sub_plot_gamma_refs": sub_plot_gamma_refs,
-                                "donor_bleach_refs": donor_bleach_refs,
-                                "acceptor_bleach_refs": acceptor_bleach_refs,
-                                "plot_lines": plot_lines,
-                                "plot_details": plot_details,
-                                "plot_dataset": plot_dataset,
-                                "plot_index": plot_index,
-                                "n_plot_lines": n_plot_lines,
-                                "split": split,
-                                "plot_lines_labels": plot_lines_labels,
-                                "efficiency_plot": efficiency_plot,
-                                }
+                    self.plot_grid[plot_index] = {
+                        "sub_axes": sub_plots,
+                        "unique_sub_axes": sub_axes,
+                        "sub_plot_crop_regions": sub_plot_crop_regions,
+                        "sub_plot_gamma_refs": sub_plot_gamma_refs,
+                        "donor_bleach_refs": donor_bleach_refs,
+                        "acceptor_bleach_refs": acceptor_bleach_refs,
+                        "plot_lines": plot_line_list,
+                        "plot_details": plot_details,
+                        "plot_dataset": plot_dataset,
+                        "plot_index": plot_index,
+                        "n_plot_lines": n_plot_lines,
+                        "split": split,
+                        "plot_lines_labels": plot_line_label_list,
+                    }
 
             plot_list = []
             for plot_index, grid in enumerate(self.plot_grid.values()):
@@ -510,6 +463,7 @@ class _trace_plotting_methods:
 
             checkboxes = []
             line_list = set(line_list)
+            line_list = self.sort_plot_labels(list(line_list))
 
             if len(line_list) > 1:
                 for col_index, line_label in enumerate(line_list):
@@ -767,7 +721,6 @@ class CustomPlot(pg.PlotItem):
         self.symbolSize = 100
 
         legend = self.addLegend(offset=(10, 10))
-        legend.setBrush('w')
         legend.setLabelTextSize("8pt")
         self.hideAxis('top')
         self.hideAxis('right')
