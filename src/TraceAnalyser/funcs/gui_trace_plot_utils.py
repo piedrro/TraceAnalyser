@@ -693,8 +693,10 @@ def auto_scale_y(sub_plots):
                     y_data = item.yData
                     x_data = item.xData
 
-                    # Get the indices of y_data that lies within the current x-range
-                    idx = np.where((x_data >= plot_x_min) & (x_data <= plot_x_max))
+                    # Get the indices of y_data that lies within the current x-range and y data is finite
+                    idx = np.where((x_data >= plot_x_min) &
+                                   (x_data <= plot_x_max) &
+                                   (np.isfinite(y_data)))
 
                     if len(idx[0]) > 0:  # If there's any data within the x-range
                         y_min = min(y_min, y_data[idx].min())
