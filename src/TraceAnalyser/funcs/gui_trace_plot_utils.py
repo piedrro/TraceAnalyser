@@ -219,18 +219,28 @@ class _trace_plotting_methods:
         return re.search(pattern, input_string) is not None
 
 
-    def assign_plot_list(self, plot_line_labels, join_fret = False):
+    def assign_plot_list(self, plot_line_labels):
 
         try:
 
+            split = self.plot_settings.plot_split_lines.isChecked()
+            combine_fret = self.plot_settings.plot_combine_fret.isChecked()
+            separate_efficiency = self.plot_settings.plot_separate_efficiency.isChecked()
+
             plot_list = []
             plot_line_labels = list(set(plot_line_labels))
-            efficiency_labels = [label for label in plot_line_labels if "Efficiency" in label]
+            plot_line_labels = self.sort_plot_labels(plot_line_labels)
+
+            if separate_efficiency:
+                efficiency_labels = [label for label in plot_line_labels if "Efficiency" in label]
+            else:
+                efficiency_labels = []
 
             if efficiency_labels != []:
                 plot_line_labels = [label for label in plot_line_labels if label not in efficiency_labels]
 
-            if join_fret == True:
+            if combine_fret == True:
+
                 fret_labels = ["Donor", "Acceptor", "DD", "DA", "AD", "AA"]
                 fret_labels = [label for label in plot_line_labels if label in fret_labels]
                 non_fret_labels = [label for label in plot_line_labels if label not in fret_labels]
@@ -238,23 +248,25 @@ class _trace_plotting_methods:
                 if len(fret_labels) > 0:
                     plot_list.append(fret_labels)
                 if len(non_fret_labels) > 0:
-                    plot_list.append(non_fret_labels)
+                    if split:
+                        non_fret_labels = [[line] for line in non_fret_labels]
+                    else:
+                        non_fret_labels = [non_fret_labels]
+                    plot_list.extend(non_fret_labels)
             else:
-                plot_list = [[line] for line in plot_line_labels]
+                if split:
+                    plot_list = [[line] for line in plot_line_labels]
+                else:
+                    plot_list = [plot_line_labels]
 
             if len(efficiency_labels) > 0:
                 plot_list.append(efficiency_labels)
-
-            print(plot_list)
 
         except:
             print(traceback.format_exc())
             pass
 
         return plot_list
-
-
-
 
 
     def update_plot_layout(self):
@@ -271,7 +283,6 @@ class _trace_plotting_methods:
             self.acceptor_bleach_refs = {}
 
             self.graph_canvas.clear()
-            split = self.plot_settings.plot_split_lines.isChecked()
 
             for plot_index, plot_dataset in enumerate(self.plot_datasets):
 
@@ -316,7 +327,7 @@ class _trace_plotting_methods:
 
                 n_plot_lines = len(plot_line_labels)
 
-                sub_plot_list = self.assign_plot_list(plot_line_labels, split)
+                sub_plot_list = self.assign_plot_list(plot_line_labels)
 
                 if len(sub_plot_list) > 0:
 
@@ -370,6 +381,7 @@ class _trace_plotting_methods:
                     plot_details = f"{plot_dataset}   #:{localisation_number} G:{user_label}"
 
                     self.plot_grid[plot_index] = {
+                        "plot_dataset": plot_dataset,
                         "sub_axes": sub_plots,
                         "unique_sub_axes": sub_axes,
                         "sub_plot_crop_regions": sub_plot_crop_regions,
@@ -377,11 +389,6 @@ class _trace_plotting_methods:
                         "donor_bleach_refs": donor_bleach_refs,
                         "acceptor_bleach_refs": acceptor_bleach_refs,
                         "plot_lines": plot_line_list,
-                        "plot_details": plot_details,
-                        "plot_dataset": plot_dataset,
-                        "plot_index": plot_index,
-                        "n_plot_lines": n_plot_lines,
-                        "split": split,
                         "plot_lines_labels": plot_line_label_list,
                     }
 

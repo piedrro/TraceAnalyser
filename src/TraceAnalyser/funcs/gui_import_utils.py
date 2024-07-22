@@ -54,9 +54,7 @@ class _import_methods:
 
                         trace_dict = {"DD": DD, "DA": DA, "AA": AA, "AD": AD}
 
-                        loc_data = {"FRET Efficiency": [],
-                                    "ALEX Efficiency": [],
-                                    "states": [],
+                        loc_data = {"states": [],
                                     "state_means": {},
                                     "user_label": 0,
                                     "break_points": [],

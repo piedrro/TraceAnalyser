@@ -198,6 +198,8 @@ class AnalysisGUI(QtWidgets.QMainWindow,
         self.plot_dataset.currentIndexChanged.connect(self.initialise_plot)
 
         self.plot_settings.plot_split_lines.stateChanged.connect(partial(self.plot_traces, update_plot=True))
+        self.plot_settings.plot_combine_fret.stateChanged.connect(partial(self.plot_traces, update_plot=True))
+        self.plot_settings.plot_separate_efficiency.stateChanged.connect(partial(self.plot_traces, update_plot=True))
         self.plot_settings.plot_showx.stateChanged.connect(partial(self.plot_traces, update_plot=True))
         self.plot_settings.plot_showy.stateChanged.connect(partial(self.plot_traces, update_plot=True))
 
