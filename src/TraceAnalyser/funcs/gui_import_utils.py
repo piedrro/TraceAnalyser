@@ -654,7 +654,7 @@ class _import_methods:
 
         return alex_dict
 
-    def assign_plot_channels(self, plot_dataset = None, single_channel=False):
+    def assign_plot_channels(self, plot_dataset=None, single_channel=False, select_channel=False):
 
         plot_datasets = []
         plot_channels = []
@@ -681,7 +681,6 @@ class _import_methods:
             if len(plot_channels) > 0:
 
                 plot_channels = list(set(plot_channels))
-                plot_channels = self.sort_channel_list(plot_channels)
 
                 if single_channel == False:
 
@@ -698,8 +697,13 @@ class _import_methods:
                     if set(["DD","DA","AA"]).issubset(plot_channels):
                         plot_channels.insert(0, "ALEX Correction Data")
 
+                plot_channels = self.sort_channel_list(plot_channels)
+
+                if single_channel == False:
                     if len(plot_channels) > 1:
-                        plot_channels.insert(0, "All Channels")
+                        plot_channels.append("All Channels")
+                    if select_channel:
+                        plot_channels.append("Select Channels")
 
         except:
             pass
@@ -1012,8 +1016,13 @@ class _import_methods:
                             else:
                                 single_channel = True
 
+                            if channel_combo_name == "plot_channel":
+                                select_channel = True
+                            else:
+                                select_channel = False
+
                             update_func = partial(self.update_channel_combos,dataset_combo,
-                                channel_combo, single_channel=single_channel)
+                                channel_combo, single_channel=single_channel, select_channel=select_channel)
 
                             update_func()
 
@@ -1024,14 +1033,15 @@ class _import_methods:
             pass
 
     def update_channel_combos(self, dataset_combo,
-            channel_combo,single_channel=False):
+            channel_combo, single_channel=False, select_channel=False):
 
         try:
 
             dataset_name = dataset_combo.currentText()
 
             channels = self.assign_plot_channels(dataset_name,
-                single_channel=single_channel)
+                single_channel=single_channel,
+                select_channel=select_channel)
 
             channel_combo.blockSignals(True)
             channel_combo.clear()

@@ -148,7 +148,7 @@ class _trace_plotting_methods:
                         if dataset_name not in plot_label_dict.keys():
                             plot_label_dict[dataset_name] = []
 
-                        if plot_mode == "All Channels":
+                        if plot_mode in ["All Channels", "Select Channels"]:
                             plot_label_dict[dataset_name].extend(plot_labels)
                         elif plot_mode in plot_labels:
                             plot_label_dict[dataset_name].append(plot_mode)
@@ -203,8 +203,7 @@ class _trace_plotting_methods:
                                 for label in plot_labels:
                                     self.plot_show_dict[label] = True
 
-                            # self.create_plot_checkboxes()
-                            self.toggle_plot_selector()
+                            self.populate_plot_selector()
                             self.plot_traces(update_plot=True)
 
                         else:
@@ -401,7 +400,8 @@ class _trace_plotting_methods:
                     plot_list.append(plot)
             for i in range(1, len(plot_list)):
                 plot_list[i].setXLink(plot_list[0])
-            plot.getViewBox().sigXRangeChanged.connect(lambda: auto_scale_y(plot_list))
+            if len(plot_list) > 0:
+                plot.getViewBox().sigXRangeChanged.connect(lambda: auto_scale_y(plot_list))
 
         except:
             print(traceback.format_exc())
@@ -443,23 +443,12 @@ class _trace_plotting_methods:
 
 
 
-    def toggle_plot_selector(self):
-
-        line_list = []
-        for plot_labels in self.plot_info.values():
-            for label in plot_labels:
-                if label not in line_list:
-                    line_list.append(label)
-
-        self.populate_plot_selector(line_list)
-
-
-    def populate_plot_selector(self, line_list):
+    def populate_plot_selector(self):
 
         try:
 
             layout = self.plot_settings.selector_layout
-            scroll_area = self.plot_settings.scroll_area
+            plot_channels = self.plot_channel.currentText()
 
             for i in range(layout.count()):
                 item = layout.itemAt(i)
@@ -469,6 +458,13 @@ class _trace_plotting_methods:
                     widget.hide()
 
             checkboxes = []
+
+            line_list = []
+            for plot_labels in self.plot_info.values():
+                for label in plot_labels:
+                    if label not in line_list:
+                        line_list.append(label)
+
             line_list = set(line_list)
             line_list = self.sort_plot_labels(list(line_list))
 
@@ -484,15 +480,19 @@ class _trace_plotting_methods:
                     checkboxes.append(check_box)
 
                     check_box.blockSignals(True)
-                    check_box.setChecked(True)
-                    check_box.blockSignals(False)
+                    if plot_channels == "Select Channels":
+                        if col_index == 0:
+                            check_box.setChecked(True)
+                        else:
+                            check_box.setChecked(False)
+                    else:
+                        check_box.setChecked(True)
 
+                    check_box.blockSignals(False)
                     check_box.stateChanged.connect(self.plot_checkbox_event)
                     layout.addWidget(check_box)
 
-            # min_width = max(checkbox.sizeHint().width() for checkbox in checkboxes)
-            # min_width + self.scroll_area.verticalScrollBar().sizeHint().width()
-            # scroll_area.setMinimumWidth(min_width+20)
+                    self.plot_show_dict[line_label] = check_box.isChecked()
 
         except Exception as e:
             print(traceback.format_exc())

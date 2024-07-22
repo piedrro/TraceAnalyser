@@ -24,8 +24,7 @@ class _window_utils:
 
         try:
 
-            reference_list = ["All Channels",
-                              "Data",
+            reference_list = ["Data",
                               "Trace",
                               "Donor", "Acceptor",
                               "FRET Efficiency",
@@ -36,7 +35,7 @@ class _window_utils:
                               "ALEX Efficiency",
                               "ALEX Data",
                               "ALEX Data + ALEX Efficiency"
-                              "ALEX Correction Data",
+                              "ALEX Correction Data"
                               ]
 
             order = {key: i for i, key in enumerate(reference_list)}
@@ -158,8 +157,12 @@ class _window_utils:
                 combo_options = self.sort_channel_list(combo_options)
 
                 if len(combo_options) > 1 and single_channel == False:
-                    combo_options.insert(0, "All Channels")
+                    combo_options.append("All Channels")
                     channel_dict["All Channels"] = channel_names
+                if channel_combo_name == "plot_channel":
+                    combo_options.append("Select Channels")
+
+                print(channel_combo_name, combo_options)
 
                 channel_combo.blockSignals(True)
                 channel_combo.clear()
